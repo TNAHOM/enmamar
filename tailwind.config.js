@@ -12,6 +12,7 @@ module.exports = {
     extend: {
       colors: {
         'orangeStandard': '#E85E1A',
+        'contentFontColor': "#5B5D6B"
       }
     },
   },

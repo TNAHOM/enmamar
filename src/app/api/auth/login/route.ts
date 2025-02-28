@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         });
 
         const data = await response.json();
-        console.log(data, email, password, 'data from login route');
+        console.log(data, email, 'data from login route');
         if (!response.ok) {
             throw new Error(data.detail || 'Login failed');
         }

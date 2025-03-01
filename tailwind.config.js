@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'orangeStandard': '#E85E1A',
+        'purpleStandard': '#893EE8',
         'contentFontColor': "#5B5D6B"
       }
     },

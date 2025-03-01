@@ -8,7 +8,7 @@ const Navbar = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (isAuthenticated) {
-        // Silent refresh check
+        // check refresh
         fetch("/api/auth/me").catch(() => logout());
       }
     }, 300000);
@@ -17,8 +17,8 @@ const Navbar = () => {
   }, [isAuthenticated, logout]);
 
   return (
-    <div className="flex justify-between items-center p-4 px-14">
-      <div className="text-xl text-orangeStandard font-bold">{"ENMAMAR"}</div>
+    <div className="flex justify-between items-center p-4 px-14 bg-[#F6F7F9]">
+      <div className="text-xl text-purpleStandard font-bold">{"ENMAMAR"}</div>
       <div className="flex justify-between items-center space-x-8 font-medium">
         <p>Explore</p>
         <p>Become an Instructor</p>
@@ -29,7 +29,7 @@ const Navbar = () => {
             <p>{user?.full_name}</p>
             <button
               onClick={() => logout()}
-              className="px-4 py-1 bg-orangeStandard text-white"
+              className="px-4 py-1 bg-purpleStandard text-white"
             >
               Logout
             </button>
@@ -37,14 +37,14 @@ const Navbar = () => {
         ) : (
           <>
             <a
-              className="text-orangeStandard border border-orangeStandard px-4 py-1"
+              className="text-purpleStandard border border-purpleStandard px-4 py-1"
               href="/auth/login"
             >
               Login
             </a>
             <a
               href="/auth/signup"
-              className="px-4 py-1 bg-orangeStandard text-white"
+              className="px-4 py-1 bg-purpleStandard text-white"
             >
               SignUp
             </a>

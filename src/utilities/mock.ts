@@ -36,3 +36,14 @@ export const mockCourse = [
         image: '/Images/JavaCourse.png'
     },
 ];
+
+
+export const lessons = [
+    { day: 1, title: 'Introduction to Programming & Setup' },
+    { day: 2, title: 'Fundamentals of Java and C++' },
+    { day: 3, title: 'Control Flow and Loops' },
+    { day: 4, title: 'Functions & Modular Programming' },
+    { day: 5, title: 'Object-Oriented Programming (OOP) Basics' },
+    { day: 6, title: 'Advanced OOP Concepts' },
+    { day: 7, title: 'Data Structures and Algorithms' }
+];

@@ -8,7 +8,7 @@ const LandingPage = () => {
       <div className="">
         <h2 className="text-4xl font-bold">
           Unlock Your Potential with{" "}
-          <span className="text-orangeStandard">Expert-Led</span> Courses
+          <span className="text-purpleStandard">Expert-Led</span> Courses
         </h2>
         <p className="text-2xl max-w-md my-4">
           Learn new skills anytime, anywhere at your own pace

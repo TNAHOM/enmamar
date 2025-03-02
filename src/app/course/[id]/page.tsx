@@ -4,18 +4,22 @@ import { mockCourse } from "@/utilities/mock";
 import Image from "next/image";
 import CoursePrice from "@/component/course/CoursePrice";
 import Lessons from "@/component/course/Lessons";
+import CourseDescription from "@/component/course/CourseDescription";
+import CourseReview from "@/component/course/CourseReview";
 import { Star } from "lucide-react";
 
 const CourseDetailPage = () => {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const course = mockCourse.find((_, index) => index.toString() === id);
 
   if (!course) {
     return <div>Course not found</div>;
   }
+
   return (
-    <div className="mx-16">
-      <div className="grid grid-cols-10 gap-10 mt-10">
+    <div className="mx-16 my-10">
+      <div className="grid grid-cols-10 gap-10">
+        {/* Column 1 - Main Content */}
         <div className="col-span-7 space-y-7">
           <h2 className="text-4xl font-bold leading-tight">{course.title}</h2>
           <p className="text-lg text-gray-500 font-normal">
@@ -42,11 +46,11 @@ const CourseDetailPage = () => {
             <div className="">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <Star className="w-5 h-5 text-yellow-500" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                  <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                 </div>
                 <div className="flex gap-1">
                   <p className="text-base text-gray-500">Rating: </p>
@@ -62,13 +66,25 @@ const CourseDetailPage = () => {
               alt={course.title}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover" // Ensures image covers container while maintaining aspect ratio
+              className="object-cover"
               priority={false}
             />
           </div>
+
+          {/* Adding Course Description Component */}
+          <CourseDescription
+            description={course.description}
+            level="Beginner to Intermediate"
+            duration="42 hours"
+            numLessons={3248}
+            lastUpdated="March 2025"
+          />
+
+          {/* Adding Course Reviews Component */}
+          <CourseReview averageRating={course.rating} totalReviews={128} />
         </div>
 
-        {/* Column 2 */}
+        {/* Column 2 - Sidebar */}
         <div className="col-span-3 space-y-5">
           <CoursePrice />
           <Lessons />

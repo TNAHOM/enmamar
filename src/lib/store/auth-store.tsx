@@ -45,7 +45,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (response.ok && data.user) {
         set({ user: data.user, isAuthenticated: true, isLoading: false });
-        console.log("User authenticated:", data.user);
+        // console.log("User authenticated:", data.user);
       } else {
         console.log("Authentication failed:", data.detail);
         set({ user: null, isAuthenticated: false, isLoading: false });
@@ -60,7 +60,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
   },
-  
+
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {

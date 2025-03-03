@@ -9,7 +9,7 @@ const Navbar = () => {
     const interval = setInterval(() => {
       if (isAuthenticated) {
         // check refresh
-        fetch("/api/auth/me").catch(() => logout());
+        fetch("/api/me", { credentials: "include" }).catch(() => logout());
       }
     }, 300000);
 

@@ -5,7 +5,6 @@ export async function GET() {
     const BASEURL = process.env.BASEURL;
     const cookiesStore = await cookies();
     const accessToken = cookiesStore.get('accessToken')?.value;
-
     if (!accessToken) {
         return NextResponse.json(
             { detail: 'Not authenticated' },
@@ -33,6 +32,7 @@ export async function GET() {
         });
 
     } catch (error) {
+        console.log(error, "error form route/me")
         const cookiesStore = await cookies();
         cookiesStore.delete('accessToken');
         cookiesStore.delete('refreshToken');

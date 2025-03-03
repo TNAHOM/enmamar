@@ -22,7 +22,8 @@ export default function SignupPage() {
     username: string;
     email: string;
     password: string;
-    full_name: string;
+    first_name: string;
+    last_name: string;
     phone_number: string;
   }
 
@@ -31,7 +32,8 @@ export default function SignupPage() {
       data.username,
       data.email,
       data.password,
-      data.full_name,
+      data.first_name,
+      data.last_name,
       data.phone_number
     );
     console.log(error, "error from signup page");
@@ -83,14 +85,26 @@ export default function SignupPage() {
         </div>
 
         <div>
-          <label className="block mb-2">Full Name</label>
+          <label className="block mb-2">First Name</label>
           <input
-            {...register("full_name")}
+            {...register("first_name")}
             className="w-full p-2 border rounded"
             disabled={isLoading}
           />
-          {errors.full_name && (
-            <p className="text-red-500 text-sm">{errors.full_name.message}</p>
+          {errors.first_name && (
+            <p className="text-red-500 text-sm">{errors.first_name.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block mb-2">Last Name</label>
+          <input
+            {...register("last_name")}
+            className="w-full p-2 border rounded"
+            disabled={isLoading}
+          />
+          {errors.last_name && (
+            <p className="text-red-500 text-sm">{errors.last_name.message}</p>
           )}
         </div>
 

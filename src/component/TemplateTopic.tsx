@@ -1,8 +1,8 @@
 import React from "react";
 import type { mockCourse } from "@/utilities/mock";
-import Image from "next/image";
-import { CircleArrowRight, Star } from "lucide-react";
+import CourseCard from "./CourseCard";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 interface TemplateProps {
   topic: string;
@@ -12,80 +12,44 @@ interface TemplateProps {
 
 const TemplateTopic = ({ topic, description, contents }: TemplateProps) => {
   const [firstWord, secondWord] = topic.split(" ");
+  const isFeatured = firstWord.toLowerCase() === "featured";
   return (
-    <div className="mt-12 align-middle">
-      <div className="px-14">
-        <h3 className="font-bold text-3xl">
-          {firstWord} <span className="text-purpleStandard">{secondWord}</span>
-        </h3>
-        <p className="font-light text-lg w-96">{description}</p>
+    <div className="container space-y-8 mt-14">
+      <div className="flex items-baseline justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+            {firstWord} <span className="text-purple-600">{secondWord}</span>
+          </h2>
+          <p className="mt-2 text-muted-foreground">{description}</p>
+        </div>
+        <Link
+          href="#"
+          className="text-sm font-medium text-purple-600 hover:underline flex items-center"
+        >
+          View all <ChevronRight className="ml-1 h-4 w-4" />
+        </Link>
       </div>
+
       <div
-        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full px-14 py-5 mt-6 ${
-          firstWord.toLowerCase() === "featured" ? "bg-[#F6F7F9]" : "bg-white"
+        className={`grid gap-6 sm:grid-cols-2 ${
+          isFeatured ? "lg:grid-cols-3" : "lg:grid-cols-4"
         }`}
       >
-        {(firstWord.toLowerCase() !== "featured"
-          ? [...contents, ...contents]
-          : contents
-        ).map((content, index) => (
-          <div key={index} className="rounded-3xl w-full bg-white pb-3">
-            <Image
-              src={content.image}
-              alt={content.title}
-              className="w-full object-cover rounded-lg"
-              width={200}
-              height={200}
+        {(!isFeatured ? [...contents, ...contents] : contents.slice(0, 3)).map(
+          (content, index) => (
+            <CourseCard
+              key={index}
+              id={index}
+              title={content.title}
+              instructor={content.instructor}
+              description={content.description}
+              price={content.price}
+              image={content.image}
+              rating={content.rating || 4.5}
             />
-
-            <div className="mt-2 py-2 px-4">
-              <h3 className="text-lg font-medium">{content.title}</h3>
-              <h4 className="text-contentFontColor text-sm font-normal mt-1">
-                Instructor:{" "}
-                <span className="text-purpleStandard">
-                  {content.instructor}
-                </span>
-              </h4>
-
-              <p className="text-contentFontColor text-xs font-normal mt-2 leading-5 h-24">
-                {content.description.split(" ").slice(0, 25).join(" ")} ...
-              </p>
-
-              <div className="">
-                <div className="flex gap-2">
-                  <span className="text-purpleStandard font-bold">4.5</span>
-                  <div className="flex gap-1">
-                    <Star size={20} />
-                    <Star size={20} />
-                    <Star size={20} />
-                    <Star size={20} />
-                    <Star size={20} />
-                  </div>
-                </div>
-
-                <p className="font-medium text-base mt-3">2000 Br.</p>
-                <div className="text-right w-full">
-                  <Link
-                    href={`/course/${index}`}
-                    className="text-white px-2 py-1 font-semibold text-sm rounded-md w-fit bg-purpleStandard"
-                  >
-                    See more
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
-
-      {topic !== "Featured Courses" && (
-        <div className="flex justify-center align-middle">
-          <button className="flex gap-2 text-white bg-purpleStandard rounded-xl px-3 py-2 mt-4 font-bold text-base items-center">
-            View More
-            <CircleArrowRight size={25} className="inline ml-2" />
-          </button>
-        </div>
-      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import LandSearch from "../Search/LandSearch";
 
 const LandingPage = () => {
   return (
-    <div className="flex justify-between items-center bg-[#FCEDE6] px-20 py-6">
+    <div className="flex justify-between items-center bg-purpleStandard text-white px-20 py-6">
       <div className="">
         <h2 className="text-4xl font-bold">
           Unlock Your Potential with{" "}

@@ -26,7 +26,7 @@ const Navbar = () => {
           <p>Loading...</p>
         ) : isAuthenticated ? (
           <div className="flex items-center space-x-4">
-            <p>{user?.full_name}</p>
+            <p>{user?.first_name}</p>
             <button
               onClick={() => logout()}
               className="px-4 py-1 bg-purpleStandard text-white"

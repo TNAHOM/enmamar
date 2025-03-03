@@ -4,7 +4,8 @@ interface User {
   id: number;
   username: string;
   email: string;
-  full_name: string;
+  first_name: string;
+  last_name: string;
   phone_number: string;
   role: string;
   is_active: boolean;
@@ -21,7 +22,8 @@ interface AuthState {
     username: string,
     email: string,
     password: string,
-    full_name: string,
+    first_name: string,
+    last_name: string,
     phone_number: string
   ) => Promise<void>;
   logout: () => Promise<void>;
@@ -71,7 +73,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  signup: async (username, email, password, full_name, phone_number) => {
+  signup: async (
+    username,
+    email,
+    password,
+    first_name,
+    last_name,
+    phone_number
+  ) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetch("/api/auth/signup", {
@@ -81,18 +90,24 @@ export const useAuthStore = create<AuthState>((set) => ({
           username,
           email,
           password,
-          full_name,
+          first_name,
+          last_name,
           phone_number,
           role: "user",
         }),
       });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-    //   console.error("Signup error:", errorData);
-      set({ error: errorData.detail || "An error occurred during signup. Please try again later.", isLoading: false });
-      return;
-    }
+      if (!response.ok) {
+        const errorData = await response.json();
+        //   console.error("Signup error:", errorData);
+        set({
+          error:
+            errorData.detail ||
+            "An error occurred during signup. Please try again later.",
+          isLoading: false,
+        });
+        return;
+      }
 
       const { user } = await response.json();
       set({ isLoading: false });

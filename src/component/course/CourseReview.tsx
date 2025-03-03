@@ -14,13 +14,11 @@ interface Review {
 interface CourseReviewsProps {
   averageRating: number;
   totalReviews: number;
-  reviews: Review[];
 }
 
 const CourseReviews = ({
   averageRating = 4.5,
   totalReviews = 128,
-  reviews = [],
 }: CourseReviewsProps) => {
   const defaultReviews: Review[] = [
     {
@@ -52,7 +50,7 @@ const CourseReviews = ({
     },
   ];
 
-  const displayReviews = reviews.length > 0 ? reviews : defaultReviews;
+  const displayReviews = defaultReviews;
 
   // Generate stars based on rating
   const renderStars = (rating: number) => {

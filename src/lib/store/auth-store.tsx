@@ -36,20 +36,31 @@ export const useAuthStore = create<AuthState>((set) => ({
   error: null,
 
   initializeAuth: async () => {
+    set({ isLoading: true });
     try {
       const response = await fetch("/api/me");
-      if (response.ok) {
-        const user = await response.json();
-        set({ user, isAuthenticated: true, isLoading: false });
+      const data = await response.json();
+
+      console.log("Auth initialization response:", data);
+
+      if (response.ok && data.user) {
+        set({ user: data.user, isAuthenticated: true, isLoading: false });
+        console.log("User authenticated:", data.user);
       } else {
-        set({ isLoading: false });
+        console.log("Authentication failed:", data.detail);
+        set({ user: null, isAuthenticated: false, isLoading: false });
       }
     } catch (error) {
-      console.log(error, "error from auth-store.tsx");
-      set({ error: "Failed to initialize auth", isLoading: false });
+      console.error("Error during auth initialization:", error);
+      set({
+        error: "Failed to initialize auth",
+        isLoading: false,
+        user: null,
+        isAuthenticated: false,
+      });
     }
   },
-
+  
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {

@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { courseSchema, CourseSchema } from "@/lib/scheme/course-scheme";
 import { Lesson } from "@/types/courses";
-import { MOCK_INSTRUCTORS } from "@/utilities/mock";
+import { userProfile } from "@/types/user";
 
 interface AddCourseModalProps {
   isOpen: boolean;
@@ -37,6 +37,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const [, setThumbnail] = useState<File | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+  const [instructors, setInstructors] = useState<userProfile[]>([]);
 
   const {
     register,
@@ -55,6 +56,22 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
       lessons: [],
     },
   });
+
+  
+  useEffect(() => {
+    const fetchInstructors = async () => {
+      try {
+        const response = await fetch('/api/instructors');
+        if (!response.ok) throw new Error('Failed to fetch instructors');
+        const data = await response.json();
+        setInstructors(data);
+      } catch (error) {
+        console.error('Error fetching instructors:', error);
+      }
+    };
+    
+    fetchInstructors();
+  }, []);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -103,7 +120,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
           title: data.title,
           price: data.price,
           description: data.description,
-          instructor: data.instructor,
+          instructor_id: data.instructor,
         }),
       });
 
@@ -157,9 +174,9 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                       <SelectValue placeholder="Select instructor" />
                     </SelectTrigger>
                     <SelectContent>
-                      {MOCK_INSTRUCTORS.map((instructor) => (
+                      {instructors.map((instructor) => (
                         <SelectItem key={instructor.id} value={instructor.id}>
-                          {instructor.name}
+                          {instructor.first_name + ' ' + instructor.last_name + ' ' + instructor.email}
                         </SelectItem>
                       ))}
                     </SelectContent>

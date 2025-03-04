@@ -22,14 +22,14 @@ export async function GET() {
         });
 
         const data = await response.json();
-
+        // console.log(data, 'data received');
         if (!response.ok) {
             throw new Error(data.detail || 'Failed to fetch user');
         }
 
         return NextResponse.json({
             detail: 'User retrieved successfully',
-            user: data.user
+            user: data.data
         });
 
     } catch (error) {

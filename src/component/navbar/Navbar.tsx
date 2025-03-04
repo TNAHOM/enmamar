@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useAuthStore } from "@/lib/store/auth-store";
+import Link from "next/link";
 
 const Navbar = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuthStore();
@@ -22,6 +23,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center space-x-8 font-medium">
         <p>Explore</p>
         <p>Become an Instructor</p>
+        <Link href={"admin"} >Admin</Link>
         {isLoading ? (
           <p>Loading...</p>
         ) : isAuthenticated ? (

@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  console.log(request, "request from course creation route");
   const BASEURL = process.env.BASEURL;
-  const { title, description, price } = await request.json();
-  const instructor_id = "e1bf65cc-eb8c-4526-a559-c21cc5e38944";
+  const { title, description, price, instructor_id } = await request.json();
 
-  console.log(title, description, price, instructor_id)
   try {
     const response = await fetch(`${BASEURL}/course/add`, {
       method: "POST", 

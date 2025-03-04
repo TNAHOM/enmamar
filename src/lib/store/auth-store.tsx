@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       console.log("Auth initialization response:", data);
 
-      if (response.ok && data.user) {
+      if (response.ok) {
         set({ user: data.user, isAuthenticated: true, isLoading: false });
         // console.log("User authenticated:", data.user);
       } else {

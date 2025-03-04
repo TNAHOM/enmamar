@@ -1,11 +1,19 @@
+'use client'
+import { useState } from "react";
 import { BarChart3, Home, PieChart, Plus, Users } from "lucide-react";
 import Link from "next/link";
+import { AddCourseModal } from "./AddCourseModal";
 
 const Sidebar = () => {
+  const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
+
   return (
     <aside className="border-r border-gray-200 p-6 col-span-2">
       <div className="space-y-1 mb-8">
-        <button className="w-full bg-purple-600 text-white rounded-md py-3 px-4 flex items-center justify-center gap-2 font-medium">
+        <button
+          className="w-full bg-purple-600 text-white rounded-md py-3 px-4 flex items-center justify-center gap-2 font-medium"
+          onClick={() => setIsAddCourseModalOpen(true)}
+        >
           <Plus className="h-5 w-5" />
           Add New Course
         </button>
@@ -55,6 +63,10 @@ const Sidebar = () => {
           </Link>
         </div>
       </nav>
+      <AddCourseModal
+        isOpen={isAddCourseModalOpen}
+        onClose={() => setIsAddCourseModalOpen(false)}
+      />
     </aside>
   );
 };

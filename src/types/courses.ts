@@ -7,3 +7,10 @@ export interface course {
     price: string;
     image: string;
 }
+
+export interface Lesson {
+    id: string;
+    title: string;
+    description: string;
+    videoFile: File | null;
+}

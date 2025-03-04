@@ -47,3 +47,10 @@ export const lessons = [
     { day: 6, title: 'Advanced OOP Concepts' },
     { day: 7, title: 'Data Structures and Algorithms' }
 ];
+
+export const MOCK_INSTRUCTORS = [
+    { id: "1", name: "Tishun Alebe" },
+    { id: "2", name: "Terhun Abera" },
+    { id: "3", name: "Natnael Melaku" },
+    { id: "4", name: "Kidist Haile" },
+];

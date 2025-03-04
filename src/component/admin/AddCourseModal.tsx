@@ -21,21 +21,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Upload, X } from "lucide-react";
-
-// Mock data for instructors
-const MOCK_INSTRUCTORS = [
-  { id: "1", name: "Tishun Alebe" },
-  { id: "2", name: "Terhun Abera" },
-  { id: "3", name: "Natnael Melaku" },
-  { id: "4", name: "Kidist Haile" },
-];
-
-interface Lesson {
-  id: string;
-  title: string;
-  description: string;
-  videoFile: File | null;
-}
+import Image from "next/image";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { courseSchema, CourseSchema } from "@/lib/scheme/course-scheme";
+import { Lesson } from "@/types/courses";
+import { MOCK_INSTRUCTORS } from "@/utilities/mock";
 
 interface AddCourseModalProps {
   isOpen: boolean;
@@ -43,9 +34,27 @@ interface AddCourseModalProps {
 }
 
 export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [, setThumbnail] = useState<File | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    control,
+    reset,
+  } = useForm<CourseSchema>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: {
+      instructor: "",
+      title: "",
+      price: 0,
+      thumbnail: null,
+      description: "",
+      lessons: [],
+    },
+  });
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -85,10 +94,31 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    onClose();
+  const onSubmit = async (data: CourseSchema) => {
+    try {
+      const response = await fetch(`/api/course/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.title,
+          price: data.price,
+          description: data.description,
+          instructor: data.instructor,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Course creation failed");
+      }
+
+      const result = await response.json();
+      console.log("Course created successfully:", result);
+      reset();
+      onClose();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -99,23 +129,48 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             Add New Course
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Course Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                type="text"
+                id="title"
+                placeholder="Enter course title"
+                {...register("title")}
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm">
+                  {errors.title.message}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="instructor">Instructor</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select instructor" />
-                </SelectTrigger>
-                <SelectContent>
-                  {MOCK_INSTRUCTORS.map((instructor) => (
-                    <SelectItem key={instructor.id} value={instructor.id}>
-                      {instructor.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Controller
+                name="instructor"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select instructor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {MOCK_INSTRUCTORS.map((instructor) => (
+                        <SelectItem key={instructor.id} value={instructor.id}>
+                          {instructor.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.instructor && (
+                <p className="text-red-500 text-sm">
+                  {errors.instructor.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="price">Price (Birr)</Label>
@@ -125,7 +180,11 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                 placeholder="0.00"
                 min="0"
                 step="0.01"
+                {...register("price")}
               />
+              {errors.price && (
+                <p className="text-red-500 text-sm">{errors.price.message}</p>
+              )}
             </div>
           </div>
 
@@ -135,7 +194,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             <div className="border-2 border-dashed border-gray-200 rounded-lg p-4">
               {thumbnailPreview ? (
                 <div className="relative">
-                  <img
+                  <Image
                     src={thumbnailPreview || "/placeholder.svg"}
                     alt="Thumbnail preview"
                     className="w-full h-48 object-cover rounded-lg"
@@ -175,9 +234,15 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             <Label htmlFor="description">Course Description</Label>
             <Textarea
               id="description"
+              {...register("description")}
               placeholder="Enter a detailed description of the course"
               className="h-24"
             />
+            {errors.description && (
+              <p className="text-red-500 text-sm">
+                {errors.description.message}
+              </p>
+            )}
           </div>
 
           {/* Lessons */}
@@ -208,12 +273,18 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                   </Label>
                   <Input
                     id={`lesson-title-${lesson.id}`}
+                    {...register(`lessons.${index}.title` as const)}
                     value={lesson.title}
                     onChange={(e) =>
                       handleLessonChange(lesson.id, "title", e.target.value)
                     }
                     placeholder="Enter lesson title"
                   />
+                  {errors.lessons && errors.lessons[index]?.title && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lessons[index]?.title?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor={`lesson-description-${lesson.id}`}>
@@ -221,6 +292,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                   </Label>
                   <Textarea
                     id={`lesson-description-${lesson.id}`}
+                    {...register(`lessons.${index}.description` as const)}
                     value={lesson.description}
                     onChange={(e) =>
                       handleLessonChange(
@@ -231,6 +303,11 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                     }
                     placeholder="Enter lesson description"
                   />
+                  {errors.lessons && errors.lessons[index]?.description && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lessons[index]?.description?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label>Lesson Video</Label>
@@ -266,8 +343,12 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-              Create Course
+            <Button 
+              type="submit" 
+              className="bg-purple-600 hover:bg-purple-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating..." : "Create Course"}
             </Button>
           </div>
         </form>

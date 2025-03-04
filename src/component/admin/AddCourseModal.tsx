@@ -41,12 +41,14 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
+    reset,
   } = useForm<CourseSchema>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
       instructor: "",
+      title: "",
       price: 0,
       thumbnail: null,
       description: "",
@@ -93,18 +95,30 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   };
 
   const onSubmit = async (data: CourseSchema) => {
-    console.log("Form Data:", data);
-    const response = await fetch(`/api/course/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    console.log(response, "response from course creation");
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.detail || "Course creation failed");
+    try {
+      const response = await fetch(`/api/course/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.title,
+          price: data.price,
+          description: data.description,
+          instructor: data.instructor,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Course creation failed");
+      }
+
+      const result = await response.json();
+      console.log("Course created successfully:", result);
+      reset();
+      onClose();
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
-    onClose();
   };
 
   return (
@@ -118,6 +132,20 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Course Basic Info */}
           <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                type="text"
+                id="title"
+                placeholder="Enter course title"
+                {...register("title")}
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm">
+                  {errors.title.message}
+                </p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="instructor">Instructor</Label>
               <Controller
@@ -315,8 +343,12 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-              Create Course
+            <Button 
+              type="submit" 
+              className="bg-purple-600 hover:bg-purple-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating..." : "Create Course"}
             </Button>
           </div>
         </form>

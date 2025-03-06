@@ -18,16 +18,9 @@ export default function SignupPage() {
   } = useForm({
     resolver: zodResolver(signupSchema),
   });
-
+  console.log(errors, "error from signup page");
   const onSubmit = async (data: SignupFormData) => {
-    await signup(
-      data.username,
-      data.email,
-      data.password,
-      data.first_name,
-      data.last_name,
-      data.phone_number
-    );
+    await signup({ ...data, role: "user" });
     console.log(error, "error from signup page");
     if (!error) {
       router.push("/auth/login");
@@ -73,6 +66,21 @@ export default function SignupPage() {
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block mb-2">Confirm Password</label>
+          <input
+            {...register("confirm_password")}
+            type="password"
+            className="w-full p-2 border rounded"
+            disabled={isLoading}
+          />
+          {errors.confirm_password && (
+            <p className="text-red-500 text-sm">
+              {errors.confirm_password.message}
+            </p>
           )}
         </div>
 

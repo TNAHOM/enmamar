@@ -24,7 +24,8 @@ import { Upload, X } from "lucide-react";
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { courseSchema, CourseSchema } from "@/lib/scheme/course-scheme";
+import { courseSchema } from "@/lib/scheme/course-scheme";
+import type { CourseSchemaType } from "@/lib/scheme/course-scheme";
 import { Lesson } from "@/types/courses";
 import { userProfile } from "@/types/user";
 
@@ -45,31 +46,22 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
     formState: { errors, isSubmitting },
     control,
     reset,
-  } = useForm<CourseSchema>({
+  } = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
-    defaultValues: {
-      instructor: "",
-      title: "",
-      price: 0,
-      thumbnail: null,
-      description: "",
-      lessons: [],
-    },
   });
 
-  
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const response = await fetch('/api/instructors');
-        if (!response.ok) throw new Error('Failed to fetch instructors');
+        const response = await fetch("/api/instructors");
+        if (!response.ok) throw new Error("Failed to fetch instructors");
         const data = await response.json();
         setInstructors(data);
       } catch (error) {
-        console.error('Error fetching instructors:', error);
+        console.error("Error fetching instructors:", error);
       }
     };
-    
+
     fetchInstructors();
   }, []);
 
@@ -86,42 +78,52 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   };
 
   const addLesson = () => {
-    const newLesson: Lesson = {
-      id: `lesson-${lessons.length + 1}`,
-      title: "",
-      description: "",
-      videoFile: null,
-    };
-    setLessons([...lessons, newLesson]);
+    setLessons([
+      ...lessons,
+      {
+        id: `lesson-${lessons.length + 1}`,
+        title: "",
+        description: "",
+        video_url: "hello.com",
+        duration: 0,
+      },
+    ]);
   };
 
   const removeLesson = (lessonId: string) => {
     setLessons(lessons.filter((lesson) => lesson.id !== lessonId));
   };
+  console.log(errors);
 
   const handleLessonChange = (
     lessonId: string,
     field: keyof Lesson,
-    value: string | File | null
+    value: string | File | null | number
   ) => {
     setLessons(
       lessons.map((lesson) =>
-        lesson.id === lessonId ? { ...lesson, [field]: value } : lesson
+        lesson.id === lessonId
+          ? {
+              ...lesson,
+              duration:
+                field === "duration"
+                  ? parseInt(value as string)
+                  : lesson.duration,
+              [field]: value,
+            }
+          : lesson
       )
     );
   };
 
-  const onSubmit = async (data: CourseSchema) => {
+  const onSubmit = async (data: CourseSchemaType) => {
+    console.log("Submitting form data:", data);
+    console.log("Lessons:", lessons);
     try {
       const response = await fetch(`/api/course/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: data.title,
-          price: data.price,
-          description: data.description,
-          instructor_id: data.instructor,
-        }),
+        body: JSON.stringify({ ...data, instructor_id: data.instructor }),
       });
 
       if (!response.ok) {
@@ -158,9 +160,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                 {...register("title")}
               />
               {errors.title && (
-                <p className="text-red-500 text-sm">
-                  {errors.title.message}
-                </p>
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
               )}
             </div>
             <div className="space-y-2">
@@ -176,7 +176,11 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                     <SelectContent>
                       {instructors.map((instructor) => (
                         <SelectItem key={instructor.id} value={instructor.id}>
-                          {instructor.first_name + ' ' + instructor.last_name + ' ' + instructor.email}
+                          {instructor.first_name +
+                            " " +
+                            instructor.last_name +
+                            " " +
+                            instructor.email}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -303,6 +307,49 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                     </p>
                   )}
                 </div>
+                <div className="">
+                  <Label>Lesson Duration</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="1"
+                    {...register(`lessons.${index}.duration` as const)}
+                    onChange={(e) =>
+                      handleLessonChange(
+                        lesson.id,
+                        "duration",
+                        parseInt(e.target.value)
+                      )
+                    }
+                    value={String(lesson.duration)}
+                    placeholder="Enter lesson duration in minutes"
+                  />
+                  {errors.lessons && errors.lessons[index]?.duration && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lessons[index]?.duration?.message}
+                    </p>
+                  )}
+                </div>
+                {/* for video_url input text field */}
+                <div className="space-y-2">
+                  <Label htmlFor={`lesson-video_url-${lesson.id}`}>
+                    Lesson Video URL
+                  </Label>
+                  <Input
+                    id={`lesson-video_url-${lesson.id}`}
+                    {...register(`lessons.${index}.video_url` as const)}
+                    value={lesson.video_url}
+                    onChange={(e) =>
+                      handleLessonChange(lesson.id, "video_url", e.target.value)
+                    }
+                    placeholder="Enter lesson video url"
+                  />
+                  {errors.lessons && errors.lessons[index]?.video_url && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lessons[index]?.video_url?.message}
+                    </p>
+                  )}
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor={`lesson-description-${lesson.id}`}>
                     Lesson Description
@@ -360,8 +407,8 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="bg-purple-600 hover:bg-purple-700"
               disabled={isSubmitting}
             >

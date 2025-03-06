@@ -6,5 +6,5 @@
     
     
 ## Future TODO    
-    - [  ] if (isLoading) return; // Prevent multiple submissions when submitting.
+    - [  ] if (isLoading) return; // Prevent multiple submissions when submitting. for both input field and submittion
     - [  ] Password confimation

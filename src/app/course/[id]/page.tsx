@@ -2,10 +2,10 @@
 import { useParams } from "next/navigation";
 import { mockCourse } from "@/utilities/mock";
 import Image from "next/image";
-import CoursePrice from "@/component/course/CoursePrice";
-import Lessons from "@/component/course/Lessons";
-import CourseDescription from "@/component/course/CourseDescription";
-import CourseReview from "@/component/course/CourseReview";
+import CoursePrice from "@/components/course/CoursePrice";
+import Lessons from "@/components/course/Lessons";
+import CourseDescription from "@/components/course/CourseDescription";
+import CourseReview from "@/components/course/CourseReview";
 import { Star } from "lucide-react";
 
 const CourseDetailPage = () => {

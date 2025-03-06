@@ -12,8 +12,10 @@ export const courseSchema = z.object({
       title: z.string().nonempty("Lesson title is required"),
       description: z.string().nonempty("Lesson description is required"),
       videoFile: z.any().optional(),
+      duration: z.preprocess(val => Number(val), z.number().min(0, "Duration must be a positive number")),
+      video_url: z.string().nonempty("Video URL is required"),
     })
   ),
 });
 
-export type CourseSchema = z.infer<typeof courseSchema>;
+export type CourseSchemaType = z.infer<typeof courseSchema>;

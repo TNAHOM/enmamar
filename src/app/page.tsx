@@ -1,5 +1,5 @@
-import LandingPage from "@/component/landingPage/LandingPage";
-import TemplateTopic from "@/component/TemplateTopic";
+import LandingPage from "@/components/landingPage/LandingPage";
+import TemplateTopic from "@/components/TemplateTopic";
 import { mockCourse } from "@/utilities/mock";
 
 export default function Home() {

@@ -6,13 +6,13 @@ export async function GET() {
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get('accessToken')?.value;
 
-    if (!accessToken) {
-        return NextResponse.json(
-            { detail: 'Not authenticated' },
-            { status: 401 }
-        );
-    }
-  
+  if (!accessToken) {
+    return NextResponse.json(
+      { detail: 'Not authenticated' },
+      { status: 401 }
+    );
+  }
+
   try {
     const response = await fetch(`${BASEURL}/instructors`, {
       method: 'GET',

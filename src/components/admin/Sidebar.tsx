@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
 
   return (
-    <aside className="border-r border-gray-200 p-6 col-span-2">
+    <aside className="border-r border-gray-200 w-full">
       <div className="space-y-1 mb-8">
         <button
           className="w-full bg-purple-600 text-white rounded-md py-3 px-4 flex items-center justify-center gap-2 font-medium"

@@ -6,6 +6,7 @@ import { useAuthStore } from "@/lib/store/auth-store";
 import { signupSchema } from "@/lib/scheme/auth-scheme";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SignupFormData } from "@/types/user";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -17,15 +18,6 @@ export default function SignupPage() {
   } = useForm({
     resolver: zodResolver(signupSchema),
   });
-
-  interface SignupFormData {
-    username: string;
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-  }
 
   const onSubmit = async (data: SignupFormData) => {
     await signup(

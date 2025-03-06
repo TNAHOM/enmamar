@@ -1,31 +1,14 @@
+import { userProfile, SignupFormData } from "@/types/user";
 import { create } from "zustand";
 
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  role: string;
-  is_active: boolean;
-}
-
 interface AuthState {
-  user: User | null;
+  user: userProfile | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
   initializeAuth: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  signup: (
-    username: string,
-    email: string,
-    password: string,
-    first_name: string,
-    last_name: string,
-    phone_number: string
-  ) => Promise<void>;
+  signup: (data: SignupFormData) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -84,28 +67,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  signup: async (
-    username,
-    email,
-    password,
-    first_name,
-    last_name,
-    phone_number
-  ) => {
+  signup: async (data) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-          first_name,
-          last_name,
-          phone_number,
-          role: "user",
-        }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

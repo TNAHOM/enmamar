@@ -6,6 +6,7 @@ import { useAuthStore } from "@/lib/store/auth-store";
 import { signupSchema } from "@/lib/scheme/auth-scheme";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SignupFormData } from "@/types/user";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -17,25 +18,9 @@ export default function SignupPage() {
   } = useForm({
     resolver: zodResolver(signupSchema),
   });
-
-  interface SignupFormData {
-    username: string;
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-    phone_number: string;
-  }
-
+  console.log(errors, "error from signup page");
   const onSubmit = async (data: SignupFormData) => {
-    await signup(
-      data.username,
-      data.email,
-      data.password,
-      data.first_name,
-      data.last_name,
-      data.phone_number
-    );
+    await signup({ ...data, role: "user" });
     console.log(error, "error from signup page");
     if (!error) {
       router.push("/auth/login");
@@ -81,6 +66,21 @@ export default function SignupPage() {
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block mb-2">Confirm Password</label>
+          <input
+            {...register("confirm_password")}
+            type="password"
+            className="w-full p-2 border rounded"
+            disabled={isLoading}
+          />
+          {errors.confirm_password && (
+            <p className="text-red-500 text-sm">
+              {errors.confirm_password.message}
+            </p>
           )}
         </div>
 

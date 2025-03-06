@@ -4,7 +4,7 @@ import { CustomerRow } from "./CustomRow";
 
 const RecentCustomers = () => {
   return (
-    <Card className="border border-gray-200 rounded-lg shadow-sm">
+    <Card className="border border-gray-200 rounded-lg shadow-sm w-full">
       <CardContent className="p-6">
         <h2 className="text-lg font-medium mb-2">Recent Customers</h2>
         <p className="text-gray-500 text-sm mb-6">

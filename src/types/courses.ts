@@ -12,5 +12,7 @@ export interface Lesson {
     id: string;
     title: string;
     description: string;
-    videoFile: File | null;
+    videoFile?: File | null; // Optional for the being
+    video_url: string;
+    duration: number;
 }

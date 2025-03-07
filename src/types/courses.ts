@@ -6,6 +6,7 @@ export interface course {
     rating: number;
     price: string;
     image: string;
+    // lessons: Lesson[];
 }
 
 export interface Lesson {

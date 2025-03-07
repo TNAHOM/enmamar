@@ -19,7 +19,12 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    await login(data.email, data.password);
+    const check = await login(data.email, data.password);
+    if (check === undefined) {
+      console.error("Login function returned undefined");
+    } else {
+      console.log(check, "error from login page");
+    }
     if (!error) router.push("/");
   };
 

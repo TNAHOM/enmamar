@@ -55,7 +55,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Login failed");
+        console.log(errorData, "errorData from login");
+        // throw new Error(errorData.detail || "Login failed");
+        return 
       }
 
       const { user } = await response.json();
@@ -63,7 +65,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       const err = error as Error;
       set({ error: err.message, isLoading: false });
-      throw err;
+      // throw err;
     }
   },
 

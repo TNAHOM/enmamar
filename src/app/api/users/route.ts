@@ -21,7 +21,7 @@ export async function GET() {
             throw new Error(responseData.detail || 'Failed to fetch users');
         }
 
-        return NextResponse.json(responseData, { status: 200 });
+        return NextResponse.json(responseData.data, { status: 200 });
     } catch (error) {
         console.log(error, "error from users/route.ts");
 

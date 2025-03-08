@@ -6,6 +6,23 @@ export interface userProfile {
     last_name: string,
     phone_number: string,
     role: string,
+    created_at: string,
+    updated_at: string,
+    profile_picture?: string,
+}
+
+export interface InstructorProfile {
+    id: string,
+    username: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    phone_number: string,
+    role: string,
+    industry: string,
+    created_at: string,
+    courses: number,
+    views: number,
 }
 
 export interface SignupFormData {

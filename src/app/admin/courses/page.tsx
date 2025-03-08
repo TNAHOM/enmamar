@@ -7,6 +7,7 @@ import { CourseStats } from "@/components/admin/course/CourseStats";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { AddCourseModal } from "@/components/admin/AddCourseModal";
+import { Button } from "@/components/ui/button";
 
 export default function CoursesPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function CoursesPage() {
   return (
     <AdminLayout>
       <div className="">
+        {/* Search and other content */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex-1 max-w-md">
             <div className="relative">
@@ -24,27 +26,20 @@ export default function CoursesPage() {
               />
             </div>
           </div>
+          {/* Add New Course Button */}
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-purple-600 hover:bg-purple-700"
+          >
+            Add New Course
+          </Button>
         </div>
 
         <CourseStats />
 
+        {/* Course lists */}
         <div className="space-y-8">
-          <CourseList
-            title="Recent Courses"
-            viewAll="/admin/courses/recent"
-          />
-
-          <CourseList
-            title="Most Viewed"
-            // courses={mostViewedCourses}
-            viewAll="/admin/courses/most-viewed"
-          />
-
-          <CourseList
-            title="Trending Courses"
-            // courses={trendingCourses}
-            viewAll="/admin/courses/trending"
-          />
+          <CourseList title="Recent Courses" viewAll="/admin/courses/recent" />
         </div>
       </div>
 

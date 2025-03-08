@@ -42,11 +42,8 @@ export default function AdminDashboard() {
               positive={true}
             />
           </div>
-
-          {/* Sales Report */}
-
           <SalesReport />
-          {/* </div> */}
+        
         </div>
     </AdminLayout>
   );

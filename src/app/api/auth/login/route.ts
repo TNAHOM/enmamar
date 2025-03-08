@@ -13,9 +13,10 @@ export async function POST(request: Request) {
         });
 
         const data = await response.json();
-        // console.log(data, email, 'data from login route');
+        // console.log(data, email, 'data from login route, ss');
         if (!response.ok) {
-            throw new Error(data.detail || 'Login failed');
+            // throw new Error(data.detail || 'Login failed');
+            return NextResponse.json({ detail: data.detail || 'Failed: Please try again' }, { status: 500 });
         }
 
         // Set cookies from successful response
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
         return NextResponse.json({
             detail: data.detail,
             user: data.user
-        });
+        }, { status: 200 });
 
     } catch (error) {
         console.log(error, 'error from login route');

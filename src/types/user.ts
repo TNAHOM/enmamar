@@ -6,6 +6,9 @@ export interface userProfile {
     last_name: string,
     phone_number: string,
     role: string,
+    created_at: string,
+    updated_at: string,
+    profile_picture?: string,
 }
 
 export interface InstructorProfile {

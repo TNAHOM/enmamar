@@ -16,9 +16,10 @@ import { Button } from "@/components/ui/button";
 import { EditInstructorModal } from "@/components/admin/EditInstructorModal";
 import { Pencil, Trash2 } from "lucide-react";
 import { useFetchData } from "@/hooks/useFetchData";
-import { InstructorProfile } from "@/types/user";
+import { userProfile } from "@/types/user";
 
 type SortField = "first_name" | "views" | "industry" | "courses";
+// type SortField = "first_name";
 type SortOrder = "asc" | "desc";
 
 export function InstructorTable() {
@@ -30,7 +31,7 @@ export function InstructorTable() {
   );
   const itemsPerPage = 5;
 
-  const { data, loading, error } = useFetchData<InstructorProfile>({
+  const { data, loading, error } = useFetchData<userProfile>({
     url: "/api/users",
   });
 
@@ -131,15 +132,23 @@ export function InstructorTable() {
                 <TableCell>
                   <Badge
                     variant={
-                      instructor.views > 1000 ? "default" : "destructive"
+                      // instructor.views > 1000 ? "default" : "destructive"
+                      "default"
                     }
                     className="rounded-full"
                   >
-                    {instructor.views}
+                    {/* {instructor.views} */}
+                    2198
                   </Badge>
                 </TableCell>
-                <TableCell>{instructor.industry}</TableCell>
-                <TableCell>{instructor.courses}</TableCell>
+                <TableCell>
+                  {/* {instructor.industry} */}
+                  Software Development
+                </TableCell>
+                <TableCell>
+                  {/* {instructor.courses} */}
+                  12
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button

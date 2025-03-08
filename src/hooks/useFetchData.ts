@@ -5,14 +5,14 @@ import { useState, useEffect } from "react"
 export function useFetchData<T>({ url }: { url: string }) {
     const [data, setData] = useState<T[]>([])
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<unknown>(null)
+    const [error, setError] = useState<string>('')
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(url)
-                const data = await response.json()
-                setData(data.data)
+                const jsonData: T[] = await response.json()
+                setData(jsonData)
             } catch (error) {
                 if (error instanceof Error) {
                     setError(error.message);
@@ -25,6 +25,7 @@ export function useFetchData<T>({ url }: { url: string }) {
         }
         fetchData()
     }, [url])
+    // console.log(data, "data from useFetchData")
 
     return { data, loading, error }
 }

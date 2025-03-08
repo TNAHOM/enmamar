@@ -54,7 +54,8 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
     const fetchInstructors = async () => {
       try {
         const response = await fetch("/api/instructors");
-        if (!response.ok) throw new Error("Failed to fetch instructors");
+        if (!response.ok) 
+          throw new Error("Failed to fetch instructors");
         const data = await response.json();
         setInstructors(data);
       } catch (error) {
@@ -93,7 +94,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const removeLesson = (lessonId: string) => {
     setLessons(lessons.filter((lesson) => lesson.id !== lessonId));
   };
-  console.log(errors);
 
   const handleLessonChange = (
     lessonId: string,

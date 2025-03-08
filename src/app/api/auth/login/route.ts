@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         // console.log(data, email, 'data from login route, ss');
         if (!response.ok) {
             // throw new Error(data.detail || 'Login failed');
-            return NextResponse.json({ detail: 'Failed: Please try again' }, { status: 500 });
+            return NextResponse.json({ detail: data.detail || 'Failed: Please try again' }, { status: 500 });
         }
 
         // Set cookies from successful response

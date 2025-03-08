@@ -7,7 +7,10 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   initializeAuth: () => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ detail: string; status: number }>;
   signup: (data: SignupFormData) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -53,19 +56,23 @@ export const useAuthStore = create<AuthState>((set) => ({
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log(errorData, "errorData from login");
+        set({ error: data.detail || "Login failed", isLoading: false });
         // throw new Error(errorData.detail || "Login failed");
-        return 
+        return { detail: data.detail, status: response.status };
       }
 
-      const { user } = await response.json();
-      set({ user, isAuthenticated: true, isLoading: false });
+      // const { user } = await response.json();
+      // set({ user, isAuthenticated: true, isLoading: false });
+      set({ user: data.user, isAuthenticated: true, isLoading: false });
+
+      return { detail: "Login successful", status: response.status };
     } catch (error) {
       const err = error as Error;
       set({ error: err.message, isLoading: false });
-      // throw err;
+      return { detail: err.message, status: 500 };
     }
   },
 

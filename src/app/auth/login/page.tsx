@@ -10,6 +10,7 @@ import Link from "next/link";
 export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading, error } = useAuthStore();
+
   const {
     register,
     handleSubmit,
@@ -19,13 +20,12 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    const check = await login(data.email, data.password);
-    if (check === undefined) {
-      console.error("Login function returned undefined");
-    } else {
-      console.log(check, "error from login page");
+    const response = await login(data.email, data.password);
+    // console.log(response, "check from login page");
+
+    if (response.status === 200) {
+      router.push("/");
     }
-    if (!error) router.push("/");
   };
 
   return (

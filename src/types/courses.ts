@@ -1,11 +1,16 @@
+import { userProfile } from "./user";
+
 export interface course {
     id: string;
     title: string;
-    instructor: string;
     description: string;
     rating: number;
     price: string;
     image: string;
+    instructor_id: string;
+    created_at: string;
+    updated_at: string;
+    instructor: userProfile
     // lessons: Lesson[];
 }
 

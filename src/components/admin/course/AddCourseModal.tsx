@@ -70,7 +70,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
       }
     };
     fetchInstructors();
-  }, []); // Add onError to dependencies
+  }, []);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

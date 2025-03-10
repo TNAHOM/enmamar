@@ -6,7 +6,7 @@ import { CourseList } from "@/components/admin/course/CourseList";
 import { CourseStats } from "@/components/admin/course/CourseStats";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { AddCourseModal } from "@/components/admin/AddCourseModal";
+import { AddCourseModal } from "@/components/admin/course/AddCourseModal";
 import { Button } from "@/components/ui/button";
 
 export default function CoursesPage() {

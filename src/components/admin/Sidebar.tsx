@@ -2,12 +2,11 @@
 import { useState } from "react";
 import { BarChart3, Home, PieChart, Plus, Users } from "lucide-react";
 import Link from "next/link";
-import { AddCourseModal } from "./AddCourseModal";
+import { AddCourseModal } from "./course/AddCourseModal";
 
 const Sidebar = () => {
   const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
-  
-  
+
   return (
     <aside className="border-r border-gray-200 w-full">
       <div className="space-y-1 mb-8">

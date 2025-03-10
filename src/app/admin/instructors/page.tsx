@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { InstructorTable } from "@/components/admin/InstructorTable";
-import { AddInstructorModal } from "@/components/admin/AddInstructorModal";
+import { InstructorTable } from "@/components/admin/instructor/InstructorTable";
+import { AddInstructorModal } from "@/components/admin/instructor/AddInstructorModal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 

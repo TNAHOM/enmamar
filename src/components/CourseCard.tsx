@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 
 interface CourseCardProps {
-  id: number;
+  id: string;
   title: string;
   instructor: string;
   description: string;
@@ -32,7 +32,7 @@ export default function CourseCard({
     <Card className="overflow-hidden transition-all hover:shadow-md ">
       <div className="aspect-video relative overflow-hidden">
         <Image
-          src={image || "/placeholder.svg"}
+          src={image || "/Images/Full-stack.png"}
           alt={title}
           fill
           className="object-cover transition-transform hover:scale-105"

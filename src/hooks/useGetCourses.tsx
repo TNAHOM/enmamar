@@ -1,9 +1,9 @@
-import { useFetchData } from "./useFetchData";
+import { useFetchListData } from "./useFetchData";
 import { course } from "@/types/courses";
 
 export const useGetCourses = () => {
-  const { data, error, loading } = useFetchData<course>({
-    url: "/api/course/getCourse",
+  const { data, error, loading } = useFetchListData<course>({
+    url: "/api/course/getCourses",
   });
   //   make the slice dynamic
 

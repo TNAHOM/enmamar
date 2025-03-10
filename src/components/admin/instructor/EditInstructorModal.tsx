@@ -1,19 +1,30 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { MOCK_INSTRUCTORS } from "../../utilities/mock"
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MOCK_INSTRUCTORS } from "@/utilities/mock";
 
 interface EditInstructorModalProps {
-  isOpen: boolean
-  onClose: () => void
-  instructorId: string | null
+  isOpen: boolean;
+  onClose: () => void;
+  instructorId: string | null;
 }
 
 const PROFESSIONS = [
@@ -25,44 +36,50 @@ const PROFESSIONS = [
   "UX Designer",
   "Product Manager",
   "UX Copywriter",
-]
+];
 
-export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstructorModalProps) {
+export function EditInstructorModal({
+  isOpen,
+  onClose,
+  instructorId,
+}: EditInstructorModalProps) {
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
     firstName: "",
     lastName: "",
     profession: "",
-  })
+  });
 
   useEffect(() => {
     if (instructorId) {
-      const instructor = MOCK_INSTRUCTORS.find((i) => i.id === instructorId)
+      const instructor = MOCK_INSTRUCTORS.find((i) => i.id === instructorId);
       if (instructor) {
-        const [firstName, lastName] = instructor.name.split(" ")
+        const [firstName, lastName] = instructor.name.split(" ");
         setFormData({
           email: instructor.email,
           phone: instructor.phone,
           firstName,
           lastName,
           profession: instructor.industry,
-        })
+        });
       }
     }
-  }, [instructorId])
+  }, [instructorId]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle form submission
-    onClose()
-  }
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-purple-600">Edit Instructor</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-purple-600">
+            Edit Instructor
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -71,7 +88,9 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
               <Input
                 id="firstName"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
                 required
               />
             </div>
@@ -80,7 +99,9 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
               <Input
                 id="lastName"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, lastName: e.target.value })
+                }
                 required
               />
             </div>
@@ -92,7 +113,9 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               required
             />
           </div>
@@ -103,7 +126,9 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
               id="phone"
               type="tel"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
               required
             />
           </div>
@@ -112,7 +137,9 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
             <Label htmlFor="profession">Profession</Label>
             <Select
               value={formData.profession}
-              onValueChange={(value) => setFormData({ ...formData, profession: value })}
+              onValueChange={(value) =>
+                setFormData({ ...formData, profession: value })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select profession" />
@@ -138,6 +165,5 @@ export function EditInstructorModal({ isOpen, onClose, instructorId }: EditInstr
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

@@ -39,7 +39,10 @@ export default function CoursesPage() {
 
         {/* Course lists */}
         <div className="space-y-8">
-          <CourseList title="Recent Courses" viewAll="/admin/courses/recent" />
+          <CourseList
+            title="Recent Courses"
+            viewAll="/admin/courses/allCourses"
+          />
         </div>
       </div>
 

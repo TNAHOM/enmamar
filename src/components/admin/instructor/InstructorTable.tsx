@@ -13,9 +13,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { EditInstructorModal } from "@/components/admin/EditInstructorModal";
+import { EditInstructorModal } from "@/components/admin/instructor/EditInstructorModal";
 import { Pencil, Trash2 } from "lucide-react";
-import { useFetchData } from "@/hooks/useFetchData";
+import { useFetchListData } from "@/hooks/useFetchData";
 import { userProfile } from "@/types/user";
 
 type SortField = "first_name" | "views" | "industry" | "courses";
@@ -31,9 +31,14 @@ export function InstructorTable() {
   );
   const itemsPerPage = 5;
 
-  const { data, loading, error } = useFetchData<userProfile>({
+  const { data, loading, error } = useFetchListData<userProfile[]>({
     url: "/api/users",
   });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  console.log(error, "error in instructor table");
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {

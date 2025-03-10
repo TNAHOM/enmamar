@@ -1,16 +1,28 @@
 "use client";
 import { useParams } from "next/navigation";
-import { mockCourse } from "@/utilities/mock";
 import Image from "next/image";
 import CoursePrice from "@/components/course/CoursePrice";
 import Lessons from "@/components/course/Lessons";
 import CourseDescription from "@/components/course/CourseDescription";
 import CourseReview from "@/components/course/CourseReview";
 import { Star } from "lucide-react";
+import { useFetchData } from "@/hooks/useFetchData";
+import { course as courseType } from "@/types/courses";
 
 const CourseDetailPage = () => {
   const { id } = useParams() as { id: string };
-  const course = mockCourse.find((_, index) => index.toString() === id);
+  const {
+    data: course,
+    error,
+    loading,
+  } = useFetchData<courseType>({
+    url: `/api/course/${id}`,
+  });
+
+  console.log(error, "error in course detail page");
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!course) {
     return <div>Course not found</div>;
@@ -29,7 +41,7 @@ const CourseDetailPage = () => {
           <div className="flex justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Image
-                src="/placeholder.svg?height=50&width=50"
+                src="/Images/Full-stack.png"
                 alt="Instructor"
                 width={50}
                 height={50}
@@ -39,7 +51,11 @@ const CourseDetailPage = () => {
                 <p className="text-base font-medium text-gray-500">
                   Instructor
                 </p>
-                <p className="text-lg font-medium">{course.instructor}</p>
+                <p className="text-lg font-medium">
+                  {course.instructor.first_name +
+                    " " +
+                    course.instructor.last_name}
+                </p>
               </div>
             </div>
 
@@ -62,7 +78,7 @@ const CourseDetailPage = () => {
 
           <div className="relative w-full h-[550px] border border-gray-300 rounded-xl overflow-hidden">
             <Image
-              src={course.image}
+              src="/Images/Full-stack.png"
               alt={course.title}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"

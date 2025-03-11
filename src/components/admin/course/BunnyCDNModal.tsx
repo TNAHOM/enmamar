@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,14 +16,9 @@ import { Label } from "@/components/ui/label";
 interface BunnyCDNModalProps {
   isOpen: boolean;
   onClose: () => void;
-  instructorId: string | null;
 }
 
-export function BunnyCDNModal({
-  isOpen,
-  onClose,
-  instructorId,
-}: BunnyCDNModalProps) {
+export function BunnyCDNModal({ isOpen, onClose }: BunnyCDNModalProps) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",

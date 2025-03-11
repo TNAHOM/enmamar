@@ -16,62 +16,44 @@ import { Button } from "@/components/ui/button";
 import { EditInstructorModal } from "@/components/admin/instructor/EditInstructorModal";
 import { Pencil, Trash2 } from "lucide-react";
 import { useFetchListData } from "@/hooks/useFetchData";
-import { userProfile } from "@/types/user";
+import { InstructorProfile } from "@/types/user";
+import { useTableData } from "@/hooks/useTableData";
 
-type SortField = "first_name" | "views" | "industry" | "courses";
-// type SortField = "first_name";
-type SortOrder = "asc" | "desc";
+type SortField = keyof InstructorProfile | "courses" | "views" | "industry";
 
 export function InstructorTable() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortField, setSortField] = useState<SortField>("first_name");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [selectedInstructor, setSelectedInstructor] = useState<string | null>(
     null
   );
-  const itemsPerPage = 5;
 
-  const { data, loading, error } = useFetchListData<userProfile[]>({
+  const { data, loading, error } = useFetchListData<InstructorProfile>({
     url: "/api/users",
+  });
+
+  const {
+    paginatedData,
+    totalItems,
+    startIndex,
+    endIndex,
+    currentPage,
+    totalPages,
+    handleSort,
+    sortField,
+    sortOrder,
+    goToNextPage,
+    goToPreviousPage,
+    goToPage,
+  } = useTableData<InstructorProfile, SortField>({
+    data: data || [],
+    initialSortField: "first_name",
+    itemsPerPage: 5,
   });
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   console.log(error, "error in instructor table");
-
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
-  };
-
-  const sortedInstructors = [...data].sort((a, b) => {
-    const aValue = a[sortField];
-    const bValue = b[sortField];
-
-    if (typeof aValue === "string" && typeof bValue === "string") {
-      return sortOrder === "asc"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    }
-
-    if (typeof aValue === "number" && typeof bValue === "number") {
-      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
-    }
-
-    return 0;
-  });
-
-  const totalPages = Math.ceil(sortedInstructors.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedInstructors = sortedInstructors.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
 
   return (
     <div className="space-y-4">
@@ -115,7 +97,7 @@ export function InstructorTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedInstructors.map((instructor) => (
+            {paginatedData.map((instructor) => (
               <TableRow key={instructor.id}>
                 <TableCell>
                   <Checkbox />
@@ -135,25 +117,12 @@ export function InstructorTable() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant={
-                      // instructor.views > 1000 ? "default" : "destructive"
-                      "default"
-                    }
-                    className="rounded-full"
-                  >
-                    {/* {instructor.views} */}
+                  <Badge variant="default" className="rounded-full">
                     2198
                   </Badge>
                 </TableCell>
-                <TableCell>
-                  {/* {instructor.industry} */}
-                  Software Development
-                </TableCell>
-                <TableCell>
-                  {/* {instructor.courses} */}
-                  12
-                </TableCell>
+                <TableCell>Software Development</TableCell>
+                <TableCell>12</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
@@ -176,15 +145,13 @@ export function InstructorTable() {
 
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-500">
-          Showing {startIndex + 1} to{" "}
-          {Math.min(startIndex + itemsPerPage, sortedInstructors.length)} of{" "}
-          {sortedInstructors.length} entries
+          Showing {startIndex + 1} to {endIndex} of {totalItems} entries
         </div>
         <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage(currentPage - 1)}
+            onClick={goToPreviousPage}
             disabled={currentPage === 1}
           >
             Previous
@@ -194,7 +161,7 @@ export function InstructorTable() {
               key={i + 1}
               variant={currentPage === i + 1 ? "default" : "outline"}
               size="sm"
-              onClick={() => setCurrentPage(i + 1)}
+              onClick={() => goToPage(i + 1)}
             >
               {i + 1}
             </Button>
@@ -202,7 +169,7 @@ export function InstructorTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage(currentPage + 1)}
+            onClick={goToNextPage}
             disabled={currentPage === totalPages}
           >
             Next

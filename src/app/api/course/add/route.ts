@@ -16,15 +16,16 @@ export async function POST(request: Request) {
   }
   // console.log(data, "data from course creation route");
   try {
-    const response = await fetch(`${BASEURL}/course/add`, {
+    const response = await fetch(`${BASEURL}/protected/course/add`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json" ,
+        "Content-Type": "application/json",
         'Authorization': `Bearer ${accessToken}`,
 
       },
       body: JSON.stringify(data),
     });
+
     const responseData = await response.json();
 
     if (!response.ok) {

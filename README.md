@@ -13,4 +13,7 @@
   - [ ] Add Thumbnail(DB)
 - [ ] Add an error component and when error occures display the error component page
 - [ ] Add Loading on the datas until it get the data(Shemear effect)
--
+- [ ] Implement the sort functionality
+  - [ ] In the instructor table
+  - [ ] In the course list admin page
+- [ ] Handle the error some components I just console them in order not to get an error/issue

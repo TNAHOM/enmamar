@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const response = await fetch(`${BASEURL}/course/add`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json" ,
+        "Content-Type": "application/json",
         'Authorization': `Bearer ${accessToken}`,
 
       },

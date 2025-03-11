@@ -10,8 +10,11 @@ export interface course {
     instructor_id: string;
     created_at: string;
     updated_at: string;
-    instructor: userProfile
-    // lessons: Lesson[];
+    instructor: userProfile;
+    lessons: Lesson[];
+    industry: string;
+    views: number;
+    totalLesson: number;
 }
 
 export interface Lesson {

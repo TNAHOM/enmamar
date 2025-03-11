@@ -13,9 +13,8 @@ export async function POST(request: Request) {
         });
 
         const data = await response.json();
-        // console.log(data, email, 'data from login route, ss');
+
         if (!response.ok) {
-            // throw new Error(data.detail || 'Login failed');
             return NextResponse.json({ detail: data.detail || 'Failed: Please try again' }, { status: 500 });
         }
 

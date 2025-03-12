@@ -6,7 +6,8 @@ export interface course {
     description: string;
     rating: number;
     price: string;
-    image: string;
+    tags: string;
+    thumbnail_url: string;
     instructor_id: string;
     created_at: string;
     updated_at: string;
@@ -21,7 +22,12 @@ export interface Lesson {
     id: string;
     title: string;
     description: string;
-    videoFile?: File | null; // Optional for the being
-    video_url: string;
     duration: number;
+    video: Video;
+}
+
+export interface Video {
+    library_id: string;
+    video_id: string;
+    secret_key: string;
 }

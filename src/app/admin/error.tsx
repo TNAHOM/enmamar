@@ -25,6 +25,7 @@ export default function Error({ error }: ErrorProps) {
         {/* {error.message || "An unexpected error occurred."} */}
         We apologize for the inconvenience. Please try again later.
       </p>
+      <p>{error.message}</p>
       <Link href="/">
         <Button className="bg-purple-600 hover:bg-purple-700">
           <Home className="mr-2 h-4 w-4" />

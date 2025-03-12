@@ -26,7 +26,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { courseSchema } from "@/lib/scheme/course-scheme";
 import type { CourseSchemaType } from "@/lib/scheme/course-scheme";
-import { Lesson } from "@/types/courses";
+import { Lesson, Video } from "@/types/courses";
 import { userProfile } from "@/types/user";
 import Link from "next/link";
 
@@ -91,8 +91,12 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
         id: `lesson-${lessons.length + 1}`,
         title: "",
         description: "",
-        video_url: "hello.com",
         duration: 0,
+        video: {
+          library_id: "",
+          video_id: "",
+          secret_key: "",
+        },
       },
     ]);
   };
@@ -103,7 +107,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
 
   const handleLessonChange = (
     lessonId: string,
-    field: keyof Lesson,
+    field: keyof Lesson | keyof Video,
     value: string | File | null | number
   ) => {
     setLessons(
@@ -111,11 +115,11 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
         lesson.id === lessonId
           ? {
               ...lesson,
-              duration:
-                field === "duration"
-                  ? parseInt(value as string)
-                  : lesson.duration,
-              [field]: value,
+              ...(field in lesson ? { [field]: value } : {}),
+              video: {
+                ...lesson.video,
+                ...(field in lesson.video ? { [field]: value } : {}),
+              },
             }
           : lesson
       )
@@ -125,11 +129,21 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const onSubmit = async (data: CourseSchemaType) => {
     console.log("Submitting form data:", data);
     console.log("Lessons:", lessons);
+
+    const lessonsWithOrder = lessons.map((lesson, index) => ({
+      ...lesson,
+      order: index + 1,
+    }));
+
     try {
       const response = await fetch(`/api/course/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, instructor_id: data.instructor }),
+        body: JSON.stringify({
+          ...data,
+          instructor_id: data.instructor,
+          lessons: lessonsWithOrder,
+        }),
       });
 
       if (!response.ok) {
@@ -145,6 +159,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
       console.error("Error submitting form:", error);
     }
   };
+  console.log(errors, "errors from Add course modal");
 
   // console.log(error);
   // if (error) {
@@ -324,6 +339,23 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                   >
                     <X className="h-4 w-4" />
                   </Button>
+                  {/* <div className="space-y-2">
+                    <Label htmlFor={`lesson-id-${lesson.id}`}>Lesson ID</Label>
+                    <Input
+                      id={`lesson-id-${lesson.id}`}
+                      {...register(`lessons.${index}.id` as const)}
+                      value={lesson.id}
+                      onChange={(e) =>
+                        handleLessonChange(lesson.id, "id", e.target.value)
+                      }
+                      placeholder="Enter lesson ID"
+                    />
+                    {errors.lessons && errors.lessons[index]?.id && (
+                      <p className="text-red-500 text-sm">
+                        {errors.lessons[index]?.id?.message}
+                      </p>
+                    )}
+                  </div> */}
                   <div className="space-y-2">
                     <Label htmlFor={`lesson-title-${lesson.id}`}>
                       Lesson {index + 1} Title
@@ -366,30 +398,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                       </p>
                     )}
                   </div>
-                  {/* for video_url input text field */}
-                  <div className="space-y-2">
-                    <Label htmlFor={`lesson-video_url-${lesson.id}`}>
-                      Lesson Video URL
-                    </Label>
-                    <Input
-                      id={`lesson-video_url-${lesson.id}`}
-                      {...register(`lessons.${index}.video_url` as const)}
-                      value={lesson.video_url}
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "video_url",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter lesson video url"
-                    />
-                    {errors.lessons && errors.lessons[index]?.video_url && (
-                      <p className="text-red-500 text-sm">
-                        {errors.lessons[index]?.video_url?.message}
-                      </p>
-                    )}
-                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor={`lesson-description-${lesson.id}`}>
                       Lesson Description
@@ -414,29 +423,76 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label>Lesson Video</Label>
-                    <div className="border-2 border-dashed border-gray-200 rounded-lg p-4">
-                      <label className="flex flex-col items-center justify-center h-24 cursor-pointer">
-                        <Upload className="h-6 w-6 text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-500">
-                          {lesson.videoFile
-                            ? lesson.videoFile.name
-                            : "Click to upload video"}
-                        </span>
-                        <input
-                          type="file"
-                          className="hidden"
-                          accept="video/*"
-                          onChange={(e) =>
-                            handleLessonChange(
-                              lesson.id,
-                              "videoFile",
-                              e.target.files?.[0] || null
-                            )
-                          }
-                        />
-                      </label>
-                    </div>
+                    <Label>Library Id</Label>
+                    <Input
+                      type="text"
+                      {...register(
+                        `lessons.${index}.video.library_id` as const
+                      )}
+                      value={lesson.video.library_id}
+                      onChange={(e) =>
+                        handleLessonChange(
+                          lesson.id,
+                          "library_id",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter library id"
+                    />
+                    {errors.lessons &&
+                      errors.lessons[index]?.video?.library_id && (
+                        <p className="text-red-500 text-sm">
+                          {errors.lessons[index]?.video?.library_id?.message}
+                        </p>
+                      )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Video Id</Label>
+                    <Input
+                      type="text"
+                      {...register(`lessons.${index}.video.video_id` as const)}
+                      value={lesson.video.video_id}
+                      onChange={(e) =>
+                        handleLessonChange(
+                          lesson.id,
+                          "video_id",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter Video id"
+                    />
+                    {errors.lessons &&
+                      errors.lessons[index]?.video?.video_id && (
+                        <p className="text-red-500 text-sm">
+                          {errors.lessons[index]?.video?.video_id?.message}
+                        </p>
+                      )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Secret Key</Label>
+                    <Input
+                      type="text"
+                      {...register(
+                        `lessons.${index}.video.secret_key` as const
+                      )}
+                      value={lesson.video.secret_key}
+                      onChange={(e) =>
+                        handleLessonChange(
+                          lesson.id,
+                          "secret_key",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter Secret Key"
+                    />
+                    {errors.lessons &&
+                      errors.lessons[index]?.video?.secret_key && (
+                        <p className="text-red-500 text-sm">
+                          {errors.lessons[index]?.video?.secret_key?.message}
+                        </p>
+                      )}
                   </div>
                 </div>
               ))}

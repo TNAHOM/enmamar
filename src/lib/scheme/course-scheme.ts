@@ -9,11 +9,15 @@ export const courseSchema = z.object({
   description: z.string().nonempty("Description is required"),
   lessons: z.array(
     z.object({
+      // id: z.string().nonempty("Lesson ID is required"),
       title: z.string().nonempty("Lesson title is required"),
       description: z.string().nonempty("Lesson description is required"),
-      videoFile: z.any().optional(),
       duration: z.preprocess(val => Number(val), z.number().min(0, "Duration must be a positive number")),
-      video_url: z.string().nonempty("Video URL is required"),
+      video: z.object({
+        library_id: z.string().nonempty("Library ID is required"),
+        video_id: z.string().nonempty("Video ID is required"),
+        secret_key: z.string().nonempty("Secret key is required"),
+      }).optional(),
     })
   ),
 });

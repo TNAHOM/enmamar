@@ -1,18 +1,28 @@
-import React from "react";
-import type { mockCourse } from "@/utilities/mock";
+"use client";
+
+// import type { mockCourse } from "@/utilities/mock";
 import CourseCard from "./CourseCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { useGetCourses } from "@/hooks/useGetCourses";
 
 interface TemplateProps {
   topic: string;
   description: string;
-  contents: typeof mockCourse;
 }
 
-const TemplateTopic = ({ topic, description, contents }: TemplateProps) => {
+const TemplateTopic = ({ topic, description }: TemplateProps) => {
+  const { data: contents, error, loading } = useGetCourses();
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>An error has occured: {error}</div>;
+  }
+
   return (
     <div className="container space-y-8 mt-14">
       <div className="flex items-baseline justify-between">
@@ -35,20 +45,18 @@ const TemplateTopic = ({ topic, description, contents }: TemplateProps) => {
           isFeatured ? "lg:grid-cols-3" : "lg:grid-cols-4"
         }`}
       >
-        {(!isFeatured ? [...contents, ...contents] : contents.slice(0, 3)).map(
-          (content, index) => (
-            <CourseCard
-              key={index}
-              id={index}
-              title={content.title}
-              instructor={content.instructor}
-              description={content.description}
-              price={content.price}
-              image={content.image}
-              rating={content.rating || 4.5}
-            />
-          )
-        )}
+        {(!isFeatured ? contents : contents.slice(0, 3)).map((content) => (
+          <CourseCard
+            key={content.id}
+            id={content.id}
+            title={content.title}
+            instructor={content.instructor.first_name}
+            description={content.description}
+            price={content.price}
+            image={content.image}
+            rating={content.rating || 4.5}
+          />
+        ))}
       </div>
     </div>
   );

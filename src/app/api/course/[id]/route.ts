@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function GET(
     req: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const { id } = await params;
+    const { id } = params; // Ensure id is correctly retrieved
     const BASEURL = process.env.BASEURL;
 
     try {
@@ -15,7 +14,6 @@ export async function GET(
                 "Content-Type": "application/json",
                 // "Authorization": `Bearer ${accessToken}`,
             },
-
         });
         const responseData = await response.json();
         if (!response.ok) {

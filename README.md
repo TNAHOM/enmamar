@@ -17,3 +17,4 @@
   - [ ] In the instructor table
   - [ ] In the course list admin page
 - [ ] Handle the error some components I just console them in order not to get an error/issue
+- [ ] Add total duration time in the courseDescription (check backend)

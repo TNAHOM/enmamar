@@ -1,9 +1,25 @@
-import React from "react";
-import { lessons } from "@/utilities/mock";
 import { useState } from "react";
+import { useFetchData } from "@/hooks/useFetchData";
+import { Lesson } from "@/types/courses";
 
-const Lessons = () => {
-  const [activeDay, setActiveDay] = useState<number | null>(1);
+const Lessons = ({ id }: { id: string }) => {
+  console.log(id, "id from lesson component");
+  const [activeDay, setActiveDay] = useState<number>(1);
+  const {
+    data: lessons,
+    error,
+    loading,
+  } = useFetchData<Lesson[]>({
+    url: `/api/lessons/${id}`, // Ensure id is used here
+  });
+  console.log(lessons, "lessons from lesson component");
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (!lessons || error) {
+    console.log(error, "error from lesson component");
+    return <div>No data: {error}</div>;
+  }
 
   return (
     <div className="p-3 border rounded-xl shadow-sm font-sans ">
@@ -16,18 +32,18 @@ const Lessons = () => {
       <div className="space-y-3 overflow-hidden h-[600px] overflow-y-auto py-4">
         {lessons.map((item, index) => (
           <div
-            key={item.day}
+            key={item.id}
             className={` py-4 px-5 transition-colors duration-200 text-lg rounded-md font-medium cursor-pointer ${
-              activeDay === item.day
+              activeDay === index
                 ? "text-purpleStandard bg-purple-200 border-gray-200 border "
                 : "hover:bg-gray-100 "
             }`}
-            onClick={() => setActiveDay(item.day)}
+            onClick={() => setActiveDay(index)}
           >
             <div className="flex items-center gap-4">
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                  activeDay === item.day
+                  activeDay === index
                     ? "bg-purple-600 text-white"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 }`}
@@ -35,7 +51,7 @@ const Lessons = () => {
                 {index + 1}
               </div>
               <span>
-                <span className="font-medium">Lesson {item.day}: </span>
+                <span className="font-medium">Lesson {index + 1}: </span>
                 {item.title}
               </span>
             </div>

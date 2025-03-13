@@ -4,7 +4,7 @@ export async function GET(
     req: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const { id } = await params; // Ensure id is correctly retrieved
+    const { id } = await params;
     const BASEURL = process.env.BASEURL;
 
     try {
@@ -12,7 +12,6 @@ export async function GET(
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                // "Authorization": `Bearer ${accessToken}`,
             },
         });
         const responseData = await response.json();

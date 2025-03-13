@@ -19,7 +19,9 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between items-center p-4 px-14 bg-[#F6F7F9]">
-      <div className="text-xl text-purpleStandard font-bold">{"ENMAMAR"}</div>
+      <div className="text-xl text-purpleStandard font-bold">
+        <Link href={"/"}>ENEMAMAR</Link>
+      </div>
       <div className="flex justify-between items-center space-x-8 font-medium">
         <p>Explore</p>
         <p>Become an Instructor</p>

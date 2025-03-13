@@ -8,18 +8,36 @@ import CourseReview from "@/components/course/CourseReview";
 import { Star } from "lucide-react";
 import { useFetchData } from "@/hooks/useFetchData";
 import { course as courseType } from "@/types/courses";
+import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
+import { useEffect } from "react";
 
 const CourseDetailPage = () => {
-  const { id } = useParams() as { id: string }; // Ensure id is correctly retrieved
+  const { id } = useParams() as { id: string };
+  const {
+    activeLesson,
+    isVideoPlaying,
+    videoUrl,
+    isLoading,
+    error: videoError,
+    resetVideoState,
+  } = useLessonVideoStore();
+
   const {
     data: course,
     error,
     loading,
   } = useFetchData<courseType>({
-    url: `/api/course/${id}`, // Ensure id is used here
+    url: `/api/course/${id}`,
   });
 
   console.log(error, "error in course detail page");
+
+  useEffect(() => {
+    return () => {
+      resetVideoState();
+    };
+  }, [id, resetVideoState]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -31,7 +49,6 @@ const CourseDetailPage = () => {
   return (
     <div className="mx-16 my-10">
       <div className="grid grid-cols-10 gap-10">
-        {/* Column 1 - Main Content */}
         <div className="col-span-7 space-y-7">
           <h2 className="text-4xl font-bold leading-tight">{course.title}</h2>
           <p className="text-lg text-gray-500 font-normal">
@@ -77,24 +94,41 @@ const CourseDetailPage = () => {
           </div>
 
           <div className="relative w-full h-[550px] border border-gray-300 rounded-xl overflow-hidden">
-            <Image
-              src="/Images/Full-stack.png"
-              alt={course.title}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
-              priority={false}
-            />
+            {isLoading ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <p>Loading video...</p>
+              </div>
+            ) : videoError ? (
+              <div className="w-full h-full flex items-center justify-center bg-red-50">
+                <p className="text-red-500">
+                  Error loading video: {videoError}
+                </p>
+              </div>
+            ) : activeLesson && isVideoPlaying && videoUrl ? (
+              <iframe
+                src={videoUrl}
+                width="100%"
+                height="100%"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <Image
+                src="/Images/thumbnail.webp"
+                alt={course.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                priority={false}
+              />
+            )}
           </div>
 
-          {/* Adding Course Description Component */}
           <CourseDescription />
 
-          {/* Adding Course Reviews Component */}
           <CourseReview averageRating={course.rating} totalReviews={128} />
         </div>
 
-        {/* Column 2 - Sidebar */}
         <div className="col-span-3 space-y-5">
           <CoursePrice />
           <Lessons id={id} />

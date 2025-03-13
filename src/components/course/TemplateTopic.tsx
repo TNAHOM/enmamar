@@ -13,6 +13,7 @@ interface TemplateProps {
 
 const TemplateTopic = ({ topic, description }: TemplateProps) => {
   const { data: contents, error, loading } = useGetCourses();
+  console.log(contents, "contents from TemplateTopic");
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
 
@@ -53,7 +54,7 @@ const TemplateTopic = ({ topic, description }: TemplateProps) => {
             instructor={content.instructor.first_name}
             description={content.description}
             price={content.price}
-            image={content.image}
+            image={content.thumbnail_url}
             rating={content.rating || 4.5}
           />
         ))}

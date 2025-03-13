@@ -10,13 +10,13 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { course as courseType } from "@/types/courses";
 
 const CourseDetailPage = () => {
-  const { id } = useParams() as { id: string };
+  const { id } = useParams() as { id: string }; // Ensure id is correctly retrieved
   const {
     data: course,
     error,
     loading,
   } = useFetchData<courseType>({
-    url: `/api/course/${id}`,
+    url: `/api/course/${id}`, // Ensure id is used here
   });
 
   console.log(error, "error in course detail page");
@@ -88,13 +88,7 @@ const CourseDetailPage = () => {
           </div>
 
           {/* Adding Course Description Component */}
-          <CourseDescription
-            description={course.description}
-            level="Beginner to Intermediate"
-            duration="42 hours"
-            numLessons={3248}
-            lastUpdated="March 2025"
-          />
+          <CourseDescription />
 
           {/* Adding Course Reviews Component */}
           <CourseReview averageRating={course.rating} totalReviews={128} />
@@ -103,7 +97,7 @@ const CourseDetailPage = () => {
         {/* Column 2 - Sidebar */}
         <div className="col-span-3 space-y-5">
           <CoursePrice />
-          <Lessons />
+          <Lessons id={id} />
         </div>
       </div>
     </div>

@@ -1,20 +1,22 @@
-import React from "react";
+"use client";
+
+import { useFetchData } from "@/hooks/useFetchData";
+import { course } from "@/types/courses";
 import { Clock, Users, CalendarDays } from "lucide-react";
+import { useParams } from "next/navigation";
 
-interface CourseDescriptionProps {
-  description: string;
-  level: string;
-  duration: string;
-  numLessons: number;
-  lastUpdated: string;
-}
-
-const CourseDescription = ({
-  description,
-  duration = "42 hours",
-  numLessons = 5,
-  lastUpdated = "December 2024",
-}: CourseDescriptionProps) => {
+const CourseDescription = () => {
+  const duration = "42 hours";
+  const { params } = useParams();
+  const { data, error, loading } = useFetchData<course>({
+    url: `api/course/${params}`,
+  });
+  if (!data || error) {
+    return <div className="">No data</div>;
+  }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="border rounded-xl shadow-sm font-sans overflow-hidden mb-8">
       <div className="space-y-6">
@@ -31,15 +33,16 @@ const CourseDescription = ({
               <Users className="text-purpleStandard w-5 h-5" />
               <span className="text-gray-700">
                 Number of lessons:{" "}
-                <span className="font-medium">
-                  {numLessons.toLocaleString()}
-                </span>
+                <span className="font-medium">{data.lessons.length}</span>
               </span>
             </div>
             <div className="flex items-center gap-2">
               <CalendarDays className="text-purpleStandard w-5 h-5" />
               <span className="text-gray-700">
-                Last Updated: <span className="font-medium">{lastUpdated}</span>
+                Last Updated:{" "}
+                <span className="font-medium">
+                  {data.created_at || data.updated_at}
+                </span>
               </span>
             </div>
           </div>
@@ -47,7 +50,7 @@ const CourseDescription = ({
         <div className="px-6 pb-6">
           <div className="space-y-4">
             <h3 className="font-semibold mb-2">About This Course</h3>
-            <p className="text-gray-700 leading-relaxed">{description}</p>
+            <p className="text-gray-700 leading-relaxed">{data.description}</p>
 
             <h3 className="font-semibold mt-6">{"What You'll Learn"}</h3>
             <ul className="space-y-2 list-disc list-inside text-gray-700">

@@ -40,6 +40,8 @@ export function useFetchData<T>({ url }: { url: string }) {
         const fetchData = async () => {
             try {
                 const response = await fetch(url)
+                // console.log(response, "response from useFetchData")
+                // console.log(url, "url from useFetchData")
                 const jsonData: T = await response.json()
                 setData(jsonData)
             } catch (error) {

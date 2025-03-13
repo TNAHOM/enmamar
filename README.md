@@ -18,3 +18,4 @@
   - [ ] In the course list admin page
 - [ ] Handle the error some components I just console them in order not to get an error/issue
 - [ ] Add total duration time in the courseDescription (check backend)
+- [ ] Handle a better UI when their is no lesson(just in case)

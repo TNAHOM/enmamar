@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useFetchData } from "@/hooks/useFetchData";
-import { Lesson } from "@/types/courses";
+import { course as courseType } from "@/types/courses";
 
 const Lessons = ({ id }: { id: string }) => {
   console.log(id, "id from lesson component");
   const [activeDay, setActiveDay] = useState<number>(1);
   const {
-    data: lessons,
+    data: course,
     error,
     loading,
-  } = useFetchData<Lesson[]>({
-    url: `/api/lessons/${id}`, // Ensure id is used here
+  } = useFetchData<courseType>({
+    url: `/api/course/${id}`,
   });
-  console.log(lessons, "lessons from lesson component");
+  const lessons = course?.lessons;
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -20,7 +21,9 @@ const Lessons = ({ id }: { id: string }) => {
     console.log(error, "error from lesson component");
     return <div>No data: {error}</div>;
   }
-
+  if (lessons.length === 0) {
+    return <div>No lessons available</div>;
+  }
   return (
     <div className="p-3 border rounded-xl shadow-sm font-sans ">
       <div className="mb-2">

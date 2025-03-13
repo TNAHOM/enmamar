@@ -3,16 +3,16 @@ import { cookies } from "next/headers";
 
 
 export async function GET(req: NextRequest,
-    { params }: { params: { courseId: string } }
+    { params }: { params: { id: string } }
 ) {
-    const { courseId } = params;
-    console.log(courseId, "courseId from course lessons")
+    const { id } = params;
+    // console.log(id, "courseId from course lessons")
     const BAESURL = process.env.BASEURL
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('accessToken');
 
     try {
-        const response = await fetch(`${BAESURL}/course/${courseId}/lessons`, {
+        const response = await fetch(`${BAESURL}/course/${id}/lessons`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest,
                 { status: response.status }
             );
         }
-        console.log(responseData, "responseData from course lessons")
+        // console.log(responseData, "responseData from course lessons")
         return NextResponse.json(responseData.data);
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Course creation failed";

@@ -23,6 +23,7 @@ export interface Lesson {
     title: string;
     description: string;
     duration: number;
+    video_url: string;
     video: Video;
 }
 

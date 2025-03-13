@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useFetchData } from "@/hooks/useFetchData";
 import { course as courseType } from "@/types/courses";
+import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 
 const Lessons = ({ id }: { id: string }) => {
   console.log(id, "id from lesson component");
   const [activeDay, setActiveDay] = useState<number>(1);
+  const { setActiveLesson, activeLesson, isLoading } = useLessonVideoStore();
   const {
     data: course,
     error,
@@ -13,6 +15,11 @@ const Lessons = ({ id }: { id: string }) => {
     url: `/api/course/${id}`,
   });
   const lessons = course?.lessons;
+
+  const handleLessonClick = (lesson_id: string, index: number) => {
+    setActiveDay(index);
+    setActiveLesson(lesson_id, id);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -37,16 +44,17 @@ const Lessons = ({ id }: { id: string }) => {
           <div
             key={item.id}
             className={` py-4 px-5 transition-colors duration-200 text-lg rounded-md font-medium cursor-pointer ${
-              activeDay === index
+              activeDay === index || (activeLesson && activeLesson === item.id)
                 ? "text-purpleStandard bg-purple-200 border-gray-200 border "
                 : "hover:bg-gray-100 "
             }`}
-            onClick={() => setActiveDay(index)}
+            onClick={() => handleLessonClick(item.id, index)}
           >
             <div className="flex items-center gap-4">
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                  activeDay === index
+                  activeDay === index ||
+                  (activeLesson && activeLesson === item.id)
                     ? "bg-purple-600 text-white"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 }`}
@@ -56,6 +64,11 @@ const Lessons = ({ id }: { id: string }) => {
               <span>
                 <span className="font-medium">Lesson {index + 1}: </span>
                 {item.title}
+                {isLoading && activeLesson && (
+                  <span className="ml-2 text-sm text-gray-500">
+                    (Loading...)
+                  </span>
+                )}
               </span>
             </div>
           </div>

@@ -32,7 +32,7 @@ export default function CourseCard({
     <Card className="overflow-hidden transition-all hover:shadow-md ">
       <div className="aspect-video relative overflow-hidden">
         <Image
-          src={image || "/Images/Full-stack.png"}
+          src={image || "/Images/thumbnail.webp"}
           alt={title}
           fill
           className="object-cover transition-transform hover:scale-105"

@@ -54,7 +54,7 @@ export function AddInstructorModal({
         const response = await fetch("/api/users");
         if (!response.ok) throw new Error("Failed to fetch instructors");
         const data = await response.json();
-        setInstructors(data.data);
+        setInstructors(data);
       } catch (error) {
         console.error("Error fetching instructors:", error);
         throw new Error("Failed to fetch instructors");

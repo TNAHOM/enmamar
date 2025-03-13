@@ -14,8 +14,9 @@ export async function GET(
                 "Content-Type": "application/json",
             },
         });
+        console.log(response, "response from course/id")
         const responseData = await response.json();
-        // console.log(responseData, "responseData from course/id")
+
         if (!response.ok) {
             return NextResponse.json(
                 { error: "Failed to fetch course" },

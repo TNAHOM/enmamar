@@ -71,7 +71,7 @@ export function AddInstructorModal({
           "Content-Type": "application/json",
         },
         method: "PUT",
-        body: JSON.stringify({ role: "inst" }),
+        body: JSON.stringify({ role: "instructor" }),
       });
       // console.log(response, "response from role/id");
       const data = await response.json();

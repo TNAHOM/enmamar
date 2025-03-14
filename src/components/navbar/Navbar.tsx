@@ -25,8 +25,8 @@ const Navbar = () => {
       <div className="flex justify-between items-center space-x-8 font-medium">
         <p>Explore</p>
         <p>Become an Instructor</p>
-        {user?.role === "admin" && <Link href={"admin"}>Admin</Link>}
-        {user?.role === "user" && <Link href={"profile"}>Profile</Link>}
+        {user?.role === "admin" && <Link href={"/admin"}>Admin</Link>}
+        {user?.role === "user" && <Link href={"/profile"}>Profile</Link>}
         {isLoading ? (
           <p>Loading...</p>
         ) : isAuthenticated ? (

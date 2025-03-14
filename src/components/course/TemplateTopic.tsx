@@ -5,10 +5,11 @@ import CourseCard from "./CourseCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useGetCourses } from "@/hooks/useGetCourses";
+import ShemmerEffect from "../course/ShemmerEffect";
 
 interface TemplateProps {
   topic: string;
-  description: string;
+  description?: string;
 }
 
 const TemplateTopic = ({ topic, description }: TemplateProps) => {
@@ -17,9 +18,6 @@ const TemplateTopic = ({ topic, description }: TemplateProps) => {
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
   if (error) {
     return <div>An error has occured: {error}</div>;
   }
@@ -58,6 +56,14 @@ const TemplateTopic = ({ topic, description }: TemplateProps) => {
             rating={content.rating || 4.5}
           />
         ))}
+
+        {loading && (
+          <>
+            {[...Array(4)].map((_, index) => (
+              <ShemmerEffect key={index} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

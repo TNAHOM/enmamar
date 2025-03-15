@@ -18,7 +18,8 @@ export async function GET() {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -61,7 +62,8 @@ export async function PUT(request: Request) {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         });
 
         if (!response.ok) {

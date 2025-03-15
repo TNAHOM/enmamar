@@ -24,7 +24,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   initializeAuth: async () => {
     set({ isLoading: true });
     try {
-      const response = await fetch("/api/me");
+      const response = await fetch("/api/me", {
+        credentials: "include",
+      });
       const data = await response.json();
 
       console.log("Auth initialization response:", data);
@@ -52,6 +54,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
@@ -81,6 +84,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -110,7 +114,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     set({ isLoading: true });
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       set({ user: null, isAuthenticated: false, isLoading: false });
     } catch (error) {
       console.log(error, "error from auth-store.tsx");

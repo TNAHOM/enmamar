@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { Label } from "@radix-ui/react-label";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ProfileData {
   first_name: string;
@@ -16,15 +16,27 @@ interface ProfileData {
 }
 
 const Profile = () => {
-  const { user, isLoading } = useAuthStore();
+  const { user, isLoading, initializeAuth } = useAuthStore();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData>({
-    first_name: user?.first_name || "",
-    last_name: user?.last_name || "",
-    email: user?.email || "",
-    phone_number: user?.phone_number || "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
   });
-  console.log(user, "user");
+
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        phone_number: user.phone_number,
+      });
+    }
+    console.log(user, "user");
+  }, [user]);
+
   const handleSave = async () => {
     setIsEditing(false);
     try {
@@ -39,8 +51,9 @@ const Profile = () => {
       if (!response.ok) {
         throw new Error("Failed to update profile");
       }
-
       const updatedUser = await response.json();
+      console.log(updatedUser, "Profile updated successfully");
+      initializeAuth();
       useAuthStore.setState({ user: updatedUser });
     } catch (error) {
       console.error("Error updating profile:", error);

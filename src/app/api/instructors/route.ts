@@ -14,7 +14,7 @@ export async function GET() {
   }
 
   try {
-    const response = await fetch(`${BASEURL}/users/instructors/`, {
+    const response = await fetch(`${BASEURL}/protected/users/instructors`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

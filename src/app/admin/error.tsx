@@ -12,7 +12,7 @@ interface ErrorProps {
 
 export default function Error({ error }: ErrorProps) {
   useEffect(() => {
-    // Log the error to an error reporting service
+    // Log the error to an error reporting service.
     console.error(error);
   }, [error]);
 

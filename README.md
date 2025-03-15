@@ -12,10 +12,10 @@
   - [ ] A views and durations for the courses(must for the admin)
   - [ ] Add Thumbnail(DB)
 - [ ] Add an error component and when error occures display the error component page
-- [ ] Add Loading on the datas until it get the data(Shemear effect)
+- [x] Add Loading on the datas until it get the data(Shemear effect)
 - [ ] Implement the sort functionality
-  - [ ] In the instructor table
-  - [ ] In the course list admin page
+  - [x] In the instructor table
+  - [x] In the course list admin page
 - [ ] Handle the error some components I just console them in order not to get an error/issue
 - [ ] Add total duration time in the courseDescription (check backend)
 - [ ] Handle a better UI when their is no lesson(just in case)

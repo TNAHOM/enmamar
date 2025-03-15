@@ -27,7 +27,7 @@ export function InstructorTable() {
   );
 
   const { data, loading, error } = useFetchListData<InstructorProfile>({
-    url: "/api/users",
+    url: "/api/instructors",
   });
 
   const {

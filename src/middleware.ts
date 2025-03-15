@@ -7,10 +7,11 @@ export async function middleware(request: NextRequest) {
 
   const adminRoutes = ["/admin", "/settings"];
   const userRoutes = ["/dashboard", "/profile"];
+  const instructorRoutes = ["/instructor/dashboard"];
 
   // Check if the route is protected
   if (
-    [...adminRoutes, ...userRoutes].some((route) => pathname.startsWith(route))
+    [...adminRoutes, ...userRoutes, ...instructorRoutes].some((route) => pathname.startsWith(route))
   ) {
     try {
       // Get the role
@@ -34,6 +35,15 @@ export async function middleware(request: NextRequest) {
       ) {
         return NextResponse.redirect(new URL("/auth/login", request.url));
       }
+
+      // Instructor route protection
+      if (
+        instructorRoutes.some((route) => pathname.startsWith(route)) &&
+        userRole !== "instructor"
+      ) {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
+      
     } catch (error) {
       console.log(error, "error from middleware");
       return NextResponse.redirect(new URL("/auth/login", request.url));
@@ -50,6 +60,6 @@ export const config = {
     "/settings/:path*",
     "/dashboard/:path*",
     "/profile/:path*",
-
+    "/instructor/dashboard/:path*",
   ],
 };

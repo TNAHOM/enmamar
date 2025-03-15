@@ -18,15 +18,17 @@ const Navbar = () => {
   }, [isAuthenticated, logout]);
 
   return (
-    <div className="flex justify-between items-center p-4 px-14 bg-[#F6F7F9]">
+    <div className="flex justify-between items-center p-4 px-14 bg-[#F6F7F9] text-gray-600 sticky top-0 z-50 border-b h-20">
       <div className="text-xl text-purpleStandard font-bold">
         <Link href={"/"}>ENEMAMAR</Link>
       </div>
-      <div className="flex justify-between items-center space-x-8 font-medium">
+      <div className="flex justify-between items-center space-x-8 font-medium text-lg">
         <p>Explore</p>
-        <p>Become an Instructor</p>
+        <Link href={"/become-instructor"}>Become an Instructor</Link>
         {user?.role === "admin" && <Link href={"/admin"}>Admin</Link>}
-        {user?.role === "instructor" && <Link href={"/instructor/dashboard"}>Dashboard</Link>}
+        {user?.role === "instructor" && (
+          <Link href={"/instructor/dashboard"}>Dashboard</Link>
+        )}
         {user?.role === "user" && <Link href={"/profile"}>Profile</Link>}
         {isLoading ? (
           <p>Loading...</p>

@@ -12,7 +12,7 @@
   - [ ] A views and durations for the courses(must for the admin)
   - [ ] Add Thumbnail(DB)
 - [ ] Add an error component and when error occures display the error component page
-- [x] Add Loading on the datas until it get the data(Shemear effect)
+- [x] Add Loading on the datas until it get the data(Shemear effect) .
 - [ ] Implement the sort functionality
   - [x] In the instructor table
   - [x] In the course list admin page

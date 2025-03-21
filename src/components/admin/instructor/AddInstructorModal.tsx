@@ -51,7 +51,7 @@ export function AddInstructorModal({
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const response = await fetch("/api/users/instructors");
+        const response = await fetch("/api/instructors");
         if (!response.ok) throw new Error("Failed to fetch instructors");
         const data = await response.json();
         setInstructors(data);

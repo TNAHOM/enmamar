@@ -1,6 +1,5 @@
 "use client";
 
-// import type { mockCourse } from "@/utilities/mock";
 import CourseCard from "./CourseCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -12,9 +11,22 @@ interface TemplateProps {
   description?: string;
 }
 
-const TemplateTopic = ({ topic, description }: TemplateProps) => {
-  const { data: contents, error, loading } = useGetCourses();
-  console.log(contents, "contents from TemplateTopic");
+const TemplateTopic = ({
+  header,
+  from,
+}: {
+  header: TemplateProps;
+  from?: string;
+}) => {
+  const { topic, description } = header;
+  const allcourses = useGetCourses({ url: "/api/course/getCourses" });
+  const enrolledCourses = useGetCourses({ url: "/api/course/enrolled" });
+
+  const courseData =
+    from === "profile" ? enrolledCourses ?? allcourses : allcourses;
+
+  const { data: contents, error, loading } = courseData;
+  console.log(contents, "contents in TemplateTopic");
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
 

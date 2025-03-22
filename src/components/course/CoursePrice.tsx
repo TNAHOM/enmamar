@@ -1,11 +1,60 @@
 import { Newspaper, ShieldCheck, Video } from "lucide-react";
+import { useState } from "react";
+import { useParams } from "next/navigation";
+
+export interface EnrollProps {
+  chapa_response: {
+    message: string;
+    status: string;
+    data: {
+      checkout_url: string;
+    };
+  };
+}
 
 const CoursePrice = () => {
-  // const features = [
-  //   "42 hours on-demand video",
-  //   "25 downloadable resources",
-  //   "Certificate of completion",
-  // ];
+  const params = useParams<{ id: string }>();
+  const id = params?.id || "";
+  const [data, setData] = useState<EnrollProps | null>(null);
+
+  const enrollUser = async () => {
+    if (!id) {
+      console.error("Course ID is undefined");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/course/${id}/enroll`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to enroll user");
+      }
+
+      const responseData = await response.json();
+      console.log(responseData, "data from enroll user");
+
+      setData(responseData.data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to enroll user";
+      console.error(errorMessage);
+    }
+  };
+
+  const handleButtonClick = () => {
+    console.log("Button clicked!");
+    if (id) {
+      enrollUser();
+    }
+    if (data?.chapa_response.data.checkout_url) {
+      window.open(data.chapa_response.data.checkout_url, "_blank");
+    }
+  };
 
   return (
     <div className="border rounded-xl shadow-sm font-sans overflow-hidden">
@@ -19,7 +68,10 @@ const CoursePrice = () => {
           </div>
         </div>
         <div className="px-6 pb-6">
-          <button className="w-full mb-6 bg-purpleStandard hover:bg-purple-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+          <button
+            className="w-full mb-6 bg-purpleStandard hover:bg-purple-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+            onClick={handleButtonClick}
+          >
             Enroll Now
           </button>
 

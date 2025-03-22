@@ -38,7 +38,7 @@ const CourseDetailPage = () => {
     };
   }, [id, resetVideoState]);
 
-  if (loading) {
+  if (!id || loading) {
     return <div>Loading...</div>;
   }
 
@@ -130,7 +130,7 @@ const CourseDetailPage = () => {
         </div>
 
         <div className="col-span-3 space-y-5">
-          <CoursePrice />
+          <CoursePrice/>
           <Lessons id={id} />
         </div>
       </div>

@@ -19,11 +19,7 @@ const TemplateTopic = ({
   from?: string;
 }) => {
   const { topic, description } = header;
-  const allcourses = useGetCourses({ url: "/api/course/getCourses" });
-  const enrolledCourses = useGetCourses({ url: "/api/course/enrolled" });
-
-  const courseData =
-    from === "profile" ? enrolledCourses ?? allcourses : allcourses;
+  const courseData = useGetCourses(from ? { type: from } : {});
 
   const { data: contents, error, loading } = courseData;
   console.log(contents, "contents in TemplateTopic");

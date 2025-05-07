@@ -52,18 +52,24 @@ const TemplateTopic = ({
           isFeatured ? "lg:grid-cols-3" : "lg:grid-cols-4"
         }`}
       >
-        {(!isFeatured ? contents : contents.slice(0, 3)).map((content) => (
-          <CourseCard
-            key={content.id}
-            id={content.id}
-            title={content.title}
-            instructor={content.instructor.first_name}
-            description={content.description}
-            price={content.price}
-            image={content.thumbnail_url}
-            rating={content.rating || 4.5}
-          />
-        ))}
+        {!loading && (!contents || contents.length === 0) ? (
+          <div className="col-span-full py-16 flex justify-center items-center text-lg font-medium">
+            No courses available at the moment.
+          </div>
+        ) : (
+          (!isFeatured ? contents : contents.slice(0, 3)).map((content) => (
+            <CourseCard
+              key={content.id}
+              id={content.id}
+              title={content.title}
+              instructor={content.instructor.first_name}
+              description={content.description}
+              price={content.price}
+              image={content.thumbnail_url}
+              rating={content.rating || 4.5}
+            />
+          ))
+        )}
 
         {loading && (
           <>

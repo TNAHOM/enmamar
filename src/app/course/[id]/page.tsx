@@ -45,7 +45,7 @@ const CourseDetailPage = () => {
   if (!course) {
     return <div>Course not found</div>;
   }
-
+  console.log(videoError, "videoerror in course detail page");
   return (
     <div className="mx-16 my-10">
       <div className="grid grid-cols-10 gap-10">
@@ -130,7 +130,7 @@ const CourseDetailPage = () => {
         </div>
 
         <div className="col-span-3 space-y-5">
-          <CoursePrice/>
+          <CoursePrice />
           <Lessons id={id} />
         </div>
       </div>

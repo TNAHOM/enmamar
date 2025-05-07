@@ -21,3 +21,5 @@
 - [ ] Handle a better UI when their is no lesson(just in case)
 
 - [ ] Inorder to promote a student to instructor theri needs to be a get all students api(currently theri is get all instructor which is not correct because we are going to promote the student to teacher)
+- [ ] Improve the error handling in the signup especially the phone number(but chack all)
+- [ ] Properly handle the enroll lesson hide lessons that are after the first one(backend endpoint checker for enrollemnt)

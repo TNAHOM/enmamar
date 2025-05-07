@@ -13,15 +13,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { InstructorCourse } from "@/utilities/instructor";
 import { useTableData } from "@/hooks/useTableData";
-import { Lesson } from "@/types/courses";
+import { InstructorCourseAnalytics } from "@/types/instructor";
 
-interface InstructorCourseListProps {
-  courses: InstructorCourse[];
-}
-
-const InstructorCourseList = ({ courses }: InstructorCourseListProps) => {
+const InstructorCourseList = ({
+  data,
+}: {
+  data: InstructorCourseAnalytics[];
+}) => {
+  console.log(data, "data from instructor course list");
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
   const {
@@ -37,9 +37,9 @@ const InstructorCourseList = ({ courses }: InstructorCourseListProps) => {
     goToNextPage,
     goToPreviousPage,
     goToPage,
-  } = useTableData<InstructorCourse, keyof InstructorCourse>({
-    data: courses,
-    initialSortField: "title",
+  } = useTableData<InstructorCourseAnalytics, keyof InstructorCourseAnalytics>({
+    data: data || [],
+    initialSortField: "course",
     itemsPerPage: 5,
   });
 
@@ -56,24 +56,26 @@ const InstructorCourseList = ({ courses }: InstructorCourseListProps) => {
               <TableHead className="w-12"></TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => handleSort("title")}
+                onClick={() => handleSort("course")}
               >
                 Course Name{" "}
-                {sortField === "title" && (sortOrder === "asc" ? "↑" : "↓")}
+                {sortField === "course" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => handleSort("views")}
+                onClick={() => handleSort("view_count")}
               >
                 Views{" "}
-                {sortField === "views" && (sortOrder === "asc" ? "↑" : "↓")}
+                {sortField === "view_count" &&
+                  (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
               <TableHead
                 className="cursor-pointer"
-                onClick={() => handleSort("enrollments")}
+                onClick={() => handleSort("no_of_enrollments")}
               >
                 Enrollments{" "}
-                {sortField === "enrollments" && (sortOrder === "asc" ? "↑" : "↓")}
+                {sortField === "no_of_enrollments" &&
+                  (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
               <TableHead
                 className="cursor-pointer"
@@ -86,63 +88,68 @@ const InstructorCourseList = ({ courses }: InstructorCourseListProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((course) => (
-              <React.Fragment key={course.id}>
+            {paginatedData.map((courseData: InstructorCourseAnalytics) => (
+              <React.Fragment key={courseData.course.id}>
                 <TableRow>
                   <TableCell>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDropdown(course.id)}
+                      onClick={() => handleDropdown(courseData.course.id)}
                     >
-                      {expandedRow === course.id ? "▲" : "▼"}
+                      {expandedRow === courseData.course.id ? "▲" : "▼"}
                     </Button>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">
                         <AvatarImage
-                          src="/placeholder.svg?height=32&width=32"
-                          alt={course.title}
+                          src={
+                            courseData.course.thumbnail_url ||
+                            "/placeholder.svg?height=32&width=32"
+                          }
+                          alt={courseData.course.title}
                         />
                         <AvatarFallback>
-                          {course.title.charAt(0)}
+                          {courseData.course.title.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="font-medium">{course.title}</div>
+                      <div className="font-medium">
+                        {courseData.course.title}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary" className="rounded-full">
-                      {course.views}
+                      {courseData.view_count}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant="default" className="rounded-full">
-                      {course.enrollments}
+                      {courseData.no_of_enrollments}
                     </Badge>
                   </TableCell>
-                  <TableCell>${course.revenue}</TableCell>
+                  <TableCell>${courseData.revenue}</TableCell>
                   <TableCell>
                     <Button variant="ghost" size="icon">
                       <Eye className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
-                {expandedRow === course.id && (
+                {expandedRow === courseData.course.id && (
                   <TableRow>
                     <TableCell colSpan={6}>
                       <div className="p-4 bg-muted/50 rounded-md">
                         <h4 className="font-medium mb-2">Course Lessons</h4>
                         <ul className="space-y-2">
-                          {course.lessons.map((lesson: Lesson) => (
+                          {courseData.course.lessons.map((lesson) => (
                             <li
                               key={lesson.id}
                               className="flex items-center justify-between bg-background p-2 rounded"
                             >
                               <span>{lesson.title}</span>
                               <span className="text-muted-foreground">
-                                {lesson.duration}
+                                {lesson.duration} minutes
                               </span>
                             </li>
                           ))}
@@ -195,3 +202,29 @@ const InstructorCourseList = ({ courses }: InstructorCourseListProps) => {
 };
 
 export default InstructorCourseList;
+
+export const Loading = () => (
+  <div className="space-y-4">
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-12"></TableHead>
+            <TableHead>Course Name</TableHead>
+            <TableHead>Views</TableHead>
+            <TableHead>Enrollments</TableHead>
+            <TableHead>Revenue</TableHead>
+            <TableHead className="w-[100px]">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={6} className="text-center">
+              Loading...
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+);

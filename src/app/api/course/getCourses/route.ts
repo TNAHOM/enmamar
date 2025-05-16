@@ -8,7 +8,7 @@ export async function GET() {
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   try {
-    const response = await fetch(`${BASEURL}/course?page=1&page_size=25`, {
+    const response = await fetch(`${BASEURL}/courses?page=1&page_size=25`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export async function GET() {
       },
     });
     const responseData = await response.json();
-    // console.log(responseData, "responseData from getCourse");
+    console.log(responseData, "responseData from getCourse");
 
     if (!response.ok) {
       return NextResponse.json(

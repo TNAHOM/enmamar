@@ -15,7 +15,7 @@ export async function PUT(
     try {
         const data = await request.json();
 
-        const response = await fetch(`${BASEURL}/users/role/${id}`, {
+        const response = await fetch(`${BASEURL}/admin/users/role/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

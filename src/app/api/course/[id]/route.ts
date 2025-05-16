@@ -8,7 +8,7 @@ export async function GET(
     const BASEURL = process.env.BASEURL;
 
     try {
-        const response = await fetch(`${BASEURL}/course/${id}`, {
+        const response = await fetch(`${BASEURL}/courses/${id}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

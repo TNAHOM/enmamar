@@ -25,6 +25,7 @@ const TemplateTopic = ({
   console.log(contents, "contents in TemplateTopic");
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
+  console.log(error, "error in TemplateTopic");
 
   if (error) {
     return <div>An error has occured: {error}</div>;

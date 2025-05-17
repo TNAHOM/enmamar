@@ -12,20 +12,18 @@ export async function GET(
   // console.log(id, "course_id", lesson_id, "lesson id  from route course/lesson");
 
   try {
-    const response = await fetch(
-      `${BASEURL}/course/${id}/lesson/${lesson_id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASEURL}/lesson/${id}/${lesson_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     const responseData = await response.json();
 
     if (!response.ok) {
+      console.log("Failed to fetch lesson:", responseData);
       return NextResponse.json(
         { error: responseData.detail },
         { status: response.status }

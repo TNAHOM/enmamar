@@ -1,6 +1,6 @@
 import { Newspaper, ShieldCheck, Video } from "lucide-react";
-import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export interface EnrollProps {
   chapa_response: {
@@ -12,10 +12,15 @@ export interface EnrollProps {
   };
 }
 
-const CoursePrice = () => {
-  const params = useParams<{ id: string }>();
-  const id = params?.id || "";
+const CoursePrice = ({
+  courseId: id,
+  price,
+}: {
+  courseId: string;
+  price: number;
+}) => {
   const [data, setData] = useState<EnrollProps | null>(null);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const enrollUser = async () => {
     if (!id) {
@@ -42,14 +47,31 @@ const CoursePrice = () => {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to enroll user";
-      console.error(errorMessage);
+      console.log(errorMessage);
     }
   };
+
+  useEffect(() => {
+    const fetchIsEnrolled = async () => {
+      const data = await fetch(`/api/course/${id}/enroll`, {
+        method: "GET",
+      });
+      const response = await data.json();
+      if (!data.ok) {
+        toast.error("Failed to check enrollment status");
+        return;
+      }
+      setIsEnrolled(response.data);
+    };
+
+    fetchIsEnrolled();
+  }, [id]);
 
   const handleButtonClick = () => {
     console.log("Button clicked!");
     if (id) {
       enrollUser();
+      console.log("Enrolling user...", data);
     }
     if (data?.chapa_response.data.checkout_url) {
       window.open(data.chapa_response.data.checkout_url, "_blank");
@@ -63,16 +85,21 @@ const CoursePrice = () => {
           <div className="flex items-baseline gap-2 justify-between">
             <h3 className="font-medium text-2xl">Course Price:</h3>
             <span className="border bg-purpleStandard px-3 py-1 rounded-3xl text-white text-lg font-semibold">
-              $49.99
+              {price} Br.
             </span>
           </div>
         </div>
         <div className="px-6 pb-6">
           <button
-            className="w-full mb-6 bg-purpleStandard hover:bg-purple-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
-            onClick={handleButtonClick}
+            className={`w-full mb-6 py-3 px-4 rounded-lg font-medium transition-colors text-white ${
+              isEnrolled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-purpleStandard hover:bg-purple-700"
+            }`}
+            onClick={!isEnrolled ? handleButtonClick : undefined}
+            disabled={isEnrolled}
           >
-            Enroll Now
+            {isEnrolled ? "Enrolled" : "Enroll Now"}
           </button>
 
           <div className="space-y-3">

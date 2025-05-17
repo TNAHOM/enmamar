@@ -3,6 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import { AuthProvider } from "@/lib/AuthProvider";
 import Footer from "@/components/Footer";
+import { Toaster } from "sonner";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,12 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className=""
-      >
+      <body className="">
         <AuthProvider>
           <Navbar />
         </AuthProvider>
+        <Toaster position="top-center" richColors />
         {children}
         <Footer />
       </body>

@@ -24,13 +24,12 @@ const CourseDetailPage = () => {
 
   const {
     data: course,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error,
     loading,
   } = useFetchData<courseType>({
     url: `/api/course/${id}`,
   });
-
-  console.log(error, "error in course detail page");
 
   useEffect(() => {
     return () => {
@@ -126,11 +125,15 @@ const CourseDetailPage = () => {
 
           <CourseDescription />
 
-          <CourseReview averageRating={course.rating} totalReviews={128} />
+          <CourseReview
+            averageRating={course.rating}
+            totalReviews={128}
+            courseId={id}
+          />
         </div>
 
         <div className="col-span-3 space-y-5">
-          <CoursePrice />
+          <CoursePrice courseId={id} price={course.price} />
           <Lessons id={id} />
         </div>
       </div>

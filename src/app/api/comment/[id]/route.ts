@@ -7,27 +7,28 @@ export async function POST(
 ) {
   const { id } = await params;
   const BASEURL = process.env.BASEURL;
+  const body = await request.json();
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("accessToken")?.value;
 
-  if (!accessToken) {
-    return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
-  }
-
   try {
-    const response = await fetch(`${BASEURL}/courses/enroll/${id}`, {
+    const response = await fetch(`${BASEURL}/comments/course/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      body: JSON.stringify(body),
     });
 
     const responseData = await response.json();
     // console.log(responseData, "response from course creation route");
     if (!response.ok) {
-      console.log("Failed to create course:", responseData);
-      throw new Error(responseData.detail || "Course creation failed");
+      console.log("Failed to create comment:", responseData);
+      return NextResponse.json(
+        { detail: responseData.detail || "Comment creation failed" },
+        { status: response.status }
+      );
     }
 
     return NextResponse.json({
@@ -35,53 +36,45 @@ export async function POST(
       data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from course creation route");
+    console.log(error, "error from comment creation route");
     const errorMessage =
-      error instanceof Error ? error.message : "Course creation failed";
+      error instanceof Error ? error.message : "Comment creation failed";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });
   }
 }
 
-// check if a user is enrolled or not using accessToken
+// GET request
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   const { id } = await params;
   const BASEURL = process.env.BASEURL;
-  const cookiesStore = await cookies();
-  const accessToken = cookiesStore.get("accessToken")?.value;
-
-  if (!accessToken) {
-    return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
-  }
 
   try {
-    const response = await fetch(`${BASEURL}/courses/${id}/is_enrolled`, {
+    const response = await fetch(`${BASEURL}/comments/course/${id}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: {},
     });
 
     const responseData = await response.json();
-
+    // console.log(responseData, "response from course creation route");
     if (!response.ok) {
-      console.log("Failed to create course:", responseData);
+      console.log("Failed to create comment:", responseData);
       return NextResponse.json(
-        { detail: responseData.detail || "Course creation failed" },
+        { detail: responseData.detail || "Comment creation failed" },
         { status: response.status }
       );
     }
 
     return NextResponse.json({
       detail: responseData.detail,
-      data: responseData.data.is_enrolled,
+      data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from course creation route");
+    console.log(error, "error from comment creation route");
     const errorMessage =
-      error instanceof Error ? error.message : "Course creation failed";
+      error instanceof Error ? error.message : "Comment creation failed";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });
   }
 }

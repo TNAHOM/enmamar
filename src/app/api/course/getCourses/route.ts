@@ -16,7 +16,7 @@ export async function GET() {
       },
     });
     const responseData = await response.json();
-    console.log(responseData, "responseData from getCourse");
+    // console.log(responseData, "responseData from getCourse");
 
     if (!response.ok) {
       return NextResponse.json(

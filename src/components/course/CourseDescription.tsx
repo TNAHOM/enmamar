@@ -8,8 +8,9 @@ import { useParams } from "next/navigation";
 const CourseDescription = () => {
   const duration = "42 hours";
   const params = useParams() as { courseId?: string };
+  const id = params?.courseId;
   const { data, error, loading } = useFetchData<course>({
-    url: `api/course/${params?.courseId}`,
+    url: `api/course/${id}`,
   });
   if (!data || error) {
     return <div className="">No data</div>;

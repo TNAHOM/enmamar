@@ -30,10 +30,8 @@ export const useLessonVideoStore = create<LessonVideo>((set, get) => ({
       const response = await fetch(`/api/course/${id}/lesson/${lesson_id}`);
       const responseData = await response.json();
       console.log(response.ok, "response from lesson video");
-      //   console.log(response, "responseData from lesson video");
+
       if (!response.ok) {
-        // console.log("Failed to fetch lesson video");
-        // throw new Error("Failed to fetch lesson video")0;
         set({
           error: responseData.detail,
           isLoading: false,

@@ -4,8 +4,7 @@ import { course as courseType } from "@/types/courses";
 import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 
 const Lessons = ({ id }: { id: string }) => {
-  console.log(id, "id from lesson component");
-  const [activeDay, setActiveDay] = useState<number>(1);
+  const [activeDay, setActiveDay] = useState<number>(0);
   const { setActiveLesson, activeLesson, isLoading } = useLessonVideoStore();
   const {
     data: course,

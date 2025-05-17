@@ -5,7 +5,7 @@ export interface course {
     title: string;
     description: string;
     rating: number;
-    price: string;
+    price: number;
     tags: string;
     thumbnail_url: string;
     instructor_id: string;

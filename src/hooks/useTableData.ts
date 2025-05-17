@@ -13,7 +13,7 @@ export type SortOrder = "asc" | "desc";
  * @param itemsPerPage - Number of items to display per page
  * @returns Object containing table data and control functions
  */
-export function useTableData<T extends Record<string, any>, K extends keyof T>({
+export function useTableData<T extends Record<string, unknown>, K extends keyof T>({
     data,
     initialSortField,
     initialSortOrder = "asc",

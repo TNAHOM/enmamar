@@ -11,9 +11,11 @@ interface CourseListProps {
 }
 
 export function CourseList({ title, viewAll }: CourseListProps) {
-  const { data, error, loading } = useGetCourses();
+  // const { data, error, loading }
+  const { data } = useGetCourses();
 
-  const courses = data.slice(0, 3);
+
+  const courses = data?.slice(0, 3);
 
   return (
     <div className="space-y-4">
@@ -29,7 +31,7 @@ export function CourseList({ title, viewAll }: CourseListProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
+        {courses && courses.map((course) => (
           <Card
             key={course.id}
             className="overflow-hidden hover:shadow-md transition-shadow"

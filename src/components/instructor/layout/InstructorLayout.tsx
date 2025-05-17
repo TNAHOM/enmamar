@@ -2,10 +2,6 @@ import React from "react";
 import RecentEnrollments from "@/components/instructor/dashboard/RecentEnrollments";
 import { mockRecentEnrollments } from "@/utilities/instructor";
 
-interface InstructorLayoutProps {
-  children: React.ReactNode;
-}
-
 const InstructorLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-screen ">

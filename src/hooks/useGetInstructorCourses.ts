@@ -4,6 +4,7 @@ import { useFetchData } from "./useFetchData";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { InstructorCourse } from "@/utilities/instructor";
 import { userProfile } from "@/types/user";
+import { Video } from "@/types/courses";
 
 // Types matching external API response
 interface ApiInstructorCourseItem {
@@ -32,7 +33,7 @@ interface ApiInstructorCourseItem {
       order: number;
       created_at: string;
       updated_at: string | null;
-      video: any | null;
+      video: Video;
     }>;
   };
 }
@@ -57,7 +58,7 @@ export const useGetInstructorCourses = () => {
         title: c.title,
         description: c.description,
         rating: 0,
-        price: c.price.toString(),
+        price: c.price,
         tags: c.tags || "",
         thumbnail_url: c.thumbnail_url || "",
         instructor_id: c.instructor_id,

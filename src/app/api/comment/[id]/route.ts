@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   const BASEURL = process.env.BASEURL;
@@ -46,7 +46,7 @@ export async function POST(
 // GET request
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   const BASEURL = process.env.BASEURL;

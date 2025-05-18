@@ -28,7 +28,6 @@ export function EditLessonModal({
 }: EditLessonModalProps) {
   const [formData, setFormData] = useState({
     title: "",
-    video_url: "",
     duration: 0,
     description: "",
   });
@@ -36,7 +35,6 @@ export function EditLessonModal({
   useEffect(() => {
     setFormData({
       title: lesson.title,
-      video_url: lesson.video_url,
       duration: lesson.duration,
       description: lesson.description,
     });
@@ -86,18 +84,7 @@ export function EditLessonModal({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Video URL</Label>
-            <Input
-              id="video_url"
-              type="url"
-              value={formData.video_url}
-              onChange={(e) =>
-                setFormData({ ...formData, video_url: e.target.value })
-              }
-              required
-            />
-          </div>
+          
 
           <div className="space-y-2">
             <Label htmlFor="lastName">Description</Label>

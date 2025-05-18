@@ -60,14 +60,14 @@ const TemplateTopic = ({
         ) : (
           (!isFeatured ? contents : contents.slice(0, 3)).map((content) => (
             <CourseCard
-              key={content.id}
-              id={content.id}
-              title={content.title}
-              instructor={content.instructor.first_name}
-              description={content.description}
-              price={content.price}
-              image={content.thumbnail_url}
-              rating={content.rating || 4.5}
+              key={content.course.id}
+              id={content.course.id}
+              title={content.course.title}
+              instructor={content.course.instructor.first_name}
+              description={content.course.description}
+              price={content.course.price}
+              image={content.course.thumbnail_url}
+              rating={4.5}
             />
           ))
         )}

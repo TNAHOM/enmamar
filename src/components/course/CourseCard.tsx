@@ -14,8 +14,8 @@ interface CourseCardProps {
   title: string;
   instructor: string;
   description: string;
-  price: string;
-  image: string;
+  price: number;
+  image: string | null;
   rating: number;
 }
 

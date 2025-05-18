@@ -18,6 +18,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { course, Lesson } from "@/types/courses";
 import { useTableData } from "@/hooks/useTableData";
 import LessonList from "./LessonList";
+import { InstructorCourseAnalytics } from "@/types/instructor";
 
 const AllCoursesList = () => {
   const { data, error, loading } = useGetCourses();
@@ -39,7 +40,7 @@ const AllCoursesList = () => {
     goToNextPage,
     goToPreviousPage,
     goToPage,
-  } = useTableData<course, keyof course>({
+  } = useTableData<InstructorCourseAnalytics, keyof InstructorCourseAnalytics>({
     data: data || [],
     initialSortField: "title",
     itemsPerPage: 5,
@@ -112,15 +113,15 @@ const AllCoursesList = () => {
           </TableHeader>
           <TableBody>
             {paginatedData.map((course) => (
-              <React.Fragment key={course.id}>
+              <React.Fragment key={course.course.id}>
                 <TableRow>
                   <TableCell>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDropdown(course.id)}
+                      onClick={() => handleDropdown(course.course.id)}
                     >
-                      {expandedRow === course.id ? "▲" : "▼"}
+                      {expandedRow === course.course.id ? "▲" : "▼"}
                     </Button>
                   </TableCell>
                   <TableCell>
@@ -128,13 +129,13 @@ const AllCoursesList = () => {
                       <Avatar className="h-8 w-8">
                         <AvatarImage
                           src="/placeholder.svg?height=32&width=32"
-                          alt={course.title}
+                          alt={course.course.title}
                         />
                         <AvatarFallback>
-                          {course.title.charAt(0)}
+                          {course.course.title.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="font-medium">{course.title}</div>
+                      <div className="font-medium">{course.course.title}</div>
                     </div>
                   </TableCell>
                   <TableCell>

@@ -1,5 +1,6 @@
+import { InstructorCourseAnalytics } from "@/types/instructor";
 import { useFetchListData } from "./useFetchData";
-import { course } from "@/types/courses";
+// import { course } from "@/types/courses";
 
 export const useGetCourses = ({
   type,
@@ -12,7 +13,9 @@ export const useGetCourses = ({
       ? "/api/course/enrolled"
       : "/api/course/getCourses";
 
-  const { data, error, loading } = useFetchListData<course>({ url });
+  const { data, error, loading } = useFetchListData<InstructorCourseAnalytics>({
+    url,
+  });
 
   return { data, error, loading };
 };

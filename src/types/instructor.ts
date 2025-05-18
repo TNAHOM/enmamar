@@ -37,9 +37,13 @@ export interface Course {
   updated_at: string | null;
   instructor: Instructor;
   lessons: Lesson[];
+  view_count: number;
+  no_of_enrollments: number;
+  no_of_lessons: number;
+  revenue: number;
 }
 
-export interface InstructorCourseAnalytics {
+export interface InstructorCourseAnalytics extends Record<string, unknown> {
   view_count: number;
   no_of_enrollments: number;
   no_of_lessons: number;

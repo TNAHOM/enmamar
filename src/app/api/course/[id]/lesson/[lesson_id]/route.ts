@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string; lesson_id: string } }
+  { params }: { params: Promise<{ id: string; lesson_id: string }> }
 ) {
   const { id, lesson_id } = await params;
   const BASEURL = process.env.BASEURL;

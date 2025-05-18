@@ -11,7 +11,7 @@ export async function POST(
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   if (!accessToken) {
-    return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ detail: "Not authenticated", status: 401 });
   }
 
   try {
@@ -53,7 +53,8 @@ export async function GET(
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   if (!accessToken) {
-    return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
+    console.log("No access token found");
+    return NextResponse.json({ detail: "Not authenticated", status: 401 });
   }
 
   try {
@@ -66,10 +67,11 @@ export async function GET(
 
     const responseData = await response.json();
 
+    // console.log("Failed to fetch status:", responseData);
     if (!response.ok) {
-      console.log("Failed to create course:", responseData);
+      console.log(response, "response from course creation route");
       return NextResponse.json(
-        { detail: responseData.detail || "Course creation failed" },
+        { detail: responseData.detail || "Failed to fetch enroll status" },
         { status: response.status }
       );
     }

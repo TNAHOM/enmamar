@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-
+import { Suspense } from "react";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +18,8 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-export default function OTPVerificationPage() {
+// Component containing the original logic
+function OTPVerificationContent() {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<
@@ -62,7 +62,6 @@ export default function OTPVerificationPage() {
 
       const { data } = await response.json();
       router.push(`/auth/login`);
-
       console.log("Verified successfully", data);
       toast.success("OTP verified successfully");
     } catch (error) {
@@ -72,14 +71,10 @@ export default function OTPVerificationPage() {
   };
 
   const handleChange = (index: number, value: string) => {
-    // Only allow numbers
     if (!/^\d*$/.test(value)) return;
-
     const newOtp = [...otp];
     newOtp[index] = value.substring(0, 1);
     setOtp(newOtp);
-
-    // Auto-focus next input
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -89,14 +84,11 @@ export default function OTPVerificationPage() {
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    // Navigate with arrow keys
     if (e.key === "ArrowRight" && index < 5) {
       inputRefs.current[index + 1]?.focus();
     } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-
-    // Handle backspace
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -105,22 +97,13 @@ export default function OTPVerificationPage() {
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text/plain").trim();
-
-    // Check if pasted content is a valid OTP
     if (!/^\d+$/.test(pastedData)) return;
-
     const digits = pastedData.substring(0, 6).split("");
     const newOtp = [...otp];
-
     digits.forEach((digit, index) => {
-      if (index < 6) {
-        newOtp[index] = digit;
-      }
+      if (index < 6) newOtp[index] = digit;
     });
-
     setOtp(newOtp);
-
-    // Focus the appropriate field after paste
     if (digits.length < 6) {
       inputRefs.current[digits.length]?.focus();
     } else {
@@ -131,13 +114,9 @@ export default function OTPVerificationPage() {
   const handleVerify = () => {
     const otpValue = otp.join("");
     if (otpValue.length !== 6) return;
-
     setIsVerifying(true);
     verifyOtp();
-
-    // Simulate verification process
     setTimeout(() => {
-      // For demo purposes, let's say "123456" is the correct OTP
       if (otpValue === "123456") {
         setVerificationStatus("success");
       } else {
@@ -152,8 +131,6 @@ export default function OTPVerificationPage() {
     setVerificationStatus("idle");
     setTimer(30);
     setCanResend(false);
-
-    // Focus the first input after resend
     inputRefs.current[0]?.focus();
   };
 
@@ -198,7 +175,6 @@ export default function OTPVerificationPage() {
                 </AlertDescription>
               </Alert>
             ) : null}
-
             <div className="flex flex-col space-y-4">
               <label className="text-sm font-medium text-gray-700">
                 Enter verification code
@@ -247,11 +223,25 @@ export default function OTPVerificationPage() {
             </Button>
           </CardFooter>
         </Card>
-
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>For demo purposes, the correct OTP is: 123456</p>
         </div>
       </div>
     </div>
+  );
+}
+
+// Page component with Suspense boundary
+export default function OTPVerificationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <OTPVerificationContent />
+    </Suspense>
   );
 }

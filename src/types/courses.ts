@@ -1,6 +1,6 @@
 import { userProfile } from "./user";
 
-export interface course {
+export interface course extends Record<string, unknown> {
     id: string;
     title: string;
     description: string;

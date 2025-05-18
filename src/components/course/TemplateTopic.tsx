@@ -3,7 +3,7 @@
 import CourseCard from "./CourseCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { useGetCourses } from "@/hooks/useGetCourses";
+import { useGetTopicCourses } from "@/hooks/useGetCourses";
 import ShemmerEffect from "../course/ShemmerEffect";
 
 interface TemplateProps {
@@ -19,7 +19,7 @@ const TemplateTopic = ({
   from?: string;
 }) => {
   const { topic, description } = header;
-  const courseData = useGetCourses(from ? { type: from } : {});
+  const courseData = useGetTopicCourses(from ? { type: from } : {});
 
   const { data: contents, error, loading } = courseData;
   console.log(contents, "contents in TemplateTopic");
@@ -60,13 +60,13 @@ const TemplateTopic = ({
         ) : (
           (!isFeatured ? contents : contents.slice(0, 3)).map((content) => (
             <CourseCard
-              key={content.course.id}
-              id={content.course.id}
-              title={content.course.title}
-              instructor={content.course.instructor.first_name}
-              description={content.course.description}
-              price={content.course.price}
-              image={content.course.thumbnail_url}
+              key={content.id}
+              id={content.id}
+              title={content.title}
+              instructor={content.instructor.first_name}
+              description={content.description}
+              price={content.price}
+              image={content.thumbnail_url}
               rating={4.5}
             />
           ))

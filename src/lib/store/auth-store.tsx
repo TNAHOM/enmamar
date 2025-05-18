@@ -91,7 +91,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        //   console.error("Signup error:", errorData);
+        console.error("Signup error:", errorData);
         set({
           error:
             errorData.detail ||

@@ -20,7 +20,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center p-4 px-14 bg-[#F6F7F9] text-gray-600 sticky top-0 z-50 border-b h-20">
       <div className="text-xl text-purpleStandard font-bold">
-        <Link href={"/"}>ENEMAMAR</Link>
+        <Link href={"/"}>ENMAMAR</Link>
       </div>
       <div className="flex justify-between items-center space-x-8 font-medium text-lg">
         <p>Explore</p>

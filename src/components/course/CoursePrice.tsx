@@ -1,6 +1,8 @@
 import { Newspaper, ShieldCheck, Video } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export interface EnrollProps {
   chapa_response: {
@@ -19,8 +21,14 @@ const CoursePrice = ({
   courseId: string;
   price: number;
 }) => {
+  const { isEnrolled, enrollLoading, fetchEnrollStatus } =
+    useLessonVideoStore();
   const [data, setData] = useState<EnrollProps | null>(null);
-  const [isEnrolled, setIsEnrolled] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetchEnrollStatus(id);
+  }, [id, fetchEnrollStatus]);
 
   const enrollUser = async () => {
     if (!id) {
@@ -31,19 +39,23 @@ const CoursePrice = ({
     try {
       const response = await fetch(`/api/course/${id}/enroll`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
+      const responseData = await response.json();
+
+      if (responseData.status === 401) {
+        toast.info("Please sign up to enroll in the course.");
+        router.push("/auth/login");
+        return;
+      }
       if (!response.ok) {
-        throw new Error("Failed to enroll user");
+        toast.error("Failed to enroll user");
       }
 
-      const responseData = await response.json();
-      console.log(responseData, "data from enroll user");
-
       setData(responseData.data);
+      // refresh enrollment status
+      fetchEnrollStatus(id);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to enroll user";
@@ -51,27 +63,9 @@ const CoursePrice = ({
     }
   };
 
-  useEffect(() => {
-    const fetchIsEnrolled = async () => {
-      const data = await fetch(`/api/course/${id}/enroll`, {
-        method: "GET",
-      });
-      const response = await data.json();
-      if (!data.ok) {
-        toast.error("Failed to check enrollment status");
-        return;
-      }
-      setIsEnrolled(response.data);
-    };
-
-    fetchIsEnrolled();
-  }, [id]);
-
   const handleButtonClick = () => {
-    console.log("Button clicked!");
-    if (id) {
+    if (!isEnrolled) {
       enrollUser();
-      console.log("Enrolling user...", data);
     }
     if (data?.chapa_response.data.checkout_url) {
       window.open(data.chapa_response.data.checkout_url, "_blank");
@@ -96,10 +90,14 @@ const CoursePrice = ({
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-purpleStandard hover:bg-purple-700"
             }`}
-            onClick={!isEnrolled ? handleButtonClick : undefined}
-            disabled={isEnrolled}
+            onClick={handleButtonClick}
+            disabled={isEnrolled || enrollLoading}
           >
-            {isEnrolled ? "Enrolled" : "Enroll Now"}
+            {isEnrolled
+              ? "Enrolled"
+              : enrollLoading
+              ? "Enrolling..."
+              : "Enroll Now"}
           </button>
 
           <div className="space-y-3">

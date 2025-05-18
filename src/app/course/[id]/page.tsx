@@ -10,6 +10,7 @@ import { useFetchData } from "@/hooks/useFetchData";
 import { course as courseType } from "@/types/courses";
 import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const CourseDetailPage = () => {
   const { id } = useParams() as { id: string };
@@ -43,6 +44,10 @@ const CourseDetailPage = () => {
 
   if (!course) {
     return <div>Course not found</div>;
+  }
+
+  if (videoError) {
+    toast.error(videoError);
   }
   console.log(videoError, "videoerror in course detail page");
   return (

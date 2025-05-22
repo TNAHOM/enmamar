@@ -33,7 +33,7 @@ export async function GET(
     const instructors = await response.json();
     return NextResponse.json(instructors.data);
   } catch (error) {
-    console.error("Error fetching instructors:", error);
+    console.warn("Error fetching instructors:", error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Internal server error",

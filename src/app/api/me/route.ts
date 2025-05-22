@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { refreshAccessToken } from "@/lib/refreshAuth";
 
 export async function GET() {
   const BASEURL = process.env.BASEURL;
@@ -11,24 +12,64 @@ export async function GET() {
   }
 
   try {
-    const response = await fetch(`${BASEURL}/users/me`, {
+    let response = await fetch(`${BASEURL}/users/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
       },
-      credentials: "include",
     });
 
-    const data = await response.json();
-    // console.log(data, 'data received');
-    if (!response.ok) {
-      throw new Error(data.detail || "Failed to fetch user");
+    if (response.status === 401) {
+      const {
+        accessToken: newAccessToken,
+        refreshToken: existingRefreshToken,
+      } = await refreshAccessToken();
+
+      // Retry with new token
+      response = await fetch(`${BASEURL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        return NextResponse.json(
+          { detail: "Failed to fetch user data" },
+          { status: response.status }
+        );
+      }
+
+      const data = await response.json();
+      // external API returns user info under data
+      const res = NextResponse.json({ user: data.data });
+      res.cookies.set("accessToken", newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 15,
+        path: "/",
+      });
+      res.cookies.set("refreshToken", existingRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+      return res;
     }
-
-    return NextResponse.json({
-      detail: "User retrieved successfully",
-      user: data.data,
-    });
+    // Handle successful initial fetch (status 200-299)
+    else if (response.ok) {
+      const data = await response.json();
+      return NextResponse.json({ user: data.data });
+    }
+    // Handle other non-401 errors
+    else {
+      console.log("Failed to fetch user data: !response /me 00", response);
+      return NextResponse.json(
+        { detail: "Failed to fetch user data" },
+        { status: response.status }
+      );
+    }
   } catch (error) {
     console.log(error, "error form route/me");
     const cookiesStore = await cookies();

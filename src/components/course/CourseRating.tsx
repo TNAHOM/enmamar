@@ -8,9 +8,7 @@ interface CourseRatingProps {
   courseId: string;
 }
 
-export function CourseRating({
-  courseId,
-}: CourseRatingProps) {
+export function CourseRating({ courseId }: CourseRatingProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -32,7 +30,7 @@ export function CourseRating({
 
       setHasRated(true);
     } catch (error) {
-      console.error("Error submitting rating:", error);
+      console.warn("Error submitting rating:", error);
     } finally {
       setIsSubmitting(false);
     }

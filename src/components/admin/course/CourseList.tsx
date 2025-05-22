@@ -14,7 +14,6 @@ export function CourseList({ title, viewAll }: CourseListProps) {
   // const { data, error, loading }
   const { data } = useGetTopicCourses();
 
-
   const courses = data?.slice(0, 3);
 
   return (
@@ -31,39 +30,42 @@ export function CourseList({ title, viewAll }: CourseListProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses && courses.map((course) => (
-          <Card
-            key={course.id}
-            className="overflow-hidden hover:shadow-md transition-shadow"
-          >
-            <div className="relative h-48">
-              <Image
-                src={"/Images/JavaCourse.png"}
-                alt={course.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="font-medium mb-1 line-clamp-2">{course.title}</h3>
-              <div className="text-sm text-gray-500 space-y-1">
-                <p>
-                  Instructor:{" "}
-                  {`${course.instructor.first_name} ${course.instructor.last_name}`}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span>3h 37min</span>
-                  {/* {course.views && ( */}
-                  <span className="text-green-500">
-                    {/* {course.views.toLocaleString()} users */}
-                    2183 users
-                  </span>
-                  {/* )} */}
+        {courses &&
+          courses.map((course) => (
+            <Card
+              key={course.id}
+              className="overflow-hidden hover:shadow-md transition-shadow"
+            >
+              <div className="relative h-48">
+                <Image
+                  src={"/Images/JavaCourse.png"}
+                  alt={course.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-medium mb-1 line-clamp-2">
+                  {course.title}
+                </h3>
+                <div className="text-sm text-gray-500 space-y-1">
+                  <p>
+                    Instructor:{" "}
+                    {`${course.instructor.first_name} ${course.instructor.last_name}`}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span>3h 37min</span>
+                    {/* {course.views && ( */}
+                    {/* <span className="text-green-500">
+                      {course.views.toLocaleString()} users
+                      {course.views} users
+                    </span> */}
+                    {/* )} */}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          ))}
       </div>
     </div>
   );

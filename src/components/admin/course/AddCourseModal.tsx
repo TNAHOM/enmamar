@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import {
   Dialog,
@@ -29,6 +28,7 @@ import type { CourseSchemaType } from "@/lib/scheme/course-scheme";
 import { Lesson, Video } from "@/types/courses";
 import Link from "next/link";
 import { useInstructors } from "@/hooks/useInstructors";
+import { toast } from "sonner";
 
 interface AddCourseModalProps {
   isOpen: boolean;
@@ -36,7 +36,8 @@ interface AddCourseModalProps {
 }
 
 export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
-  const [, setThumbnail] = useState<File | null>(null);
+  // Corrected state to access thumbnail file
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const { instructors, error, clearError } = useInstructors();
@@ -54,6 +55,16 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
       setThumbnail(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -115,7 +126,9 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
     }));
 
     try {
-      const response = await fetch(`/api/course/add`, {
+      // Step 1: Create the course
+
+      const courseResponse = await fetch("/api/course/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -125,20 +138,48 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!courseResponse.ok) {
+        const errorData = await courseResponse.json();
         throw new Error(errorData.detail || "Course creation failed");
       }
 
-      const result = await response.json();
-      console.log("Course created successfully:", result);
+      const courseData = await courseResponse.json();
+      console.log("Course data:", courseData);
+      const courseId = courseData.data.id; // Assuming the response includes an 'id' field
+      console.log("Course data:", courseData, courseId, "--", courseData.data);
+      console.log("Course created successfully:", courseData);
+
+      // Step 2: Upload thumbnail if selected
+      if (thumbnail) {
+        const formData = new FormData();
+        formData.append("thumbnail", thumbnail);
+
+        const uploadResponse = await fetch(`/api/thumbnail/${courseId}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          console.error("Thumbnail upload failed");
+          toast.error("Course created, but failed to upload thumbnail");
+        } else {
+          console.log("Thumbnail uploaded successfully");
+        }
+        const uploadData = await uploadResponse.json();
+        console.log("Thumbnail URL:", uploadData);
+      }
+
+      // Step 3: Reset form and close modal
       reset();
+      setThumbnail(null);
+      setThumbnailPreview("");
+      setLessons([]);
       onClose();
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Failed to create course");
     }
   };
-  console.log(errors, "errors from Add course modal");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -171,7 +212,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
           </div>
         )}
 
-        {/* Only show form if there's no error */}
         {!error && (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Course Basic Info */}
@@ -241,9 +281,11 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                 {thumbnailPreview ? (
                   <div className="relative">
                     <Image
-                      src={thumbnailPreview || "/placeholder.svg"}
+                      src={thumbnailPreview}
                       alt="Thumbnail preview"
                       className="w-full h-48 object-cover rounded-lg"
+                      width={400}
+                      height={192}
                     />
                     <Button
                       type="button"
@@ -264,11 +306,27 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                     <span className="text-sm text-gray-500">
                       Click to upload thumbnail
                     </span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleThumbnailChange}
+                    <Controller
+                      name="thumbnail"
+                      control={control}
+                      rules={{ required: "Thumbnail is required" }}
+                      render={({ field: { onChange, ref } }) => (
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={ref}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            if (file) {
+                              // preview logic
+                              handleThumbnailChange(e);
+                              // give Zod the actual File object:
+                              onChange(file);
+                            }
+                          }}
+                          className="hidden"
+                        />
+                      )}
                     />
                   </label>
                 )}
@@ -313,23 +371,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                   >
                     <X className="h-4 w-4" />
                   </Button>
-                  {/* <div className="space-y-2">
-                    <Label htmlFor={`lesson-id-${lesson.id}`}>Lesson ID</Label>
-                    <Input
-                      id={`lesson-id-${lesson.id}`}
-                      {...register(`lessons.${index}.id` as const)}
-                      value={lesson.id}
-                      onChange={(e) =>
-                        handleLessonChange(lesson.id, "id", e.target.value)
-                      }
-                      placeholder="Enter lesson ID"
-                    />
-                    {errors.lessons && errors.lessons[index]?.id && (
-                      <p className="text-red-500 text-sm">
-                        {errors.lessons[index]?.id?.message}
-                      </p>
-                    )}
-                  </div> */}
                   <div className="space-y-2">
                     <Label htmlFor={`lesson-title-${lesson.id}`}>
                       Lesson {index + 1} Title
@@ -349,7 +390,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                       </p>
                     )}
                   </div>
-                  <div className="">
+                  <div className="space-y-2">
                     <Label>Lesson Duration</Label>
                     <Input
                       type="number"
@@ -372,7 +413,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                       </p>
                     )}
                   </div>
-
                   <div className="space-y-2">
                     <Label htmlFor={`lesson-description-${lesson.id}`}>
                       Lesson Description
@@ -420,7 +460,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                         </p>
                       )}
                   </div>
-
                   <div className="space-y-2">
                     <Label>Video Id</Label>
                     <Input
@@ -443,7 +482,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                         </p>
                       )}
                   </div>
-
                   <div className="space-y-2">
                     <Label>Secret Key</Label>
                     <Input

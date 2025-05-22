@@ -20,7 +20,7 @@ import { useTableData } from "@/hooks/useTableData";
 import LessonList from "./LessonList";
 
 const AllCoursesList = () => {
-  const { data, error, loading } = useGetTopicCourses();
+  const { data, loading } = useGetTopicCourses();
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [courseLesson, setCourseLesson] = useState<Lesson[] | null>(null);
   const [errorLesson, setErrorLesson] = useState<string | null>(null);
@@ -44,12 +44,11 @@ const AllCoursesList = () => {
     initialSortField: "title",
     itemsPerPage: 5,
   });
-  console.log(error, "error from all course list");
+
   useEffect(() => {
     const fetchData = async () => {
       setLoadingLesson(true);
       try {
-        console.log(expandedRow, "expandedRow");
         const response = await fetch(`/api/course/${expandedRow}`);
         const jsonData: course = await response.json();
         setCourseLesson(jsonData.lessons);

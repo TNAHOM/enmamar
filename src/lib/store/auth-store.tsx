@@ -24,22 +24,31 @@ export const useAuthStore = create<AuthState>((set) => ({
   initializeAuth: async () => {
     set({ isLoading: true });
     try {
-      const response = await fetch("/api/me", {
-        credentials: "include",
-      });
+      let response = await fetch("/api/me", { credentials: "include" });
+      // Attempt token refresh if unauthorized
+      if (response.status === 401) {
+        const refreshRes = await fetch("/api/auth/refresh", {
+          method: "POST",
+          credentials: "include",
+        });
+        if (refreshRes.ok) {
+          response = await fetch("/api/me", { credentials: "include" });
+        } else {
+          // Refresh failed: clear auth state
+          set({ user: null, isAuthenticated: false, isLoading: false });
+          return;
+        }
+      }
       const data = await response.json();
-
-      console.log("Auth initialization response:", data);
 
       if (response.ok) {
         set({ user: data.user, isAuthenticated: true, isLoading: false });
-        // console.log("User authenticated:", data.user);
       } else {
         console.log("Authentication failed:", data.detail);
         set({ user: null, isAuthenticated: false, isLoading: false });
       }
     } catch (error) {
-      console.error("Error during auth initialization:", error);
+      console.warn("Error during auth initialization:", error);
       set({
         error: "Failed to initialize auth",
         isLoading: false,
@@ -73,6 +82,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       return { detail: "Login successful", status: response.status };
     } catch (error) {
+      console.log("Error during login:", error);
       const err = error as Error;
       set({ error: err.message, isLoading: false });
       return { detail: err.message, status: 500 };
@@ -91,7 +101,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Signup error:", errorData);
+        console.warn("Signup error:", errorData);
         set({
           error:
             errorData.detail ||

@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       detail: responseData.detail,
-      course: responseData.course,
+      data: responseData.data,
     });
   } catch (error) {
     console.log(error, "error from course creation route");

@@ -25,7 +25,7 @@ export async function GET(
     }
     return NextResponse.json(responseData.data);
   } catch (error) {
-    console.error("Error fetching course:", error);
+    console.warn("Error fetching course:", error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Internal server error",

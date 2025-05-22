@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Facebook, Twitter, Linkedin, Globe, Clock, Users } from "lucide-react";
+import { Clock, Users } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InstructorCourseAnalytics } from "@/types/instructor";
@@ -105,7 +105,7 @@ export default function InstructorProfilePage() {
         }
       } catch (err) {
         setError("Failed to load instructor data");
-        console.error(err);
+        console.warn(err);
       } finally {
         setLoading(false);
       }
@@ -150,7 +150,7 @@ export default function InstructorProfilePage() {
                   <h1 className="text-2xl font-bold">{fullName}</h1>
                   <p className="text-purple-600 font-medium">Lecturer</p>
                 </div>
-                <div className="flex justify-center md:justify-start space-x-4">
+                {/* <div className="flex justify-center md:justify-start space-x-4">
                   <Link
                     href="#"
                     className="text-gray-500 hover:text-purple-600 transition-colors"
@@ -175,7 +175,7 @@ export default function InstructorProfilePage() {
                   >
                     <Globe size={20} />
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -236,47 +236,49 @@ export default function InstructorProfilePage() {
                   key={course.id}
                   className="overflow-hidden rounded-2xl border-0 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="flex flex-col md:flex-row">
-                    <div className="relative w-full md:w-64 h-48 md:h-auto">
-                      <Image
-                        src={course.thumbnail || "/placeholder.svg"}
-                        alt={course.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent md:hidden"></div>
-                      <div className="absolute top-4 left-4 md:hidden">
-                        <h3 className="text-xl font-bold text-white">
+                  <Link href={`/course/${course.id}`}>
+                    <div className="flex flex-col md:flex-row">
+                      <div className="relative w-full md:w-64 h-48 md:h-auto">
+                        <Image
+                          src={course.thumbnail || "/placeholder.svg"}
+                          alt={course.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent md:hidden"></div>
+                        <div className="absolute top-4 left-4 md:hidden">
+                          <h3 className="text-xl font-bold text-white">
+                            {course.title}
+                          </h3>
+                        </div>
+                      </div>
+                      <CardContent className="flex-1 p-6">
+                        <h3 className="text-xl font-bold mb-2 hidden md:block">
                           {course.title}
                         </h3>
-                      </div>
-                    </div>
-                    <CardContent className="flex-1 p-6">
-                      <h3 className="text-xl font-bold mb-2 hidden md:block">
-                        {course.title}
-                      </h3>
-                      <div className="flex items-center text-base text-gray-500 mb-4">
-                        <div className="flex items-center mr-4">
-                          <Clock size={16} className="mr-1 text-purple-500" />
-                          <span>{course.duration}</span>
+                        <div className="flex items-center text-base text-gray-500 mb-4">
+                          <div className="flex items-center mr-4">
+                            <Clock size={16} className="mr-1 text-purple-500" />
+                            <span>{course.duration}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users size={16} className="mr-1 text-purple-500" />
+                            <span>
+                              {course.students.toLocaleString()} students
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          <Users size={16} className="mr-1 text-purple-500" />
-                          <span>
-                            {course.students.toLocaleString()} students
+                        <div className="flex items-center justify-between mt-4">
+                          <span className="text-xl font-bold text-purple-600">
+                            {course.price}
                           </span>
+                          <Button className="bg-purple-600 hover:bg-purple-700 rounded-full px-6">
+                            Enroll Now
+                          </Button>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between mt-4">
-                        <span className="text-xl font-bold text-purple-600">
-                          {course.price}
-                        </span>
-                        <Button className="bg-purple-600 hover:bg-purple-700 rounded-full px-6">
-                          Enroll Now
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </div>
+                      </CardContent>
+                    </div>
+                  </Link>
                 </Card>
               ))}
 

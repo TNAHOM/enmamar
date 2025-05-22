@@ -56,7 +56,7 @@ export function AddInstructorModal({
         const data = await response.json();
         setInstructors(data);
       } catch (error) {
-        console.error("Error fetching instructors:", error);
+        console.warn("Error fetching instructors:", error);
         throw new Error("Failed to fetch instructors");
       }
     };
@@ -82,7 +82,7 @@ export function AddInstructorModal({
 
       onClose();
     } catch (error) {
-      console.error("Error updating instructor role:", error);
+      console.warn("Error updating instructor role:", error);
       throw new Error("Failed to update instructor role");
     }
   };

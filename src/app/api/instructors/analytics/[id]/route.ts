@@ -28,7 +28,7 @@ export async function GET(
     const errorMessage =
       error instanceof Error ? error.message : "Course creation failed";
 
-    console.error(errorMessage, "errorMessage");
+    console.warn(errorMessage, "errorMessage");
 
     return NextResponse.json({ detail: errorMessage, status: 500 });
   }

@@ -24,3 +24,9 @@
 - [ ] Improve the error handling in the signup especially the phone number(but chack all)
 - [ ] Properly handle the enroll lesson hide lessons that are after the first one(backend endpoint checker for enrollemnt)
 - [ ] Improve the otp when sending phone number from the signup page it uses a params so that the number can be seen in the url and can be changed (Improve this and secure it)
+
+- [ ] Enrich the metadata with viewport, themeColor, icons, OpenGraph and robots settings.Add your favicon link in the <head>. Inject Google Analytics (or GTM) via next/script using your NEXT_PUBLIC_GA_ID. Keep <html lang> and your providers as is.
+
+-[ ] Improve the fetching try to use tanstack if its nessassry try to cache or use statemanagemnt to decrease the call to the api like in one page if i need only the lenght of a list from the endpoint and inother in other i want the list it would be redundant to call the endpoint twice
+
+- [ ] For latter use check the commented codes probably they have a better ui

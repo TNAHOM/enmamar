@@ -14,7 +14,7 @@ export async function GET(
         "Content-Type": "application/json",
       },
     });
-    console.log(response, "response from course/id", id)
+
     const responseData = await response.json();
 
     if (!response.ok) {

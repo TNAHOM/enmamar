@@ -11,6 +11,7 @@ export interface course extends Record<string, unknown> {
     instructor_id: string;
     created_at: string;
     updated_at: string;
+    discount: number;
     instructor: userProfile;
     lessons: Lesson[];
     industry: string;
@@ -23,7 +24,7 @@ export interface Lesson {
     title: string;
     description: string;
     duration: number;
-    video_url?: string;
+    video_url?: string | null;
     video: Video;
 }
 

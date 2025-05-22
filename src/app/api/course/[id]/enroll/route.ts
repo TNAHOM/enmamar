@@ -24,12 +24,11 @@ export async function POST(
     });
 
     const responseData = await response.json();
-    // console.log(responseData, "response from course creation route");
+
     if (!response.ok) {
       console.log("Failed to create course:", responseData);
       throw new Error(responseData.detail || "Course creation failed");
     }
-
     return NextResponse.json({
       detail: responseData.detail,
       data: responseData.data,
@@ -53,7 +52,6 @@ export async function GET(
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   if (!accessToken) {
-    console.log("No access token found");
     return NextResponse.json({ detail: "Not authenticated", status: 401 });
   }
 
@@ -69,10 +67,8 @@ export async function GET(
 
     // console.log("Failed to fetch status:", responseData);
     if (!response.ok) {
-      console.log(response, "response from course creation route");
       return NextResponse.json(
-        { detail: responseData.detail || "Failed to fetch enroll status" },
-        { status: response.status }
+        { detail: responseData.detail || "Failed to fetch enroll status", status: response.status }
       );
     }
 
@@ -81,9 +77,9 @@ export async function GET(
       data: responseData.data.is_enrolled,
     });
   } catch (error) {
-    console.log(error, "error from course creation route");
+    // console.log(error, "error from course creation route");
     const errorMessage =
       error instanceof Error ? error.message : "Course creation failed";
-    return NextResponse.json({ detail: errorMessage }, { status: 401 });
+    return NextResponse.json({ detail: errorMessage, status: 401 });
   }
 }

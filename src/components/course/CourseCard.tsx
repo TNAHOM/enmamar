@@ -1,13 +1,8 @@
+"use client";
+
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import Link from "next/link";
+import { Star } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -15,11 +10,11 @@ interface CourseCardProps {
   instructor: string;
   description: string;
   price: number;
-  image: string | null;
+  image: string;
   rating: number;
 }
 
-export default function CourseCard({
+const CourseCard = ({
   id,
   title,
   instructor,
@@ -27,62 +22,71 @@ export default function CourseCard({
   price,
   image,
   rating,
-}: CourseCardProps) {
+}: CourseCardProps) => {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md ">
-      <div className="aspect-video relative overflow-hidden">
+    <div className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-full border border-gray-100">
+      {/* Course thumbnail with hover effect */}
+      <div className="relative h-64 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
         <Image
           src={image || "/Images/thumbnail.webp"}
           alt={title}
-          fill
-          className="object-cover transition-transform hover:scale-105"
+          width={400}
+          height={300}
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute bottom-2 right-2">
-          <Badge variant="secondary" className="bg-white/90 text-purple-600">
-            {price}
-          </Badge>
+        <div className="absolute top-3 right-3 bg-purple-600 text-white px-2 py-1 text-xs font-semibold rounded-full z-20">
+          {price === 0 ? "FREE" : `$${price}`}
         </div>
       </div>
-      <CardHeader className="p-4">
-        <div className="space-y-1">
-          <h3 className="font-semibold text-lg line-clamp-2">{title}</h3>
-          <p className="text-sm text-muted-foreground">
-            Instructor: {instructor}
-          </p>
+
+      {/* Course content */}
+      <div className="flex flex-col flex-grow p-4 space-y-2">
+        <div className="flex justify-between items-start mb-1">
+          <h3 className="font-semibold text-lg line-clamp-2 hover:text-purple-600 transition-colors">
+            <Link href={`/course/${id}`}>{title}</Link>
+          </h3>
         </div>
-      </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <p className="text-sm text-muted-foreground line-clamp-3">
+
+        <p className="text-sm text-gray-400">
+          Instructor:{" "}
+          <span className="font-medium text-gray-600">{instructor}</span>
+        </p>
+
+        <p className="text-sm text-gray-600 line-clamp-2 flex-grow">
           {description}
         </p>
-      </CardContent>
-      <CardFooter className="p-4 pt-0 flex items-center justify-between">
-        <div className="flex items-center">
-          <div className="flex">
+
+        {/* Rating */}
+        <div className="flex items-center mt-auto pt-3 border-t border-gray-100">
+          <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
-              <svg
+              <Star
                 key={i}
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill={i < Math.floor(rating) ? "#9333ea" : "none"}
-                stroke={i < Math.floor(rating) ? "#9333ea" : "currentColor"}
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="mr-1"
-              >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
+                className={`h-4 w-4 ${
+                  i < Math.floor(rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : i < rating
+                    ? "fill-yellow-400 text-yellow-400 fill-[50%]"
+                    : "text-gray-300"
+                }`}
+              />
             ))}
+            <span className="ml-1 text-sm font-medium text-gray-700">
+              {rating.toFixed(1)}
+            </span>
           </div>
-          <span className="text-sm ml-1">{rating.toFixed(1)}</span>
+
+          <Link
+            href={`/course/${id}`}
+            className="ml-auto bg-purple-50 hover:bg-purple-100 text-purple-700 text-sm font-medium py-1 px-3 rounded-full transition-colors"
+          >
+            See more
+          </Link>
         </div>
-        <Button size="default" className="bg-purple-600 hover:bg-purple-700">
-          <Link href={`/course/${id}`}>See more</Link>
-        </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
-}
+};
+
+export default CourseCard;

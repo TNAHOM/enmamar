@@ -8,7 +8,5 @@ export interface Comment {
 }
 
 export interface CourseReviewsProps {
-  averageRating: number;
-  totalReviews: number;
   courseId: string;
 }

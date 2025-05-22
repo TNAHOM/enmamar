@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,8 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { courseSchema } from "@/lib/scheme/course-scheme";
 import type { CourseSchemaType } from "@/lib/scheme/course-scheme";
 import { Lesson, Video } from "@/types/courses";
-import { userProfile } from "@/types/user";
 import Link from "next/link";
+import { useInstructors } from "@/hooks/useInstructors";
 
 interface AddCourseModalProps {
   isOpen: boolean;
@@ -39,8 +39,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   const [, setThumbnail] = useState<File | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
-  const [instructors, setInstructors] = useState<userProfile[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { instructors, error, clearError } = useInstructors();
 
   const {
     register,
@@ -51,26 +50,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   } = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
   });
-
-  useEffect(() => {
-    const fetchInstructors = async () => {
-      try {
-        const response = await fetch("/api/instructors");
-        if (!response.ok) {
-          const errorMsg = "Failed to fetch instructors";
-          setError(errorMsg);
-          return;
-        }
-        const data = await response.json();
-        setInstructors(data);
-      } catch (error) {
-        const errorMsg =
-          (error as Error).message || "Failed to fetch instructors";
-        setError(errorMsg);
-      }
-    };
-    fetchInstructors();
-  }, []);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -161,11 +140,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   };
   console.log(errors, "errors from Add course modal");
 
-  // console.log(error);
-  // if (error) {
-  //   return <ErrorTemplate />;
-  // }
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -182,7 +156,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
               <Button
                 variant="outline"
                 onClick={() => {
-                  setError(null);
+                  clearError();
                   onClose();
                 }}
               >

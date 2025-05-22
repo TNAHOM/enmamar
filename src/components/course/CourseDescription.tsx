@@ -12,6 +12,7 @@ const CourseDescription = () => {
   const { data, error, loading } = useFetchData<course>({
     url: `api/course/${id}`,
   });
+  console.log(data, error)
   if (!data || error) {
     return <div className="">No data</div>;
   }

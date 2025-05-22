@@ -74,7 +74,6 @@ const CourseDetailPage = () => {
   if (videoError) {
     toast.error(videoError);
   }
-
   return (
     <div className="mx-auto my-6 md:my-10 w-full px-4 lg:w-5/6">
       {/* Course breadcrumb */}

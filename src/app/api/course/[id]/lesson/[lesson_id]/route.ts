@@ -31,11 +31,13 @@ export async function GET(
 
     if (!response.ok) {
       console.log("Failed to fetch lesson:", responseData);
-      return NextResponse.json(
-        { error: responseData.detail, status: response.status }
-      );
+      return NextResponse.json({
+        error: responseData.detail,
+        status: response.status,
+      });
     }
-    return NextResponse.json(responseData.data);
+    const data = await responseData.data;
+    return NextResponse.json(data);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch lesson";

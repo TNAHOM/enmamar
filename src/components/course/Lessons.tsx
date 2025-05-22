@@ -38,6 +38,9 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
   const handleLessonClick = (lesson_id: string, index: number) => {
     setActiveDay(index);
     setActiveLesson(lesson_id, id);
+    console.log(
+      `Lesson clicked: ${lesson_id}, Active Day: ${index}, Course ID: ${id}`
+    );
     if (errorLessonId) {
       toast.error(errorLessonId);
       return;

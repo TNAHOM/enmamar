@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function GET() {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const BASEURL = process.env.BASEURL;
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("accessToken")?.value;
@@ -11,29 +15,30 @@ export async function GET() {
   }
 
   try {
-    const response = await fetch(`${BASEURL}/instructors`, {
+    const response = await fetch(`${BASEURL}/analysis/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     });
-    // console.log(response, 'response from instructors');
 
     if (!response.ok) {
-      return NextResponse.json({
-        error: "Failed to fetch instructors",
-        status: response.status,
-      });
+      return NextResponse.json(
+        { error: "Failed to fetch instructors" },
+        { status: response.status }
+      );
     }
 
     const instructors = await response.json();
     return NextResponse.json(instructors.data);
   } catch (error) {
     console.error("Error fetching instructors:", error);
-    return NextResponse.json({
-      error: error instanceof Error ? error.message : "Internal server error",
-      status: 500,
-    });
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
+      { status: 500 }
+    );
   }
 }

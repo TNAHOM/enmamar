@@ -1,13 +1,14 @@
 import React from "react";
 import RecentEnrollments from "@/components/instructor/dashboard/RecentEnrollments";
-import { mockRecentEnrollments } from "@/utilities/instructor";
 
 const InstructorLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen ">
-      <main className="flex-grow p-12 px-20 w-[80%]">{children}</main>
-      <aside className="w-[20%] border-l p-4 bg-background">
-        <RecentEnrollments enrollments={mockRecentEnrollments} />
+    <div className="flex min-h-screen flex-col sm:flex-row">
+      <main className="flex-grow p-4 px-6 sm:p-6 sm:px-8 md:p-8 md:px-12 lg:p-12 lg:px-20 w-full sm:w-[80%]">
+        {children}
+      </main>
+      <aside className="w-full sm:w-[20%] border-t sm:border-l p-2 sm:p-4 bg-background">
+        <RecentEnrollments />
       </aside>
     </div>
   );

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import {
   Table,
@@ -21,7 +20,6 @@ const InstructorCourseList = ({
 }: {
   data: InstructorCourseAnalytics[];
 }) => {
-  console.log(data, "data from instructor course list");
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
   const {
@@ -48,8 +46,8 @@ const InstructorCourseList = ({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
+    <div className="space-y-2 sm:space-y-4">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -60,14 +58,6 @@ const InstructorCourseList = ({
               >
                 Course Name{" "}
                 {sortField === "course" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("view_count")}
-              >
-                Views{" "}
-                {sortField === "view_count" &&
-                  (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
               <TableHead
                 className="cursor-pointer"
@@ -101,8 +91,8 @@ const InstructorCourseList = ({
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
                         <AvatarImage
                           src={
                             courseData.course.thumbnail_url ||
@@ -114,15 +104,10 @@ const InstructorCourseList = ({
                           {courseData.course.title.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="font-medium">
+                      <div className="font-medium text-sm sm:text-base">
                         {courseData.course.title}
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="rounded-full">
-                      {courseData.view_count}
-                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant="default" className="rounded-full">
@@ -139,13 +124,15 @@ const InstructorCourseList = ({
                 {expandedRow === courseData.course.id && (
                   <TableRow>
                     <TableCell colSpan={6}>
-                      <div className="p-4 bg-muted/50 rounded-md">
-                        <h4 className="font-medium mb-2">Course Lessons</h4>
-                        <ul className="space-y-2">
+                      <div className="p-2 sm:p-4 bg-muted/50 rounded-md">
+                        <h4 className="font-medium mb-1 sm:mb-2">
+                          Course Lessons
+                        </h4>
+                        <ul className="space-y-1 sm:space-y-2">
                           {courseData.course.lessons.map((lesson) => (
                             <li
                               key={lesson.id}
-                              className="flex items-center justify-between bg-background p-2 rounded"
+                              className="flex items-center justify-between bg-background p-1 sm:p-2 rounded"
                             >
                               <span>{lesson.title}</span>
                               <span className="text-muted-foreground">
@@ -163,12 +150,11 @@ const InstructorCourseList = ({
           </TableBody>
         </Table>
       </div>
-
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
         <div className="text-sm text-muted-foreground">
           Showing {startIndex + 1} to {endIndex} of {totalItems} entries
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -204,14 +190,13 @@ const InstructorCourseList = ({
 export default InstructorCourseList;
 
 export const Loading = () => (
-  <div className="space-y-4">
-    <div className="rounded-md border">
+  <div className="space-y-2 sm:space-y-4">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-12"></TableHead>
             <TableHead>Course Name</TableHead>
-            <TableHead>Views</TableHead>
             <TableHead>Enrollments</TableHead>
             <TableHead>Revenue</TableHead>
             <TableHead className="w-[100px]">Actions</TableHead>

@@ -51,7 +51,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   } = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
   });
-  console.log("Error modal:", errors);
+
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {

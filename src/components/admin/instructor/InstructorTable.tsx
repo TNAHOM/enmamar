@@ -11,10 +11,8 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EditInstructorModal } from "@/components/admin/instructor/EditInstructorModal";
-import { Pencil, Trash2 } from "lucide-react";
 import { useFetchListData } from "@/hooks/useFetchData";
 import { InstructorProfile } from "@/types/user";
 import { useTableData } from "@/hooks/useTableData";
@@ -26,7 +24,7 @@ export function InstructorTable() {
     null
   );
 
-  const { data, loading, error } = useFetchListData<InstructorProfile>({
+  const { data, loading } = useFetchListData<InstructorProfile>({
     url: "/api/instructors",
   });
 
@@ -48,14 +46,10 @@ export function InstructorTable() {
     initialSortField: "first_name",
     itemsPerPage: 5,
   });
-  console.log(data, "data in instructor table");
-  console.log(paginatedData, "paginated data in instructor table");
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log(error, "error in instructor table");
 
   return (
     <div className="space-y-4">
@@ -74,30 +68,12 @@ export function InstructorTable() {
                 {sortField === "first_name" &&
                   (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("views")}
-              >
-                Number of Views{" "}
-                {sortField === "views" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("industry")}
-              >
-                Industry{" "}
-                {sortField === "industry" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("courses")}
-              >
-                Number of Videos{" "}
-                {sortField === "courses" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Username</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {paginatedData.map((instructor) => (
               <TableRow key={instructor.id}>
@@ -118,27 +94,9 @@ export function InstructorTable() {
                     <div className="font-medium">{instructor.first_name}</div>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <Badge variant="default" className="rounded-full">
-                    2198
-                  </Badge>
-                </TableCell>
-                <TableCell>Software Development</TableCell>
-                <TableCell>12</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setSelectedInstructor(instructor.id)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
+                <TableCell>{instructor.email}</TableCell>
+                <TableCell>{instructor.phone_number}</TableCell>
+                <TableCell>{instructor.username}</TableCell>
               </TableRow>
             ))}
           </TableBody>

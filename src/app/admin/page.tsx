@@ -10,8 +10,6 @@ export default function AdminDashboard() {
   const { user } = useAuthStore();
   const { instructors } = useInstructors();
   const courses = useGetTopicCourses()
-  console.log("instructors", instructors);
-  console.log("courses", courses);
 
   const totalInstructors = instructors.length;
   const totalCoursesCount = courses.data?.length || 0;

@@ -3,7 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["enemamarimageupload.b-cdn.net"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "enemamarimageupload.b-cdn.net",
+        // Optionally, you can specify pathname: "/**" to match all paths
+      },
+    ],
   },
 };
 

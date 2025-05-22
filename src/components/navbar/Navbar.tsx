@@ -21,7 +21,10 @@ const Navbar = () => {
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMobileMenuOpen && !(event.target as HTMLElement).closest(".navbar-container")) {
+      if (
+        isMobileMenuOpen &&
+        !(event.target as HTMLElement).closest(".navbar-container")
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -42,9 +45,25 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Loading skeleton for auth section
+  const AuthLoadingSkeleton = () => (
+    <div className="flex items-center space-x-3">
+      <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+      <div className="h-10 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+    </div>
+  );
+
+  // Mobile loading skeleton
+  const MobileAuthLoadingSkeleton = () => (
+    <div className="space-y-2 pt-2">
+      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  );
+
   return (
     <nav className="navbar-container sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
-      <div className="w-4/6 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -61,6 +80,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
+            {/* Static navigation - always visible */}
             <Link
               href="/become-instructor"
               className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
@@ -68,37 +88,39 @@ const Navbar = () => {
               Become an Instructor
             </Link>
 
-            {/* Role-based Navigation */}
-            {user?.role === "admin" && (
-              <Link
-                href="/admin"
-                className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
-              >
-                Admin Dashboard
-              </Link>
-            )}
-            {user?.role === "instructor" && (
-              <Link
-                href="/instructor/dashboard"
-                className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
-              >
-                Dashboard
-              </Link>
-            )}
-            {user?.role === "user" && (
-              <Link
-                href="/profile"
-                className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
-              >
-                Profile
-              </Link>
+            {/* Role-based Navigation - only show when authenticated and not loading */}
+            {!isLoading && isAuthenticated && (
+              <>
+                {user?.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+                {user?.role === "instructor" && (
+                  <Link
+                    href="/instructor/dashboard"
+                    className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                {user?.role === "user" && (
+                  <Link
+                    href="/profile"
+                    className="text-gray-700 hover:text-purple-600 font-medium transition-all duration-200 hover:scale-105"
+                  >
+                    Profile
+                  </Link>
+                )}
+              </>
             )}
 
-            {/* Auth Section */}
+            {/* Auth Section with isolated loading */}
             {isLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-6 h-6 border-t-2 border-purple-600 border-solid rounded-full animate-spin"></div>
-              </div>
+              <AuthLoadingSkeleton />
             ) : isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-full">
@@ -135,7 +157,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - always visible */}
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -162,8 +184,8 @@ const Navbar = () => {
       >
         <div className="bg-white shadow-lg">
           <div className="px-4 py-4 space-y-2">
-            {/* User Info Section for Mobile */}
-            {isAuthenticated && user && (
+            {/* User Info Section for Mobile - only when authenticated and not loading */}
+            {!isLoading && isAuthenticated && user && (
               <div className="flex items-center space-x-3 bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg mb-4">
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full flex items-center justify-center font-semibold shadow-md">
                   {user?.first_name?.charAt(0).toUpperCase()}
@@ -180,7 +202,7 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Navigation Links */}
+            {/* Static Navigation Links */}
             <Link
               href="/become-instructor"
               onClick={handleLinkClick}
@@ -190,48 +212,49 @@ const Navbar = () => {
               Become an Instructor
             </Link>
 
-            {/* Role-based Navigation */}
-            {user?.role === "admin" && (
-              <Link
-                href="/admin"
-                onClick={handleLinkClick}
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
-              >
-                <div className="h-5 w-5 mr-3 bg-purple-500 rounded text-white flex items-center justify-center text-xs font-bold">
-                  A
-                </div>
-                Admin Dashboard
-              </Link>
-            )}
-            {user?.role === "instructor" && (
-              <Link
-                href="/instructor/dashboard"
-                onClick={handleLinkClick}
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
-              >
-                <div className="h-5 w-5 mr-3 bg-blue-500 rounded text-white flex items-center justify-center text-xs font-bold">
-                  I
-                </div>
-                Dashboard
-              </Link>
-            )}
-            {user?.role === "user" && (
-              <Link
-                href="/profile"
-                onClick={handleLinkClick}
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
-              >
-                <User className="h-5 w-5 mr-3" />
-                Profile
-              </Link>
+            {/* Role-based Navigation - only when authenticated and not loading */}
+            {!isLoading && isAuthenticated && (
+              <>
+                {user?.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    onClick={handleLinkClick}
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <div className="h-5 w-5 mr-3 bg-purple-500 rounded text-white flex items-center justify-center text-xs font-bold">
+                      A
+                    </div>
+                    Admin Dashboard
+                  </Link>
+                )}
+                {user?.role === "instructor" && (
+                  <Link
+                    href="/instructor/dashboard"
+                    onClick={handleLinkClick}
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <div className="h-5 w-5 mr-3 bg-blue-500 rounded text-white flex items-center justify-center text-xs font-bold">
+                      I
+                    </div>
+                    Dashboard
+                  </Link>
+                )}
+                {user?.role === "user" && (
+                  <Link
+                    href="/profile"
+                    onClick={handleLinkClick}
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-600 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <User className="h-5 w-5 mr-3" />
+                    Profile
+                  </Link>
+                )}
+              </>
             )}
 
-            {/* Auth Section */}
+            {/* Auth Section with isolated loading */}
             {isLoading ? (
-              <div className="flex items-center justify-center py-4">
-                <div className="w-6 h-6 border-t-2 border-purple-600 border-solid rounded-full animate-spin"></div>
-                <span className="ml-2 text-gray-600">Loading...</span>
-              </div>
+              <MobileAuthLoadingSkeleton />
             ) : !isAuthenticated ? (
               <div className="space-y-2 pt-2">
                 <Link

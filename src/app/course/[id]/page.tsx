@@ -7,13 +7,14 @@ import CourseReview from "@/components/course/CourseReview";
 import { useFetchData } from "@/hooks/useFetchData";
 import { course as courseType } from "@/types/courses";
 import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Calendar, ChevronRight, Play, Trophy } from "lucide-react";
 import Link from "next/link";
 
 const CourseDetailPage = () => {
   const { id } = useParams() as { id: string };
+  const [start, setStart] = useState<boolean>(false);
   const {
     activeLesson,
     isVideoPlaying,
@@ -184,7 +185,10 @@ const CourseDetailPage = () => {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
                     <div className="w-10 h-10 md:w-16 md:h-16 bg-purple-600 rounded-full flex items-center justify-center">
-                      <Play className="w-5 h-5 md:w-8 md:h-8 text-white fill-white ml-0.5 md:ml-1" />
+                      <Play
+                        className="w-5 h-5 md:w-8 md:h-8 text-white fill-white ml-0.5 md:ml-1"
+                        onClick={() => setStart(true)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -213,7 +217,7 @@ const CourseDetailPage = () => {
 
           {/* Mobile view - Lessons section */}
           <div className="lg:hidden">
-            <Lessons id={id} />
+            <Lessons id={id} start={start} />
           </div>
 
           {/* Reviews */}
@@ -227,7 +231,7 @@ const CourseDetailPage = () => {
             price={course.price}
             discount={course.discount}
           />
-          <Lessons id={id} />
+          <Lessons id={id} start={start} />
         </div>
       </div>
     </div>

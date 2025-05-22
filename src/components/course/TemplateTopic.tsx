@@ -20,6 +20,7 @@ const TemplateTopic = ({
   const courseData = useGetTopicCourses(from ? { type: from } : {});
 
   const { data: contents, error, loading } = courseData;
+  console.log("Contents:", courseData);
   const [firstWord, secondWord] = topic.split(" ");
   const isFeatured = firstWord.toLowerCase() === "featured";
 

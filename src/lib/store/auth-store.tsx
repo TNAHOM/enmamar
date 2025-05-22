@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: null, isAuthenticated: false, isLoading: false });
       }
     } catch (error) {
-      console.error("Error during auth initialization:", error);
+      console.warn("Error during auth initialization:", error);
       set({
         error: "Failed to initialize auth",
         isLoading: false,
@@ -91,7 +91,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Signup error:", errorData);
+        console.warn("Signup error:", errorData);
         set({
           error:
             errorData.detail ||

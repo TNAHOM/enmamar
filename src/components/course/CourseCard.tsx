@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -11,7 +10,7 @@ interface CourseCardProps {
   description: string;
   price: number;
   image: string;
-  rating: number;
+  rating?: number;
 }
 
 const CourseCard = ({
@@ -21,6 +20,7 @@ const CourseCard = ({
   description,
   price,
   image,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   rating,
 }: CourseCardProps) => {
   return (
@@ -36,7 +36,7 @@ const CourseCard = ({
           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 right-3 bg-purple-600 text-white px-2 py-1 text-xs font-semibold rounded-full z-20">
-          {price === 0 ? "FREE" : `$${price}`}
+          {price === 0 ? "FREE" : `${price} Br.`}
         </div>
       </div>
 
@@ -59,7 +59,7 @@ const CourseCard = ({
 
         {/* Rating */}
         <div className="flex items-center mt-auto pt-3 border-t border-gray-100">
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
@@ -75,7 +75,7 @@ const CourseCard = ({
             <span className="ml-1 text-sm font-medium text-gray-700">
               {rating.toFixed(1)}
             </span>
-          </div>
+          </div> */}
 
           <Link
             href={`/course/${id}`}

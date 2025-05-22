@@ -37,7 +37,7 @@ const CoursePrice = ({
 
   const enrollUser = async () => {
     if (!id) {
-      console.error("Course ID is undefined");
+      console.warn("Course ID is undefined");
       return;
     }
 
@@ -112,11 +112,7 @@ const CoursePrice = ({
           disabled={isEnrolled || enrollLoading}
         >
           <ShieldCheck className="w-5 h-5" />
-          {isEnrolled
-            ? "Enrolled"
-            : enrollLoading
-            ? "loading"
-            : "Enroll Now"}
+          {isEnrolled ? "Enrolled" : enrollLoading ? "loading" : "Enroll Now"}
         </button>
 
         <div className="space-y-4">

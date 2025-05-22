@@ -34,7 +34,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error:", error);
+    console.warn("Error:", error);
     const errorMessage =
       error instanceof Error ? error.message : "Failed to update role";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });

@@ -30,3 +30,4 @@
 -[ ] Improve the fetching try to use tanstack if its nessassry try to cache or use statemanagemnt to decrease the call to the api like in one page if i need only the lenght of a list from the endpoint and inother in other i want the list it would be redundant to call the endpoint twice
 
 - [ ] For latter use check the commented codes probably they have a better ui
+- [ ] Social media accounts

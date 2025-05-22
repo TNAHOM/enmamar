@@ -135,7 +135,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
       reset();
       onClose();
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.warn("Error submitting form:", error);
     }
   };
   console.log(errors, "errors from Add course modal");

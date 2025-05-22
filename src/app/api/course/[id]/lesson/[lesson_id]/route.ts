@@ -9,7 +9,14 @@ export async function GET(
   const BASEURL = process.env.BASEURL;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
-  // console.log(id, "course_id", lesson_id, "lesson id  from route course/lesson");
+
+  if (!accessToken) {
+    console.log("Unauthorized access");
+    return NextResponse.json({
+      error: "Unauthorized to access Please signUp",
+      status: 401,
+    });
+  }
 
   try {
     const response = await fetch(`${BASEURL}/lesson/${id}/${lesson_id}`, {
@@ -25,14 +32,13 @@ export async function GET(
     if (!response.ok) {
       console.log("Failed to fetch lesson:", responseData);
       return NextResponse.json(
-        { error: responseData.detail },
-        { status: response.status }
+        { error: responseData.detail, status: response.status }
       );
     }
     return NextResponse.json(responseData.data);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch lesson";
-    return NextResponse.json({ detail: errorMessage }, { status: 500 });
+    return NextResponse.json({ detail: errorMessage, status: 500 });
   }
 }

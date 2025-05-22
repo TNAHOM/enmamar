@@ -5,7 +5,7 @@ import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 import { Play, Lock, CheckCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 
-const Lessons = ({ id }: { id: string }) => {
+const Lessons = ({ id, start }: { id: string; start: boolean }) => {
   const [activeDay, setActiveDay] = useState<number>(0);
   const {
     setActiveLesson,
@@ -27,6 +27,13 @@ const Lessons = ({ id }: { id: string }) => {
   useEffect(() => {
     fetchEnrollStatus(id);
   }, [id, fetchEnrollStatus]);
+
+  useEffect(() => {
+    if (start && lessons && lessons.length > 0) {
+      setActiveLesson(lessons[0].id, id);
+      setActiveDay(0);
+    }
+  }, [start, lessons, setActiveLesson, id]);
 
   const handleLessonClick = (lesson_id: string, index: number) => {
     setActiveDay(index);

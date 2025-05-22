@@ -48,6 +48,8 @@ export function InstructorTable() {
     initialSortField: "first_name",
     itemsPerPage: 5,
   });
+  console.log(data, "data in instructor table");
+  console.log(paginatedData, "paginated data in instructor table");
 
   if (loading) {
     return <div>Loading...</div>;

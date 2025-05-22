@@ -22,7 +22,6 @@ export async function middleware(request: NextRequest) {
       let response = await fetch(`${request.nextUrl.origin}/api/me`, {
         headers: { cookie: cookieHeader },
       });
-
       // Handle 401 by attempting to refresh the token
       if (response.status === 401) {
         try {
@@ -55,6 +54,7 @@ export async function middleware(request: NextRequest) {
           });
 
           if (!response.ok) {
+            console.log("!ok middleware", response)
             const cookieStore = await cookies();
             cookieStore.delete("accessToken");
             cookieStore.delete("refreshToken");
@@ -92,10 +92,8 @@ export async function middleware(request: NextRequest) {
 
       if (!response.ok) {
         // Clear cookies on non-401 failure
-        console.log(
-          "Failed to fetch user data: !response middleware",
-          response
-        );
+        const errordata = await response.json();
+        console.log("Failed to fetch user data: !response middleware:", errordata);
         const cookieStore = await cookies();
         cookieStore.delete("accessToken");
         cookieStore.delete("refreshToken");

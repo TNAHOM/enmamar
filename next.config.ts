@@ -1,18 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "enemamarimageupload.b-cdn.net",
-        // Optionally, you can specify pathname: "/**" to match all paths
+        pathname: "/**", // optional but helps match all image paths
       },
       {
         protocol: "https",
-        hostname: "/**",
-        // Optionally, you can specify pathname: "/**" to match all paths
+        hostname: "enemamarpppull.b-cdn.net",
+        pathname: "/**", // optional but helps match all image paths
       },
     ],
   },

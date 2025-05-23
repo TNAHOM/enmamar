@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: "enemamarpppull.b-cdn.net",
         pathname: "/**", // optional but helps match all image paths
       },
+      {
+        protocol: "https",
+        hostname: "EnemamarImageUpload.b-cdn.net",
+        pathname: "/**",
+      },
     ],
   },
 };

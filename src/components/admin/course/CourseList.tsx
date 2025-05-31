@@ -12,9 +12,9 @@ interface CourseListProps {
 
 export function CourseList({ title, viewAll }: CourseListProps) {
   // const { data, error, loading }
-  const { data } = useGetTopicCourses();
+  const { data: courses } = useGetTopicCourses();
 
-  const courses = data?.slice(0, 3);
+  // const courses = data?.slice(0, 3);
 
   return (
     <div className="space-y-4">
@@ -38,7 +38,7 @@ export function CourseList({ title, viewAll }: CourseListProps) {
             >
               <div className="relative h-48">
                 <Image
-                  src={"/Images/JavaCourse.png"}
+                  src={course.thumbnail_url}
                   alt={course.title}
                   fill
                   className="object-cover"
@@ -53,15 +53,15 @@ export function CourseList({ title, viewAll }: CourseListProps) {
                     Instructor:{" "}
                     {`${course.instructor.first_name} ${course.instructor.last_name}`}
                   </p>
-                  <div className="flex items-center justify-between">
+                  {/* <div className="flex items-center justify-between">
                     <span>3h 37min</span>
-                    {/* {course.views && ( */}
-                    {/* <span className="text-green-500">
+                    {course.views && (
+                    <span className="text-green-500">
                       {course.views.toLocaleString()} users
                       {course.views} users
-                    </span> */}
-                    {/* )} */}
-                  </div>
+                    </span>
+                    )}
+                  </div> */}
                 </div>
               </div>
             </Card>

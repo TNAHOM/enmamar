@@ -18,6 +18,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { course, Lesson } from "@/types/courses";
 import { useTableData } from "@/hooks/useTableData";
 import LessonList from "./LessonList";
+import { EditCourseModal } from "./EditCourseModal"; // Update this path as needed
 
 const AllCoursesList = () => {
   const { data, loading } = useGetTopicCourses();
@@ -25,6 +26,10 @@ const AllCoursesList = () => {
   const [courseLesson, setCourseLesson] = useState<Lesson[] | null>(null);
   const [errorLesson, setErrorLesson] = useState<string | null>(null);
   const [loadingLesson, setLoadingLesson] = useState<boolean>(false);
+
+  // Edit modal state
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedCourseId, setSelectedCourseId] = useState<string>("");
 
   const {
     paginatedData,
@@ -47,6 +52,8 @@ const AllCoursesList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!expandedRow) return;
+
       setLoadingLesson(true);
       try {
         const response = await fetch(`/api/course/${expandedRow}`);
@@ -67,9 +74,24 @@ const AllCoursesList = () => {
     setExpandedRow(expandedRow === id ? null : id); // Toggle expanded row
   };
 
+  const handleEditClick = (courseId: string) => {
+    if (!courseId) {
+      console.error("Course ID is missing");
+      return;
+    }
+    setSelectedCourseId(courseId);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedCourseId("");
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
   console.log(paginatedData, "[paginated] from all course list");
 
   return (
@@ -127,7 +149,10 @@ const AllCoursesList = () => {
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">
                         <AvatarImage
-                          src="/placeholder.svg?height=32&width=32"
+                          src={
+                            course.thumbnail_url ||
+                            "/placeholder.svg?height=32&width=32"
+                          }
                           alt={course.title}
                         />
                         <AvatarFallback>
@@ -139,14 +164,18 @@ const AllCoursesList = () => {
                   </TableCell>
                   <TableCell>
                     <Badge variant="default" className="rounded-full">
-                      2198
+                      {course.views || 0}
                     </Badge>
                   </TableCell>
-                  <TableCell>Software Development</TableCell>
-                  <TableCell>12</TableCell>
+                  <TableCell>{course.industry || "N/A"}</TableCell>
+                  <TableCell>{course.lessons?.length || 0}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEditClick(course.id)}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon">
@@ -162,11 +191,8 @@ const AllCoursesList = () => {
                         <div>Loading course details...</div>
                       ) : errorLesson ? (
                         <div>Error loading course details</div>
-                      ) : courseLesson && courseLesson.length > 0 ? ( // Ensure `courseLesson` is an array
-                        <LessonList
-                          // key={courseLesson.id}
-                          courseLesson={courseLesson}
-                        />
+                      ) : courseLesson && courseLesson.length > 0 ? (
+                        <LessonList courseLesson={courseLesson} />
                       ) : (
                         <div>No course details available</div>
                       )}
@@ -212,6 +238,13 @@ const AllCoursesList = () => {
           </Button>
         </div>
       </div>
+
+      {/* Edit Course Modal */}
+      <EditCourseModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        courseId={selectedCourseId}
+      />
     </div>
   );
 };

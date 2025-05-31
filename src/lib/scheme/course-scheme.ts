@@ -32,3 +32,35 @@ export const courseSchema = z.object({
 });
 
 export type CourseSchemaType = z.infer<typeof courseSchema>;
+
+export const updateCourseSchema = z.object({
+  title: z.string().optional(),
+  price: z.preprocess(
+    (val) => (val === "" || val === undefined ? undefined : Number(val)),
+    z.number().min(0, "Price must be a positive number").optional()
+  ),
+  thumbnail: z.instanceof(File).optional(),
+  description: z.string().optional(),
+  lessons: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+        duration: z.preprocess(
+          (val) => (val === "" || val === undefined ? undefined : Number(val)),
+          z.number().min(0, "Duration must be a positive number").optional()
+        ),
+        video: z
+          .object({
+            library_id: z.string().optional(),
+            video_id: z.string().optional(),
+            secret_key: z.string().optional(),
+          })
+          .optional(),
+      })
+    )
+    .optional(),
+});
+
+export type UpdateCourseSchemaType = z.infer<typeof updateCourseSchema>;

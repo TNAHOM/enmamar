@@ -116,7 +116,9 @@ const CoursePrice = ({
         </button>
 
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-800">This course includes:</h4>
+          <h4 className="font-medium text-gray-800">
+            This Platform includes:
+          </h4>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">

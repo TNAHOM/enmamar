@@ -4,8 +4,10 @@ import { course as courseType } from "@/types/courses";
 import { useLessonVideoStore } from "@/lib/store/lessonVideo-store";
 import { Play, Lock, CheckCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 const Lessons = ({ id, start }: { id: string; start: boolean }) => {
+  const { user } = useAuthStore();
   const [activeDay, setActiveDay] = useState<number>(0);
   const {
     setActiveLesson,
@@ -36,14 +38,18 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
   }, [start, lessons, setActiveLesson, id]);
 
   const handleLessonClick = (lesson_id: string, index: number) => {
-    setActiveDay(index);
-    setActiveLesson(lesson_id, id);
-    console.log(
-      `Lesson clicked: ${lesson_id}, Active Day: ${index}, Course ID: ${id}`
-    );
-    if (errorLessonId) {
-      toast.error(errorLessonId);
-      return;
+    if (!user) {
+      toast.error("Please log in to access lessons");
+    } else {
+      setActiveDay(index);
+      setActiveLesson(lesson_id, id);
+      console.log(
+        `Lesson clicked: ${lesson_id}, Active Day: ${index}, Course ID: ${id}`
+      );
+      if (errorLessonId) {
+        toast.error(errorLessonId);
+        return;
+      }
     }
   };
 
@@ -225,7 +231,7 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
       </div>
 
       {/* Footer */}
-      {!isEnrolled && (
+      {isEnrolled && (
         <div className="bg-amber-50 p-4 border-t border-amber-200">
           <div className="flex items-center gap-2 text-amber-700">
             <Lock className="w-4 h-4" />

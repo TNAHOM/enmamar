@@ -5,13 +5,7 @@ import { AvatarFallback, AvatarImage, Avatar } from "../ui/avatar";
 import { toast } from "sonner";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { Comment, CourseReviewsProps } from "@/types/comment";
-import {
-  MessageSquare,
-  Send,
-  ThumbsUp,
-  Clock,
-  AlertCircle,
-} from "lucide-react";
+import { MessageSquare, Send, Clock, AlertCircle } from "lucide-react";
 
 const CourseReview = ({ courseId }: CourseReviewsProps) => {
   const { user } = useAuthStore();
@@ -45,6 +39,10 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
   }, [courseId]);
 
   const postComment = async () => {
+    if (!user) {
+      toast.error("You must be logged in to post a comment");
+      return;
+    }
     if (!comment.trim()) {
       throw new Error("Comment cannot be empty");
     }
@@ -74,6 +72,7 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
         course_id: courseId,
         created_at: new Date().toISOString(),
         updated_at: null,
+        user: user,
       };
 
       setComments((prevComments) => [newComment, ...prevComments]);
@@ -106,7 +105,7 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
         month: "short",
         day: "numeric",
       });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return dateString;
     }
@@ -236,28 +235,28 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
                       <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-gray-100">
                         <AvatarImage src="/placeholder.svg" alt="User avatar" />
                         <AvatarFallback className="bg-gradient-to-br from-purple-400 to-purple-600 text-white text-xs md:text-sm">
-                          {getUserInitials(c.user_id)}
+                          {getUserInitials(c.user.first_name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span className="font-semibold text-gray-800 text-sm md:text-base">
-                            {c.user_id.split("-")[0]}
+                            {`${c.user.first_name
+                              .charAt(0)
+                              .toUpperCase()}${c.user.first_name.slice(
+                              1
+                            )} ${c.user.last_name
+                              .charAt(0)
+                              .toUpperCase()}${c.user.last_name.slice(1)}`}
                           </span>
                           <span className="text-gray-400 text-xs md:text-sm flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {formatDate(c.created_at)}
                           </span>
                         </div>
-                        <p className="text-gray-700 mb-2 md:mb-3 text-sm md:text-base">
+                        <p className="text-gray-700 text-sm md:text-base">
                           {c.content}
                         </p>
-                        <div className="flex gap-4 items-center">
-                          <button className="text-gray-500 hover:text-purple-600 flex items-center gap-1 text-xs md:text-sm">
-                            <ThumbsUp className="w-3 h-3 md:w-4 md:h-4" />
-                            <span>Helpful</span>
-                          </button>
-                        </div>
                       </div>
                     </div>
                   </div>

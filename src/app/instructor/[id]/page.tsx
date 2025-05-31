@@ -205,14 +205,12 @@ export default function InstructorProfilePage() {
                     {skill}
                   </span>
                 )) || ( */}
-                <>
-                  <span className="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
-                    Lecturer
-                  </span>
-                  <span className="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
-                    Teaching
-                  </span>
-                </>
+                <span className="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
+                  Lecturer
+                </span>
+                <span className="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
+                  Teaching
+                </span>
                 {/* )} */}
               </div>
             </div>

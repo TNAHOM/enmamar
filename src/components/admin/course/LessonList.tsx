@@ -12,10 +12,25 @@ import { Lesson } from "@/types/courses";
 import { Pencil, Trash2 } from "lucide-react";
 import { EditLessonModal } from "./EditLessonModal";
 
-const LessonList = ({ courseLesson }: { courseLesson: Lesson[] }) => {
-  const [handleEdit, setHandleEdit] = useState<boolean>(false);
-  // const [handleDelete, setHandleDelete] = useState<boolean>(false);
-  const [lesson, setLesson] = useState<Lesson>();
+const LessonList = ({
+  courseLesson,
+  courseId,
+}: {
+  courseLesson: Lesson[];
+  courseId: string;
+}) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+
+  const handleEditClick = (lesson: Lesson) => {
+    setSelectedLesson(lesson);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedLesson(null);
+  };
 
   return (
     <>
@@ -38,10 +53,7 @@ const LessonList = ({ courseLesson }: { courseLesson: Lesson[] }) => {
                 <Button
                   variant="ghost"
                   title="Edit"
-                  onClick={() => {
-                    setLesson(lesson);
-                    setHandleEdit(true);
-                  }}
+                  onClick={() => handleEditClick(lesson)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
@@ -57,13 +69,14 @@ const LessonList = ({ courseLesson }: { courseLesson: Lesson[] }) => {
           ))}
         </TableBody>
       </Table>
-      {handleEdit && lesson && (
-        <EditLessonModal
-          isOpen={handleEdit}
-          onClose={() => setHandleEdit(false)}
-          lesson={lesson}
-        />
-      )}
+
+      <EditLessonModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        courseId={courseId}
+        lessonId={selectedLesson?.id || ""}
+        lessonData={selectedLesson}
+      />
     </>
   );
 };

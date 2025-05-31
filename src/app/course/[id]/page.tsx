@@ -70,7 +70,7 @@ const CourseDetailPage = () => {
       </div>
     );
   }
-
+  console.log(course.instructor, "Instructor data");
   if (videoError) {
     toast.error(videoError);
   }
@@ -118,7 +118,9 @@ const CourseDetailPage = () => {
             {/* Instructor info */}
             <div className="flex items-center gap-3 mt-4 md:mt-6">
               <Image
-                src="/Images/Full-stack.png"
+                src={
+                  course.instructor.profile_picture || "/Images/Full-stack.png"
+                }
                 alt={`Instructor ${course.instructor.first_name}`}
                 width={50}
                 height={50}
@@ -172,7 +174,10 @@ const CourseDetailPage = () => {
                 className="border-none"
               />
             ) : (
-              <div className="relative w-full h-full group cursor-pointer">
+              <div
+                className="relative w-full h-full group cursor-pointer"
+                onClick={() => setStart(true)}
+              >
                 <Image
                   src="/Images/thumbnail.webp"
                   alt={course.title}
@@ -184,10 +189,7 @@ const CourseDetailPage = () => {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
                     <div className="w-10 h-10 md:w-16 md:h-16 bg-purple-600 rounded-full flex items-center justify-center">
-                      <Play
-                        className="w-5 h-5 md:w-8 md:h-8 text-white fill-white ml-0.5 md:ml-1"
-                        onClick={() => setStart(true)}
-                      />
+                      <Play className="w-5 h-5 md:w-8 md:h-8 text-white fill-white ml-0.5 md:ml-1" />
                     </div>
                   </div>
                 </div>

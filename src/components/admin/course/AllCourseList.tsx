@@ -122,13 +122,6 @@ const AllCoursesList = () => {
                 Industry{" "}
                 {sortField === "industry" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("lessons")}
-              >
-                Number of lessons{" "}
-                {sortField === "lessons" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -168,7 +161,6 @@ const AllCoursesList = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>{course.industry || "N/A"}</TableCell>
-                  <TableCell>{course.lessons?.length || 0}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Button
@@ -192,7 +184,7 @@ const AllCoursesList = () => {
                       ) : errorLesson ? (
                         <div>Error loading course details</div>
                       ) : courseLesson && courseLesson.length > 0 ? (
-                        <LessonList courseLesson={courseLesson} />
+                        <LessonList courseLesson={courseLesson} courseId={course.id} />
                       ) : (
                         <div>No course details available</div>
                       )}

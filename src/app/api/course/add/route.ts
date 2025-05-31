@@ -70,9 +70,8 @@ export async function PUT(request: Request) {
       body: JSON.stringify(updateData),
     });
 
-    console.log(response, "response from course update route", updateData);
     const responseData = await response.json();
-    console.log(responseData.detail, "response from course update route");
+
     if (!response.ok) {
       throw new Error(responseData.detail || "Course update failed");
     }

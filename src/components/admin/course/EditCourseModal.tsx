@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,11 +13,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateCourseSchema } from "@/lib/scheme/course-scheme";
 import type { UpdateCourseSchemaType } from "@/lib/scheme/course-scheme";
-import { Lesson, Video, course } from "@/types/courses";
+import { course } from "@/types/courses";
 import { toast } from "sonner";
 
 interface EditCourseModalProps {
@@ -32,8 +31,9 @@ export function EditCourseModal({
   onClose,
   courseId,
 }: EditCourseModalProps) {
+  // Ref to control file input value for clearing
+  const thumbnailInputRef = useRef<HTMLInputElement | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const [courseData, setCourseData] = useState<course | null>(null);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,6 @@ export function EditCourseModal({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    control,
     reset,
     setValue,
   } = useForm<UpdateCourseSchemaType>({
@@ -71,17 +70,8 @@ export function EditCourseModal({
       setValue("title", data.title);
       setValue("price", data.price);
       setValue("description", data.description);
+      setValue("discount", data.discount);
       setInstructorId(data.instructor.id);
-
-      const lessonsWithDefaults = (data.lessons || []).map((lesson) => ({
-        ...lesson,
-        video: {
-          library_id: lesson.video?.library_id || "",
-          video_id: lesson.video?.video_id || "",
-          secret_key: lesson.video?.secret_key || "",
-        },
-      }));
-      setLessons(lessonsWithDefaults);
 
       // Set thumbnail preview if exists
       if (data.thumbnail_url) {
@@ -117,57 +107,8 @@ export function EditCourseModal({
     }
   };
 
-  const addLesson = () => {
-    setLessons([
-      ...lessons,
-      {
-        id: `lesson-${lessons.length + 1}`,
-        title: "",
-        description: "",
-        duration: 0,
-        video: {
-          library_id: "",
-          video_id: "",
-          secret_key: "",
-        },
-      },
-    ]);
-  };
-
-  const removeLesson = (lessonId: string) => {
-    setLessons(lessons.filter((lesson) => lesson.id !== lessonId));
-  };
-
-  const handleLessonChange = (
-    lessonId: string,
-    field: keyof Lesson | keyof Video,
-    value: string | File | null | number
-  ) => {
-    setLessons(
-      lessons.map((lesson) =>
-        lesson.id === lessonId
-          ? {
-              ...lesson,
-              ...(field in lesson ? { [field]: value } : {}),
-              video: {
-                ...lesson.video,
-                ...(field in lesson.video ? { [field]: value } : {}),
-              },
-            }
-          : lesson
-      )
-    );
-  };
-
   const onSubmit = async (data: UpdateCourseSchemaType) => {
     console.log("Submitting update form data:", data);
-    console.log("Lessons:", lessons);
-
-    
-    const lessonsWithOrder = lessons.map((lesson, index) => ({
-      ...lesson,
-      order: index + 1,
-    }));
 
     try {
       // Step 1: Update the course
@@ -178,7 +119,6 @@ export function EditCourseModal({
           courseId,
           instructor_id: instructorId,
           ...data,
-          lessons: lessonsWithOrder,
         }),
       });
 
@@ -212,7 +152,6 @@ export function EditCourseModal({
       reset();
       setThumbnail(null);
       setThumbnailPreview("");
-      setLessons([]);
       toast.success("Course updated successfully");
       onClose();
     } catch (error) {
@@ -276,6 +215,23 @@ export function EditCourseModal({
                   <p className="text-red-500 text-sm">{errors.price.message}</p>
                 )}
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="discount">Discount (%)</Label>
+                <Input
+                  type="number"
+                  id="discount"
+                  placeholder="0"
+                  min="0"
+                  max="100"
+                  step="1"
+                  {...register("discount")}
+                />
+                {errors.discount && (
+                  <p className="text-red-500 text-sm">
+                    {errors.discount.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Thumbnail Upload */}
@@ -298,7 +254,10 @@ export function EditCourseModal({
                       className="absolute top-2 right-2"
                       onClick={() => {
                         setThumbnail(null);
-                        setThumbnailPreview(courseData?.thumbnail_url || "");
+                        setThumbnailPreview("");
+                        // clear any previously selected file
+                        if (thumbnailInputRef.current)
+                          thumbnailInputRef.current.value = "";
                       }}
                     >
                       <X className="h-4 w-4" />
@@ -310,24 +269,12 @@ export function EditCourseModal({
                     <span className="text-sm text-gray-500">
                       Click to upload thumbnail
                     </span>
-                    <Controller
-                      name="thumbnail"
-                      control={control}
-                      render={({ field: { onChange, ref } }) => (
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={ref}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0] ?? null;
-                            if (file) {
-                              handleThumbnailChange(e);
-                              onChange(file);
-                            }
-                          }}
-                          className="hidden"
-                        />
-                      )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={thumbnailInputRef}
+                      onChange={handleThumbnailChange}
+                      className="hidden"
                     />
                   </label>
                 )}
@@ -348,124 +295,6 @@ export function EditCourseModal({
                   {errors.description.message}
                 </p>
               )}
-            </div>
-
-            {/* Lessons */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label>Lessons</Label>
-                <Button type="button" onClick={addLesson} variant="outline">
-                  Add Lesson
-                </Button>
-              </div>
-              {lessons.map((lesson, index) => (
-                <div
-                  key={lesson.id}
-                  className="space-y-4 p-4 border rounded-lg relative"
-                >
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute top-2 right-2"
-                    onClick={() => removeLesson(lesson.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                  <div className="space-y-2">
-                    <Label htmlFor={`lesson-title-${lesson.id}`}>
-                      Lesson {index + 1} Title
-                    </Label>
-                    <Input
-                      id={`lesson-title-${lesson.id}`}
-                      value={lesson.title}
-                      onChange={(e) =>
-                        handleLessonChange(lesson.id, "title", e.target.value)
-                      }
-                      placeholder="Enter lesson title"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Lesson Duration</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="1"
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "duration",
-                          parseInt(e.target.value) || 0
-                        )
-                      }
-                      value={String(lesson.duration)}
-                      placeholder="Enter lesson duration in minutes"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor={`lesson-description-${lesson.id}`}>
-                      Lesson Description
-                    </Label>
-                    <Textarea
-                      id={`lesson-description-${lesson.id}`}
-                      value={lesson.description}
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "description",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter lesson description"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Library Id</Label>
-                    <Input
-                      type="text"
-                      value={lesson.video.library_id}
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "library_id",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter library id"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Video Id</Label>
-                    <Input
-                      type="text"
-                      value={lesson.video.video_id}
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "video_id",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter Video id"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Secret Key</Label>
-                    <Input
-                      type="text"
-                      value={lesson.video.secret_key}
-                      onChange={(e) =>
-                        handleLessonChange(
-                          lesson.id,
-                          "secret_key",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter Secret Key"
-                    />
-                  </div>
-                </div>
-              ))}
             </div>
 
             {/* Submit Button */}

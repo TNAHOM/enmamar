@@ -5,10 +5,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
-  const tryh = await params;
-  console.log(tryh, 'courseId');
   const { courseId } = await params;
-  console.log("Received courseId:", courseId);
   const BASEURL = process.env.BASEURL;
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("accessToken")?.value;
@@ -19,7 +16,7 @@ export async function POST(
 
   // Parse the incoming request as form data
   const formData = await request.formData();
-  console.log("Form data received:", formData);
+
   const image = formData.get("thumbnail");
 
   if (!image) {
@@ -41,10 +38,8 @@ export async function POST(
       body: backendFormData,
     });
     const responseData = await response.json();
-    console.log("Response from backend:", responseData);
 
     if (!response.ok) {
-      console.log("Response not ok:", response.status, response.statusText);
       return NextResponse.json({
         detail: "Failed to update thumbnail",
         status: response.status,

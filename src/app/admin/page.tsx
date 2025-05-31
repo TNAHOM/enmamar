@@ -5,14 +5,18 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useInstructors } from "@/hooks/useInstructors";
 import { useGetTopicCourses } from "@/hooks/useGetCourses";
+import { useUsers } from "@/hooks/useUsers";
 
 export default function AdminDashboard() {
   const { user } = useAuthStore();
   const { instructors } = useInstructors();
-  const courses = useGetTopicCourses()
+  const { users } = useUsers();
+
+  const courses = useGetTopicCourses();
 
   const totalInstructors = instructors.length;
   const totalCoursesCount = courses.data?.length || 0;
+  const totalUsersCount = users.length;
   return (
     <AdminLayout>
       <div className="space-y-8 w-full">
@@ -28,7 +32,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-4 gap-6">
           <StatCard
             title="TOTAL USER"
-            value={99}
+            value={totalUsersCount}
             change="+36%"
             positive={true}
           />

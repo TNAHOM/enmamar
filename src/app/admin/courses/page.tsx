@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { CourseList } from "@/components/admin/course/CourseList";
-import { CourseStats } from "@/components/admin/course/CourseStats";
+// import { CourseStats } from "@/components/admin/course/CourseStats";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { AddCourseModal } from "@/components/admin/course/AddCourseModal";
@@ -35,7 +35,7 @@ export default function CoursesPage() {
           </Button>
         </div>
 
-        <CourseStats />
+        {/* <CourseStats /> */}
 
         {/* Course lists */}
         <div className="space-y-8">

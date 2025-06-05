@@ -44,7 +44,6 @@ export function EditInstructorModal({
   instructorId,
 }: EditInstructorModalProps) {
   const [formData, setFormData] = useState({
-    email: "",
     phone: "",
     firstName: "",
     lastName: "",
@@ -57,7 +56,6 @@ export function EditInstructorModal({
       if (instructor) {
         const [firstName, lastName] = instructor.name.split(" ");
         setFormData({
-          email: instructor.email,
           phone: instructor.phone,
           firstName,
           lastName,
@@ -105,19 +103,6 @@ export function EditInstructorModal({
                 required
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              required
-            />
           </div>
 
           <div className="space-y-2">

@@ -21,7 +21,6 @@ export default function InstructorDashboard() {
   useEffect(() => {
     if (data && data.length > 0) {
       const response = getCourseAnalytics(data) as ChartDataItem[];
-      console.log(response, "processed chart data");
       setChartData(response);
     }
   }, [data]);

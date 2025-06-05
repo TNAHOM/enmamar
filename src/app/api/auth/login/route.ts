@@ -3,13 +3,13 @@ import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   const BASEURL = process.env.BASEURL;
-  const { email, password } = await request.json();
+  const { phone_number, password } = await request.json();
 
   try {
     const response = await fetch(`${BASEURL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ phone_number, password }),
     });
 
     const data = await response.json();
@@ -45,7 +45,6 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error, "error from login route");
     const errorMessage =
       error instanceof Error ? error.message : "Authentication failed";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });

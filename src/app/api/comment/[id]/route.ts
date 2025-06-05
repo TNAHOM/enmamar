@@ -27,7 +27,6 @@ export async function POST(
 
     const responseData = await response.json();
     if (!response.ok) {
-      console.log("Failed to create comment:", responseData);
       return NextResponse.json({
         detail: responseData.detail || "Comment creation failed",
         status: response.status,
@@ -39,7 +38,6 @@ export async function POST(
       data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from comment creation route");
     const errorMessage =
       error instanceof Error ? error.message : "Comment creation failed";
     return NextResponse.json({ detail: errorMessage, status: 500 });
@@ -62,7 +60,6 @@ export async function GET(
 
     const responseData = await response.json();
     if (!response.ok) {
-      console.log("Failed to create comment:", responseData);
       return NextResponse.json({
         detail: responseData.detail || "Comment creation failed",
         status: response.status,
@@ -74,7 +71,6 @@ export async function GET(
       data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from comment creation route");
     const errorMessage =
       error instanceof Error ? error.message : "Comment creation failed";
     return NextResponse.json({ detail: errorMessage, status: 401 });

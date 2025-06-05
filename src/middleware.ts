@@ -54,7 +54,6 @@ export async function middleware(request: NextRequest) {
           });
 
           if (!response.ok) {
-            console.log("!ok middleware", response)
             const cookieStore = await cookies();
             cookieStore.delete("accessToken");
             cookieStore.delete("refreshToken");

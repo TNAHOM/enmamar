@@ -37,7 +37,6 @@ export async function refreshAccessToken() {
       }
 
       const data = await response.json();
-      console.log(data, "data from refresh token");
       if (!data.access_token) {
         throw new Error("No access token returned");
       }

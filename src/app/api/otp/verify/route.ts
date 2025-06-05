@@ -12,12 +12,9 @@ export async function POST(request: Request) {
             },
         });
 
-        const responseData = await response.json();
-        console.log(responseData, 'response otp message')
         if (!response.ok) {
             const errorMessage =
             response instanceof Error ? response.message : "Failed to send OTP";
-            console.log(response, 'error otp message')
         return NextResponse.json({ detail: errorMessage }, { status: response.status });
         }
 

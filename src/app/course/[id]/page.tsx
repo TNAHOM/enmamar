@@ -70,7 +70,6 @@ const CourseDetailPage = () => {
       </div>
     );
   }
-  console.log(course.instructor, "Instructor data");
   if (videoError) {
     toast.error(videoError);
   }

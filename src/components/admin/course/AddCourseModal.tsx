@@ -117,9 +117,6 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
   };
 
   const onSubmit = async (data: CourseSchemaType) => {
-    console.log("Submitting form data:", data);
-    console.log("Lessons:", lessons);
-
     const lessonsWithOrder = lessons.map((lesson, index) => ({
       ...lesson,
       order: index + 1,
@@ -144,10 +141,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
       }
 
       const courseData = await courseResponse.json();
-      console.log("Course data:", courseData);
       const courseId = courseData.data.id; // Assuming the response includes an 'id' field
-      console.log("Course data:", courseData, courseId, "--", courseData.data);
-      console.log("Course created successfully:", courseData);
 
       // Step 2: Upload thumbnail if selected
       if (thumbnail) {
@@ -165,8 +159,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
         } else {
           console.log("Thumbnail uploaded successfully");
         }
-        const uploadData = await uploadResponse.json();
-        console.log("Thumbnail URL:", uploadData);
+        await uploadResponse.json();
       }
 
       // Step 3: Reset form and close modal
@@ -241,11 +234,7 @@ export function AddCourseModal({ isOpen, onClose }: AddCourseModalProps) {
                       <SelectContent>
                         {instructors.map((instructor) => (
                           <SelectItem key={instructor.id} value={instructor.id}>
-                            {instructor.first_name +
-                              " " +
-                              instructor.last_name +
-                              " " +
-                              instructor.email}
+                            {instructor.first_name + " " + instructor.last_name}
                           </SelectItem>
                         ))}
                       </SelectContent>

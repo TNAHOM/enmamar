@@ -64,7 +64,6 @@ export async function GET() {
     }
     // Handle other non-401 errors
     else {
-      console.log("Failed to fetch user data: !response /me 00", response);
       return NextResponse.json(
         { detail: "Failed to fetch user data" },
         { status: response.status }

@@ -43,9 +43,7 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
     } else {
       setActiveDay(index);
       setActiveLesson(lesson_id, id);
-      console.log(
-        `Lesson clicked: ${lesson_id}, Active Day: ${index}, Course ID: ${id}`
-      );
+
       if (errorLessonId) {
         toast.error(errorLessonId);
         return;
@@ -66,7 +64,6 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
   }
 
   if (!lessons || error) {
-    console.log(error, "error from lesson component");
     return (
       <div className="p-6 border rounded-xl shadow-sm bg-white text-center">
         <div className="text-red-500 font-medium mb-2">

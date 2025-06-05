@@ -4,12 +4,12 @@ import Image from "next/image";
 
 const CustomerRow = ({
   name,
-  email,
   avatarSrc,
+  phone,
 }: {
   name: string;
-  email: string;
   avatarSrc: string;
+  phone: string;
 }) => (
   <div className="flex items-center gap-3">
     <Image
@@ -23,7 +23,7 @@ const CustomerRow = ({
       <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate">
         {name}
       </h3>
-      <p className="text-xs sm:text-sm text-gray-500 truncate">{email}</p>
+      <p className="text-xs sm:text-sm text-gray-500 truncate">{phone}</p>
     </div>
   </div>
 );
@@ -44,22 +44,22 @@ export const RecentCustomers = () => {
           <div className="blur-sm opacity-25 pointer-events-none space-y-4 sm:space-y-6">
             <CustomerRow
               name="Jenny Wilson"
-              email="w.lawson@example.com"
+              phone="w.lawson@example.com"
               avatarSrc="/api/placeholder/40/40"
             />
             <CustomerRow
               name="Devon Lane"
-              email="devon@example.com"
+              phone="devon@example.com"
               avatarSrc="/api/placeholder/40/40"
             />
             <CustomerRow
               name="Sarah Chen"
-              email="sarah@example.com"
+              phone="sarah@example.com"
               avatarSrc="/api/placeholder/40/40"
             />
             <CustomerRow
               name="Mike Rodriguez"
-              email="mike@example.com"
+              phone="mike@example.com"
               avatarSrc="/api/placeholder/40/40"
             />
           </div>

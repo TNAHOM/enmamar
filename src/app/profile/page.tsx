@@ -13,7 +13,6 @@ import { toast } from "sonner";
 interface ProfileData {
   first_name: string;
   last_name: string;
-  email: string;
   phone_number: string;
   profile_picture?: string;
 }
@@ -24,7 +23,6 @@ const Profile = () => {
   const [profileData, setProfileData] = useState<ProfileData>({
     first_name: "",
     last_name: "",
-    email: "",
     phone_number: "",
     profile_picture: "",
   });
@@ -38,13 +36,11 @@ const Profile = () => {
       setProfileData({
         first_name: user.first_name,
         last_name: user.last_name,
-        email: user.email,
         phone_number: user.phone_number,
         profile_picture: user.profile_picture || "",
       });
       setImagePreview(user.profile_picture || "");
     }
-    console.log(user, "user");
   }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +151,6 @@ const Profile = () => {
       setProfileData({
         first_name: user.first_name,
         last_name: user.last_name,
-        email: user.email,
         phone_number: user.phone_number,
         profile_picture: user.profile_picture || "",
       });
@@ -320,19 +315,6 @@ const Profile = () => {
                 value={profileData.last_name}
                 onChange={(e) =>
                   setProfileData({ ...profileData, last_name: e.target.value })
-                }
-                disabled={!isEditing}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={profileData.email}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, email: e.target.value })
                 }
                 disabled={!isEditing}
               />

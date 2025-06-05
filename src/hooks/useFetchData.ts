@@ -25,7 +25,6 @@ export function useFetchListData<T>({ url }: { url: string }) {
     };
     fetchData();
   }, [url]);
-  // console.log(data, "data from useFetchData")
 
   return { data, loading, error };
 }
@@ -53,7 +52,6 @@ export function useFetchData<T>({ url }: { url: string }) {
     };
     fetchData();
   }, [url]);
-  // console.log(data, "data from useFetchData")
 
   return { data, loading, error };
 }

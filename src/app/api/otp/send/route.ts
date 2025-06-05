@@ -14,17 +14,13 @@ export async function POST(request: Request) {
         },
       }
     );
-
-    const responseData = await response.json();
-    console.log(responseData, "response otp message");
     if (!response.ok) {
       const errorMessage =
         response instanceof Error ? response.message : "Failed to send OTP";
-      console.log(response, "error otp message");
-      return NextResponse.json(
-        { detail: errorMessage },
-        { status: response.status }
-      );
+      return NextResponse.json({
+        detail: errorMessage,
+        status: response.status,
+      });
     }
 
     return NextResponse.json({
@@ -34,6 +30,6 @@ export async function POST(request: Request) {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to send OTP";
-    return NextResponse.json({ detail: errorMessage }, { status: 500 });
+    return NextResponse.json({ detail: errorMessage, status: 500 });
   }
 }

@@ -41,18 +41,18 @@ export default function SignupPage() {
         },
         body: JSON.stringify({ phone_number: phone_number }),
       });
-
+      const responseData: { data: { phone_number: string } } =
+        await response.json();
+      const { data } = responseData;
       if (!response.ok) {
         toast.error("Failed to send OTP");
         return;
       }
 
-      const { data } = await response.json();
       router.push(
         `/auth/otp/verify?token=${encodeURIComponent(data.phone_number)}`
       );
 
-      console.log("OTP sent successfully:", data);
       toast.success("OTP sent successfully");
     } catch (error) {
       console.log("Error sending OTP:", error);
@@ -67,7 +67,6 @@ export default function SignupPage() {
       toast.error("Invalid phone format. Use 09XXXXXXXX or +2519XXXXXXXX");
       return;
     }
-    console.log(error, "error signupstore");
 
     if (error) {
       console.log(error, "error signupstore");
@@ -97,35 +96,6 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  {...register("username")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
-                  disabled={isLoading}
-                />
-                {errors.username && (
-                  <p className="text-red-500 text-sm">
-                    {errors.username.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
-                  disabled={isLoading}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
-                )}
-              </div>
-
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input

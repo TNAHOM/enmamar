@@ -14,7 +14,6 @@ interface InstructorProfile {
   id: string;
   first_name: string;
   last_name: string;
-  email: string;
   phone_number: string;
   profile_picture: string;
 }
@@ -64,14 +63,12 @@ export default function InstructorProfilePage() {
         }
 
         const data: InstructorCourseAnalytics[] = await response.json();
-        console.log(data, "data instr course");
         if (data.length > 0) {
           const instructorInfo = data[0].course.instructor;
           setInstructor({
             id: instructorInfo.id,
             first_name: instructorInfo.first_name,
             last_name: instructorInfo.last_name,
-            email: instructorInfo.email,
             phone_number: instructorInfo.phone_number,
             profile_picture:
               instructorInfo.profile_picture || "/Images/thumbnail.webp",

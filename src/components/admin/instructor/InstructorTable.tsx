@@ -68,9 +68,7 @@ export function InstructorTable() {
                 {sortField === "first_name" &&
                   (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead>Username</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -94,9 +92,7 @@ export function InstructorTable() {
                     <div className="font-medium">{instructor.first_name}</div>
                   </div>
                 </TableCell>
-                <TableCell>{instructor.email}</TableCell>
                 <TableCell>{instructor.phone_number}</TableCell>
-                <TableCell>{instructor.username}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -73,7 +73,6 @@ export function AddInstructorModal({
         method: "PUT",
         body: JSON.stringify({ role: "instructor" }),
       });
-      // console.log(response, "response from role/id");
       const data = await response.json();
 
       if (!response.ok) {
@@ -112,11 +111,7 @@ export function AddInstructorModal({
                     <SelectContent>
                       {instructors.map((instructor) => (
                         <SelectItem key={instructor.id} value={instructor.id}>
-                          {instructor.first_name +
-                            " " +
-                            instructor.last_name +
-                            " " +
-                            instructor.email}
+                          {instructor.first_name + " " + instructor.last_name}
                         </SelectItem>
                       ))}
                     </SelectContent>

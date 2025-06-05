@@ -12,12 +12,10 @@ export async function POST(request: Request) {
     });
 
     const data = await response.json();
-    console.log(data, "data signup");
     if (!response.ok) {
       const errorMessage = data.detail || "Registration failed";
       return NextResponse.json(
-        { detail: errorMessage },
-        { status: data.status }
+        { detail: errorMessage, status: data.status }
       );
     }
 
@@ -28,8 +26,6 @@ export async function POST(request: Request) {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Registration failed";
-    console.log(errorMessage, "errorMessage form signup");
-    console.log(error, "error from signup");
-    return NextResponse.json({ detail: errorMessage }, { status: 400 });
+    return NextResponse.json({ detail: errorMessage, status: 400 });
   }
 }

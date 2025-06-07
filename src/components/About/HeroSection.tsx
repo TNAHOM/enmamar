@@ -53,6 +53,7 @@ const HeroSection = () => {
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/Images/landingPage-Image.png"
+                  priority
                   width={600}
                   height={400}
                   alt="Ethiopian students learning online with Enmamar platform"

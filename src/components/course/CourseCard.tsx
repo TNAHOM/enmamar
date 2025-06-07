@@ -44,9 +44,9 @@ const CourseCard = ({
         {/* Course content */}
         <div className="flex flex-col flex-grow p-4 space-y-2">
           <div className="flex justify-between items-start mb-1">
-            <h3 className="font-semibold text-lg line-clamp-2 hover:text-purple-600 transition-colors">
-              <Link href={`/course/${id}`}>{title}</Link>
-            </h3>
+            <p className="font-semibold text-lg line-clamp-2 hover:text-purple-600 transition-colors">
+              {title}
+            </p>
           </div>
 
           <p className="text-sm text-gray-400">

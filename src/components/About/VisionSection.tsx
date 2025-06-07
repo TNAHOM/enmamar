@@ -85,6 +85,7 @@ const VisionSection = () => {
               <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/Images/landingPage-Image.png"
+                  priority
                   width={600}
                   height={400}
                   alt="Vision of Ethiopian education future with technology and traditional learning"

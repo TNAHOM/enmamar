@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,9 +32,46 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const sendOtp = async (phone_number: string) => {
+    try {
+      const response = await fetch("/api/otp/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone_number: phone_number }),
+      });
+      const responseData: { data: { phone_number: string } } =
+        await response.json();
+      const { data } = responseData;
+      if (!response.ok) {
+        toast.error("Failed to send OTP");
+        return;
+      }
+
+      router.push(
+        `/auth/otp/verify?token=${encodeURIComponent(data.phone_number)}`
+      );
+
+      toast.success("OTP sent successfully");
+    } catch (error) {
+      console.log("Error sending OTP:", error);
+      toast.error("Failed to send OTP");
+    }
+  };
+
   const onSubmit = async (data: { phone_number: string; password: string }) => {
     const response = await login(data.phone_number, data.password);
 
+    if (response.detail?.data) {
+      if (!response.detail.data.is_active) {
+        if (!/^(\+2519\d{8}|09\d{8})$/.test(data.phone_number)) {
+          toast.error("Invalid phone format. Use 09XXXXXXXX or +2519XXXXXXXX");
+          return;
+        }
+        sendOtp(data.phone_number);
+      }
+    }
     if (response.status === 200) {
       router.push("/");
     }

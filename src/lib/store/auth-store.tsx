@@ -10,7 +10,7 @@ interface AuthState {
   login: (
     phone_number: string,
     password: string
-  ) => Promise<{ detail: string; status: number }>;
+  ) => Promise<{ detail: { data: { is_active: boolean } }; status: number }>;
   signup: (
     data: SignupFormData
   ) => Promise<{ detail: string; status: number; user?: userProfile }>;

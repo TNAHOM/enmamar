@@ -72,6 +72,7 @@ const LandingPage = () => {
             <div className="relative z-10">
               <Image
                 src="/Images/landingPage-Image.png"
+                priority
                 width={550}
                 height={550}
                 alt="Student learning online"

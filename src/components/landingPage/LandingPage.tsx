@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import LandSearch from "../Search/LandSearch";
 import { ArrowRight, BookOpen, Users, Award, Clock } from "lucide-react";
 import Link from "next/link";
 
@@ -40,9 +39,9 @@ const LandingPage = () => {
             personalized learning paths.
           </p>
 
-          <div className="mb-6 sm:mb-8 md:mb-10">
+          {/* <div className="mb-6 sm:mb-8 md:mb-10">
             <LandSearch />
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap gap-3 mb-6 sm:mb-8 md:mb-10">
             <Link href="/become-instructor">
@@ -73,6 +72,7 @@ const LandingPage = () => {
             <div className="relative z-10">
               <Image
                 src="/Images/landingPage-Image.png"
+                priority
                 width={550}
                 height={550}
                 alt="Student learning online"

@@ -18,7 +18,6 @@ export async function GET() {
         "Content-Type": "application/json",
       },
     });
-    // console.log(response, 'response from instructors');
 
     if (!response.ok) {
       return NextResponse.json({

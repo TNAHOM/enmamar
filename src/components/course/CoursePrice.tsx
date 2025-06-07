@@ -27,7 +27,7 @@ const CoursePrice = ({
   const discountedPrice = price - (price * discount) / 100;
   const { isEnrolled, enrollLoading, fetchEnrollStatus } =
     useLessonVideoStore();
-  console.log(isEnrolled, "isEnrolled");
+
   const [data, setData] = useState<EnrollProps | null>(null);
   const router = useRouter();
 
@@ -116,9 +116,7 @@ const CoursePrice = ({
         </button>
 
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-800">
-            This Platform includes:
-          </h4>
+          <h4 className="font-medium text-gray-800">This Platform includes:</h4>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">

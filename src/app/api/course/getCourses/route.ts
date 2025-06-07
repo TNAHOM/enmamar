@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 
 export async function GET() {
   const BASEURL = process.env.BASEURL;
-  console.log(BASEURL, "BASEURL from getCourse");
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("accessToken")?.value;
 
@@ -16,7 +15,6 @@ export async function GET() {
       },
     });
     const responseData = await response.json();
-    // console.log(responseData, "responseData from getCourse");
 
     if (!response.ok) {
       return NextResponse.json(

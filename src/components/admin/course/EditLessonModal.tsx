@@ -53,11 +53,9 @@ export function EditLessonModal({
   }, [isOpen, lessonData, setValue]);
 
   const onSubmit = async (data: LessonSchemaType) => {
-    console.log("Submitting lesson update:", data);
 
     try {
       const id = courseId;
-      console.log("Course ID:", id);
       const response = await fetch(`/api/course/${id}/lesson/${lessonId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

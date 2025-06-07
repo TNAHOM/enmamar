@@ -92,8 +92,6 @@ const AllCoursesList = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(paginatedData, "[paginated] from all course list");
-
   return (
     <div className="space-y-4">
       <div className="rounded-md border">

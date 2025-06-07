@@ -85,7 +85,7 @@ export function BunnyCDNModal({ isOpen, onClose }: BunnyCDNModalProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Duration</Label>
+            <Label htmlFor="duration">Duration</Label>
             <Input
               id="duration"
               type="number"

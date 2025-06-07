@@ -8,10 +8,12 @@ interface AuthState {
   error: string | null;
   initializeAuth: () => Promise<void>;
   login: (
-    email: string,
+    phone_number: string,
     password: string
-  ) => Promise<{ detail: string; status: number }>;
-  signup: (data: SignupFormData) => Promise<void>;
+  ) => Promise<{ detail: { data: { is_active: boolean } }; status: number }>;
+  signup: (
+    data: SignupFormData
+  ) => Promise<{ detail: string; status: number; user?: userProfile }>;
   logout: () => Promise<void>;
 }
 
@@ -44,7 +46,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (response.ok) {
         set({ user: data.user, isAuthenticated: true, isLoading: false });
       } else {
-        console.log("Authentication failed:", data.detail);
         set({ user: null, isAuthenticated: false, isLoading: false });
       }
     } catch (error) {
@@ -58,14 +59,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  login: async (email, password) => {
+  login: async (phone_number, password) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ phone_number, password }),
       });
 
       const data = await response.json();
@@ -82,7 +83,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       return { detail: "Login successful", status: response.status };
     } catch (error) {
-      console.log("Error during login:", error);
       const err = error as Error;
       set({ error: err.message, isLoading: false });
       return { detail: err.message, status: 500 };
@@ -99,25 +99,31 @@ export const useAuthStore = create<AuthState>((set) => ({
         body: JSON.stringify(data),
       });
 
+      const responseData = await response.json();
       if (!response.ok) {
-        const errorData = await response.json();
-        console.warn("Signup error:", errorData);
-        set({
-          error:
-            errorData.detail ||
-            "An error occurred during signup. Please try again later.",
-          isLoading: false,
-        });
-        return;
+        const message = responseData.detail || "Signup failed";
+        set({ error: message, isLoading: false });
+        return { detail: message, status: response.status };
       }
 
-      const { user } = await response.json();
-      set({ isLoading: false });
-      return user;
+      // Ensure user is present in response
+      if (!responseData.user) {
+        const message =
+          responseData.detail || "Signup succeeded but no user data returned";
+        set({ error: message, isLoading: false });
+        return { detail: message, status: response.status };
+      }
+      const newUser = responseData.user;
+      set({ user: newUser, isAuthenticated: true, isLoading: false });
+      return {
+        detail: responseData.detail || "Signup successful",
+        status: response.status,
+        user: newUser,
+      };
     } catch (error) {
-      const err = error as Error;
-      set({ error: err.message, isLoading: false });
-      throw error;
+      const message = error instanceof Error ? error.message : "Signup error";
+      set({ error: message, isLoading: false });
+      return { detail: message, status: 500 };
     }
   },
 

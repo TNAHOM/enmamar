@@ -11,7 +11,6 @@ export async function GET(
   const accessToken = cookieStore.get("accessToken")?.value;
 
   if (!accessToken) {
-    console.log("Unauthorized access");
     return NextResponse.json({
       error: "Unauthorized to access Please signUp",
       status: 401,
@@ -30,7 +29,6 @@ export async function GET(
     const responseData = await response.json();
 
     if (!response.ok) {
-      console.log("Failed to fetch lesson:", responseData);
       return NextResponse.json({
         error: responseData.detail,
         status: response.status,
@@ -56,7 +54,6 @@ export async function PUT(
   const data = await req.json();
 
   if (!accessToken) {
-    console.log("Unauthorized access");
     return NextResponse.json({
       error: "Unauthorized to access Please signUp",
       status: 401,
@@ -79,7 +76,6 @@ export async function PUT(
     const responseData = await response.json();
 
     if (!response.ok) {
-      console.log("Failed to update lesson:", responseData);
       return NextResponse.json({
         error: responseData.detail,
         status: response.status,

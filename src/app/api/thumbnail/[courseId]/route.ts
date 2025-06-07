@@ -50,7 +50,6 @@ export async function POST(
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to update thumbnail";
-    console.log("Error occurred:", errorMessage, error);
     return NextResponse.json({ detail: errorMessage, status: 500 });
   }
 }

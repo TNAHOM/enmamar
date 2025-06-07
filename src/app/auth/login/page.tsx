@@ -6,11 +6,19 @@ import { useAuthStore } from "@/lib/store/auth-store";
 import { loginSchema } from "@/lib/scheme/auth-scheme";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,10 +32,46 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    const response = await login(data.email, data.password);
-    // console.log(response, "check from login page");
+  const sendOtp = async (phone_number: string) => {
+    try {
+      const response = await fetch("/api/otp/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone_number: phone_number }),
+      });
+      const responseData: { data: { phone_number: string } } =
+        await response.json();
+      const { data } = responseData;
+      if (!response.ok) {
+        toast.error("Failed to send OTP");
+        return;
+      }
 
+      router.push(
+        `/auth/otp/verify?token=${encodeURIComponent(data.phone_number)}`
+      );
+
+      toast.success("OTP sent successfully");
+    } catch (error) {
+      console.log("Error sending OTP:", error);
+      toast.error("Failed to send OTP");
+    }
+  };
+
+  const onSubmit = async (data: { phone_number: string; password: string }) => {
+    const response = await login(data.phone_number, data.password);
+
+    if (response.detail?.data) {
+      if (!response.detail.data.is_active) {
+        if (!/^(\+2519\d{8}|09\d{8})$/.test(data.phone_number)) {
+          toast.error("Invalid phone format. Use 09XXXXXXXX or +2519XXXXXXXX");
+          return;
+        }
+        sendOtp(data.phone_number);
+      }
+    }
     if (response.status === 200) {
       router.push("/");
     }
@@ -57,16 +101,18 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="phone">Phone</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
+                  id="phone"
+                  type="tel"
+                  {...register("phone_number")}
                   className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
                   disabled={isLoading}
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                {errors.phone_number && (
+                  <p className="text-red-500 text-sm">
+                    {errors.phone_number.message}
+                  </p>
                 )}
               </div>
 

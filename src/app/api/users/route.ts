@@ -14,7 +14,6 @@ export async function GET() {
                 'Authorization': `Bearer ${accessToken?.value}`
             },
         });
-        // console.log(response, "response from users/route.ts");
         const responseData = await response.json();
 
         if (!response.ok) {
@@ -23,8 +22,6 @@ export async function GET() {
 
         return NextResponse.json(responseData.data, { status: 200 });
     } catch (error) {
-        console.log(error, "error from users/route.ts");
-
         const errorMessage = error instanceof Error ? error.message : 'Failed to fetch users';
 
         return NextResponse.json(

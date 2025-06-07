@@ -10,7 +10,6 @@ export async function POST(request: Request) {
   if (!accessToken) {
     return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
   }
-  // console.log(data, "data from course creation route");
   try {
     const response = await fetch(`${BASEURL}/admin/courses/add`, {
       method: "POST",
@@ -32,7 +31,6 @@ export async function POST(request: Request) {
       data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from course creation route");
     const errorMessage =
       error instanceof Error ? error.message : "Course creation failed";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });
@@ -46,7 +44,6 @@ export async function PUT(request: Request) {
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   if (!accessToken) {
-    console.log("Not authenticated");
     return NextResponse.json({ detail: "Not authenticated", status: 401 });
   }
 
@@ -81,7 +78,6 @@ export async function PUT(request: Request) {
       data: responseData.data,
     });
   } catch (error) {
-    console.log(error, "error from course update route");
     const errorMessage =
       error instanceof Error ? error.message : "Course update failed";
     return NextResponse.json({ detail: errorMessage }, { status: 401 });

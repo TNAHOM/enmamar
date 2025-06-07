@@ -108,8 +108,6 @@ export function EditCourseModal({
   };
 
   const onSubmit = async (data: UpdateCourseSchemaType) => {
-    console.log("Submitting update form data:", data);
-
     try {
       // Step 1: Update the course
       const courseResponse = await fetch("/api/course/add", {
@@ -127,8 +125,7 @@ export function EditCourseModal({
         throw new Error(errorData.detail || "Course update failed");
       }
 
-      const courseData = await courseResponse.json();
-      console.log("Course updated successfully:", courseData);
+      await courseResponse.json();
 
       // Step 2: Upload thumbnail if selected
       if (thumbnail) {

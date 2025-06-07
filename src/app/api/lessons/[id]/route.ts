@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  // console.log(id, "courseId from course lessons")
   const BAESURL = process.env.BASEURL;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken");
@@ -28,7 +27,6 @@ export async function GET(
         { status: response.status }
       );
     }
-    // console.log(responseData, "responseData from course lessons")
     return NextResponse.json(responseData.data);
   } catch (error) {
     const errorMessage =

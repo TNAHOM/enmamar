@@ -13,10 +13,9 @@ export async function POST() {
         });
 
     } catch (error) {
-        console.log(error, 'error from logout route');
+        console.error('Logout error:', error);
         return NextResponse.json(
-            { detail: 'Logout failed' },
-            { status: 500 }
+            { detail: 'Logout failed', status: 500 }
         );
     }
 }

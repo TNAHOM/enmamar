@@ -60,9 +60,7 @@ function OTPVerificationContent() {
         return;
       }
 
-      const { data } = await response.json();
       router.push(`/auth/login`);
-      console.log("Verified successfully", data);
       toast.success("OTP verified successfully");
     } catch (error) {
       console.log("Error sending OTP:", error);

@@ -1,7 +1,5 @@
 export interface userProfile {
     id: string,
-    username: string,
-    email: string,
     first_name: string,
     last_name: string,
     phone_number: string,
@@ -13,8 +11,6 @@ export interface userProfile {
 
 export interface InstructorProfile extends Record<string, unknown> {
   id: string;
-  username: string;
-  email: string;
   first_name: string;
   last_name: string;
   phone_number: string;
@@ -26,8 +22,6 @@ export interface InstructorProfile extends Record<string, unknown> {
 }
 
 export interface SignupFormData {
-    username: string;
-    email: string;
     password: string;
     first_name: string;
     last_name: string;

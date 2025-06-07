@@ -8,8 +8,7 @@ interface StatCardProps {
   positive: boolean;
 }
 
-export function StatCard({ title, value, change, positive }: StatCardProps) {
-  console.log(change, positive)
+export function StatCard({ title, value }: StatCardProps) {
   return (
     <Card className="border border-gray-200 rounded-lg shadow-sm">
       <CardContent className="p-6">

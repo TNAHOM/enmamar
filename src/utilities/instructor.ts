@@ -1,4 +1,6 @@
 import { course } from "@/types/courses";
+import { Course } from "@/types/instructor";
+import { userProfile } from "@/types/user";
 
 export interface InstructorCourse extends course {
   revenue: number;
@@ -12,11 +14,9 @@ export interface MonthlyStats {
 }
 
 export interface RecentEnrollment {
-  id: string;
-  studentName: string;
-  courseName: string;
-  date: string;
-  avatarUrl?: string;
+  user: userProfile;
+  course: Course;
+  enrolled_at: Date;
 }
 
 
@@ -33,25 +33,4 @@ export const mockMonthlyStats: MonthlyStats[] = [
   { month: "Oct", enrollments: 40, revenue: 2000 },
   { month: "Nov", enrollments: 35, revenue: 1750 },
   { month: "Dec", enrollments: 30, revenue: 1500 },
-];
-
-export const mockRecentEnrollments: RecentEnrollment[] = [
-  {
-    id: "e1",
-    studentName: "John Doe",
-    courseName: "Advanced Web Development",
-    date: "2025-03-14",
-  },
-  {
-    id: "e2",
-    studentName: "Jane Smith",
-    courseName: "UI/UX Design Fundamentals",
-    date: "2025-03-13",
-  },
-  {
-    id: "e3",
-    studentName: "Mike Johnson",
-    courseName: "Advanced Web Development",
-    date: "2025-03-12",
-  },
 ];

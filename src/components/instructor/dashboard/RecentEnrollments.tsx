@@ -13,7 +13,7 @@ const RecentEnrollments = ({ enrollments }: RecentEnrollmentsProps) => {
     <Card className="p-4">
       <h3 className="font-semibold mb-4">Recent Enrollments</h3>
       <div className="space-y-4">
-        {enrollments?.map((enrollment, index) => (
+        {enrollments?.slice(0, 20).map((enrollment, index) => (
           <div
             key={index}
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50"

@@ -38,7 +38,6 @@ export const useLessonVideoStore = create<LessonVideo>((set, get) => ({
     try {
       const response = await fetch(`/api/course/${id}/lesson/${lesson_id}`);
       const responseData = await response.json();
-
       if (!response.ok) {
         set({
           error: responseData.error,

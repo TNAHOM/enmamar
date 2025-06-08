@@ -8,6 +8,7 @@ export interface ChartDataItem {
   month: string;
   enrollment: number;
   revenue: number;
+  courses: number;
 }
 
 export default function useInstructorAnalysis(userId?: string) {
@@ -69,15 +70,14 @@ export const getCourseAnalytics = (
         month: monthName,
         enrollment: 0,
         revenue: 0,
+        courses: 0,
       };
     }
-
     monthlyAggregates[monthName].enrollment += enrollments;
+    monthlyAggregates[monthName].courses += 1;
     const price = typeof item.course.price === "number" ? item.course.price : 0;
-    const discountPercent =
-      typeof item.course.discount === "number" ? item.course.discount : 0;
-    const discountedPrice = price - (price * discountPercent) / 100;
-    monthlyAggregates[monthName].revenue += discountedPrice * enrollments;
+    const totalRevenue = price * enrollments;
+    monthlyAggregates[monthName].revenue += totalRevenue;
   });
 
   const chartDataArray = Object.values(monthlyAggregates);

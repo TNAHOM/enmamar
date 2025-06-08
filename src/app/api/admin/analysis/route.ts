@@ -2,11 +2,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   // Extract time filter parameters
@@ -22,7 +18,7 @@ export async function GET(
   if (month) timeFilterParams.append("month", month);
   if (year) timeFilterParams.append("year", year);
 
-  console.log("Instructor ID:", id);
+  console.log("Time Filter Params:", timeFilterParams.toString());
 
   const BASEURL = process.env.BASEURL;
   const cookieStore = await cookies();
@@ -33,7 +29,7 @@ export async function GET(
   }
 
   try {
-    const backendUrl = `${BASEURL}/analysis/instructor/courses${
+    const backendUrl = `${BASEURL}/analysis/courses${
       timeFilterParams.toString() ? `?${timeFilterParams.toString()}` : ""
     }`;
 

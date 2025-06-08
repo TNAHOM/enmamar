@@ -181,7 +181,7 @@ export default function AdminDashboard() {
   );
 }
 
-export const renderLoadingSkeleton = () => (
+const renderLoadingSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {[1, 2, 3].map((i) => (
@@ -201,7 +201,7 @@ export const renderLoadingSkeleton = () => (
   </div>
 );
 
-export const renderErrorState = () => (
+const renderErrorState = () => (
   <Card className="bg-red-50 border-red-200">
     <CardContent className="p-6">
       <div className="flex items-center justify-center text-center py-8">
@@ -219,7 +219,7 @@ export const renderErrorState = () => (
   </Card>
 );
 
-export const renderEmptyState = () => (
+const renderEmptyState = () => (
   <Card className="bg-gray-50 border-gray-200">
     <CardContent className="p-6">
       <div className="text-center py-10">

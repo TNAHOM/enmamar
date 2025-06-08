@@ -38,7 +38,7 @@ const Lessons = ({ id, start }: { id: string; start: boolean }) => {
   }, [start, lessons, setActiveLesson, id]);
 
   const handleLessonClick = (lesson_id: string, index: number) => {
-    if (!user) {
+    if (!user && index !== 0) {
       toast.error("Please log in to access lessons");
     } else {
       setActiveDay(index);

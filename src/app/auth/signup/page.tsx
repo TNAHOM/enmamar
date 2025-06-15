@@ -96,38 +96,6 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
-                  disabled={isLoading}
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirm_password">Confirm Password</Label>
-                <Input
-                  id="confirm_password"
-                  type="password"
-                  {...register("confirm_password")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
-                  disabled={isLoading}
-                />
-                {errors.confirm_password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.confirm_password.message}
-                  </p>
-                )}
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="first_name">First Name</Label>
@@ -171,6 +139,38 @@ export default function SignupPage() {
                 {errors.phone_number && (
                   <p className="text-red-500 text-sm">
                     {errors.phone_number.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password")}
+                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                  disabled={isLoading}
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirm_password">Confirm Password</Label>
+                <Input
+                  id="confirm_password"
+                  type="password"
+                  {...register("confirm_password")}
+                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                  disabled={isLoading}
+                />
+                {errors.confirm_password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.confirm_password.message}
                   </p>
                 )}
               </div>

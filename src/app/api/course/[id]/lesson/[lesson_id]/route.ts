@@ -27,7 +27,6 @@ export async function GET(
     });
 
     const responseData = await response.json();
-    console.log(responseData, "responseData in lesson route");
 
     if (!response.ok) {
       return NextResponse.json({

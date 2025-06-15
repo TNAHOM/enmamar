@@ -23,7 +23,6 @@ export async function GET() {
     );
 
     if (!response.ok) {
-        console.log("Failed to fetch instructors:", response.statusText, response);
       return NextResponse.json({
         error: "Failed to fetch instructors",
         status: response.status,
@@ -31,7 +30,6 @@ export async function GET() {
     }
 
     const instructors = await response.json();
-    console.log("Fetched instructors:", instructors);
     return NextResponse.json(instructors.data);
   } catch (error) {
     console.warn("Error fetching instructors:", error);

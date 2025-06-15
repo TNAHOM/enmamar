@@ -5,20 +5,19 @@ export async function POST(request: Request) {
   const { phone_number } = await request.json();
 
   try {
-    const response = await fetch(
-      `${BASEURL}/auth/otp/send/?phone_number=${phone_number}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const fetchUrl = `${BASEURL}/auth/otp/send?phone_number=${phone_number}`;
+    const response = await fetch(fetchUrl, {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+      },
+    });
+    const responseData = await response.json();
     if (!response.ok) {
       const errorMessage =
         response instanceof Error ? response.message : "Failed to send OTP";
       return NextResponse.json({
-        detail: errorMessage,
+        detail: responseData.detail.data.response.errors[0] || errorMessage,
         status: response.status,
       });
     }

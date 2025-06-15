@@ -12,27 +12,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
+import { KeyRound, CheckCircle2, AlertCircle, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
 
-// Component containing the original logic
-function OTPVerificationContent() {
+// Component containing the password reset OTP verification logic
+function VerifyPasswordResetContent() {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-  const [errorDetail, setErrorDetail] = useState<string | null>(null);
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get("token"); // phone number
 
   useEffect(() => {
     if (timer > 0 && !canResend) {
@@ -45,41 +45,78 @@ function OTPVerificationContent() {
     }
   }, [timer, canResend]);
 
-  const verifyOtp = async () => {
+  const verifyPasswordResetOTP = async () => {
     const otpValue = otp.join("");
+
+    if (!token) {
+      toast.error("Phone number not found. Please try again.");
+      router.push("/auth/forgot-password");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/otp/verify", {
+      setIsVerifying(true);
+
+      const response = await fetch("/api/auth/verify-password-reset", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ phone_number: token, code: otpValue }),
       });
+
       const responseData = await response.json();
-      if (!response.ok || responseData.status !== 200) {
-        if (
-          responseData.detail ===
-          "Seems like we dont have this code in our database for this phone or verification id. Please try again..."
-        ) {
-          toast.error("Invalid OTP. Please try again.");
-          setErrorDetail("Invalid OTP. Please try again.");
-        } else {
-          toast.error(responseData.detail || "Failed to verify OTP");
-          setErrorDetail(responseData.detail || "Failed to verify OTP");
-        }
-        return false;
+      if (!response.ok || responseData.status === 422) {
+        setVerificationStatus("error");
+        toast.error(responseData.detail || "Failed to verify OTP");
+        return;
       }
 
-      router.push(`/auth/login`);
+      setVerificationStatus("success");
       toast.success("OTP verified successfully");
-      setErrorDetail(null);
-      return true;
+
+      const { reset_token } = responseData;
+      setTimeout(() => {
+        router.push(
+          `/auth/reset-password?resetToken=${encodeURIComponent(reset_token)}`
+        );
+      }, 1000);
     } catch (error) {
-      toast.error("Failed to send OTP");
-      setErrorDetail(
-        error instanceof Error ? error.message : "Failed to verify OTP"
-      );
-      return false;
+      console.log("Error verifying password reset OTP:", error);
+      setVerificationStatus("error");
+      toast.error("Failed to verify OTP");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const resendPasswordResetOTP = async () => {
+    if (!token) {
+      toast.error("Phone number not found. Please try again.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone_number: token }),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        toast.error(responseData.detail || "Failed to resend OTP");
+        return;
+      }
+
+      toast.success("Password reset OTP sent successfully");
+      handleResendOTP();
+    } catch (error) {
+      console.error("Error resending password reset OTP:", error);
+      toast.error("Failed to resend OTP");
     }
   };
 
@@ -124,26 +161,25 @@ function OTPVerificationContent() {
     }
   };
 
-  const handleVerify = async () => {
+  const handleVerify = () => {
     const otpValue = otp.join("");
     if (otpValue.length !== 6) return;
-    setIsVerifying(true);
-    const response = await verifyOtp();
-    setIsVerifying(false);
-    if (response) {
-      setVerificationStatus("success");
-    } else {
-      setVerificationStatus("error");
-    }
+    verifyPasswordResetOTP();
   };
 
-  // const handleResendOTP = () => {
-  //   setOtp(Array(6).fill(""));
-  //   setVerificationStatus("idle");
-  //   setTimer(30);
-  //   setCanResend(false);
-  //   inputRefs.current[0]?.focus();
-  // };
+  const handleResendOTP = () => {
+    setOtp(Array(6).fill(""));
+    setVerificationStatus("idle");
+    setTimer(30);
+    setCanResend(false);
+    inputRefs.current[0]?.focus();
+  };
+
+  const maskedPhoneNumber = token
+    ? token.length > 4
+      ? `****${token.slice(-4)}`
+      : `****${token.slice(-2)}`
+    : "****1234";
 
   return (
     <div className="bg-gray-50 flex flex-col items-center justify-center p-4">
@@ -152,16 +188,14 @@ function OTPVerificationContent() {
           <CardHeader className="space-y-1 text-center">
             <div className="flex justify-center mb-2">
               <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
-                <ShieldCheck className="h-8 w-8 text-purple-600" />
+                <KeyRound className="h-8 w-8 text-purple-600" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold">
-              OTP Verification
+              Verify Reset Code
             </CardTitle>
             <CardDescription>
-              {
-                "We've sent a verification code to your phone number ending in ****1234"
-              }
+              {`We've sent a password reset code to your phone number ending in ${maskedPhoneNumber}`}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -172,7 +206,7 @@ function OTPVerificationContent() {
                   Verification Successful
                 </AlertTitle>
                 <AlertDescription className="text-green-700">
-                  {"Your phone number has been successfully verified."}
+                  Your code has been verified. Redirecting to reset password...
                 </AlertDescription>
               </Alert>
             ) : verificationStatus === "error" ? (
@@ -182,8 +216,7 @@ function OTPVerificationContent() {
                   Verification Failed
                 </AlertTitle>
                 <AlertDescription className="text-red-700">
-                  {errorDetail ||
-                    "There was an error verifying your OTP. Please try again."}
+                  The code you entered is incorrect. Please try again.
                 </AlertDescription>
               </Alert>
             ) : null}
@@ -207,44 +240,58 @@ function OTPVerificationContent() {
                     onPaste={index === 0 ? handlePaste : undefined}
                     className="w-12 h-12 text-center text-lg font-bold border-gray-300 focus:border-purple-500 focus:ring-purple-500"
                     autoFocus={index === 0}
+                    disabled={isVerifying || verificationStatus === "success"}
                   />
                 ))}
               </div>
-              {/* <p className="text-sm text-gray-500 text-center">
+              <p className="text-sm text-gray-500 text-center">
                 {"Didn't receive the code?"}
                 {canResend ? (
                   <button
-                    onClick={handleResendOTP}
-                    className="text-purple-600 font-medium hover:text-purple-700"
+                    onClick={resendPasswordResetOTP}
+                    className="text-purple-600 font-medium hover:text-purple-700 ml-1"
+                    disabled={isVerifying}
                   >
                     Resend Code
                   </button>
                 ) : (
-                  <span>Resend in {timer} seconds</span>
+                  <span className="ml-1">Resend in {timer} seconds</span>
                 )}
-              </p> */}
+              </p>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="space-y-2">
             <Button
               onClick={handleVerify}
-              disabled={otp.join("").length !== 6 || isVerifying}
+              disabled={
+                otp.join("").length !== 6 ||
+                isVerifying ||
+                verificationStatus === "success"
+              }
               className="w-full bg-purple-600 hover:bg-purple-700"
             >
-              {isVerifying ? "Verifying..." : "Verify"}
+              {isVerifying ? "Verifying..." : "Verify Code"}
             </Button>
+            <div className="flex justify-center w-full">
+              <div className="flex items-center space-x-2">
+                <ArrowLeft className="h-4 w-4 text-gray-500" />
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                >
+                  Back to Forgot Password
+                </Link>
+              </div>
+            </div>
           </CardFooter>
         </Card>
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>For demo purposes, the correct OTP is: 123456</p>
-        </div>
       </div>
     </div>
   );
 }
 
 // Page component with Suspense boundary
-export default function OTPVerificationPage() {
+export default function VerifyPasswordResetPage() {
   return (
     <Suspense
       fallback={
@@ -253,7 +300,7 @@ export default function OTPVerificationPage() {
         </div>
       }
     >
-      <OTPVerificationContent />
+      <VerifyPasswordResetContent />
     </Suspense>
   );
 }

@@ -18,7 +18,6 @@ export async function GET(request: Request) {
   if (month) timeFilterParams.append("month", month);
   if (year) timeFilterParams.append("year", year);
 
-  console.log("Time Filter Params:", timeFilterParams.toString());
 
   const BASEURL = process.env.BASEURL;
   const cookieStore = await cookies();

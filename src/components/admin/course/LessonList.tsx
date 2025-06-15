@@ -11,6 +11,7 @@ import {
 import { Lesson } from "@/types/courses";
 import { Pencil, Trash2 } from "lucide-react";
 import { EditLessonModal } from "./EditLessonModal";
+import { toast } from "sonner";
 
 const LessonList = ({
   courseLesson,
@@ -30,6 +31,22 @@ const LessonList = ({
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedLesson(null);
+  };
+
+  // Delete lesson handler with toast notifications
+  const handleDeleteLesson = async (lessonId: string) => {
+    try {
+      const res = await fetch(`/api/course/${courseId}/lesson/${lessonId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete lesson");
+      toast.success("Lesson deleted successfully");
+    } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : "Error deleting lesson";
+      toast.error(msg);
+    }
   };
 
   return (
@@ -60,7 +77,7 @@ const LessonList = ({
                 <Button
                   variant="ghost"
                   title="Delete"
-                  onClick={() => console.log("Delete")}
+                  onClick={() => handleDeleteLesson(lesson.id)}
                 >
                   <Trash2 />
                 </Button>

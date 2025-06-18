@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function GET(
   req: NextRequest,
@@ -40,15 +41,20 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  const cookiesStore = await cookies();
+  const accessToken = cookiesStore.get("accessToken")?.value;
   const BASEURL = process.env.BASEURL;
 
   try {
-    const response = await fetch(`${BASEURL}/courses/enroll/${id}`, {
+    const response = await fetch(`${BASEURL}/admin/courses/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     });
+    const responseData = await response.json();
+    console.log("Response data:", responseData);
 
     if (!response.ok) {
       return NextResponse.json({
@@ -62,7 +68,7 @@ export async function DELETE(
       status: 200,
     });
   } catch (error) {
-    console.warn("Error deleting course:", error);
+    console.log("Error deleting course:", error);
     return NextResponse.json({
       error: error instanceof Error ? error.message : "Failed to delete course",
       status: 500,

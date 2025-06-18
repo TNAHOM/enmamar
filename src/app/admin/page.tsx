@@ -123,7 +123,7 @@ export default function AdminDashboard() {
           </h1>
         </div>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-3 gap-6">
           <StatCard
             title="TOTAL USER"
             value={totalUsersCount}
@@ -142,12 +142,7 @@ export default function AdminDashboard() {
             change="+23%"
             positive={true}
           />
-          <StatCard
-            title="Total ENROLLMENTS"
-            value={20}
-            change="+36%"
-            positive={true}
-          />
+          
         </div>
         {/* <SalesReport /> */}
         <div className="">

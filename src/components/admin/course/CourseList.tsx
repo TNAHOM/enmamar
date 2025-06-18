@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
 import { useGetTopicCourses } from "@/hooks/useGetCourses";
+import ShemmerEffect from "@/components/course/ShemmerEffect";
 // import { course } from "@/types/courses";
 
 interface CourseListProps {
@@ -12,7 +13,7 @@ interface CourseListProps {
 
 export function CourseList({ title, viewAll }: CourseListProps) {
   // const { data, error, loading }
-  const { data: courses } = useGetTopicCourses();
+  const { data: courses, loading } = useGetTopicCourses();
 
   // const courses = data?.slice(0, 3);
 
@@ -32,16 +33,17 @@ export function CourseList({ title, viewAll }: CourseListProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses &&
           courses.map((course) => (
-            <Card
-              key={course.id}
-              className="overflow-hidden hover:shadow-md transition-shadow"
-            >
-              <div className="relative h-48">
-                <Image
-                  src={course.thumbnail_url}
-                  alt={course.title}
-                  fill
-                  className="object-cover"
+            <Link href={`/admin/course/${course.id}`} key={course.id}>
+              <Card
+                key={course.id}
+                className="overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={course.thumbnail_url || "/images/development.png"}
+                    alt={course.title || course.title}
+                    fill
+                    className="object-cover"
                 />
               </div>
               <div className="p-4">
@@ -65,7 +67,16 @@ export function CourseList({ title, viewAll }: CourseListProps) {
                 </div>
               </div>
             </Card>
+            </Link>
           ))}
+        {loading && (
+          <>
+            {[...Array(4)].map((_, index) => (
+              <ShemmerEffect key={index} />
+            ))}
+          </>
+          // )}
+        )}
       </div>
     </div>
   );

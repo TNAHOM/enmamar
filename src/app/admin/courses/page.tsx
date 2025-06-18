@@ -34,9 +34,7 @@ export default function CoursesPage() {
             Add New Course
           </Button>
         </div>
-
         {/* <CourseStats /> */}
-
         {/* Course lists */}
         <div className="space-y-8">
           <CourseList

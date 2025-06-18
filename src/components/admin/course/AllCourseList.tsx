@@ -19,6 +19,7 @@ import { course, Lesson } from "@/types/courses";
 import { useTableData } from "@/hooks/useTableData";
 import LessonList from "./LessonList";
 import { EditCourseModal } from "./EditCourseModal"; // Update this path as needed
+import { toast } from "sonner";
 
 const AllCoursesList = () => {
   const { data, loading } = useGetTopicCourses();
@@ -86,6 +87,20 @@ const AllCoursesList = () => {
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedCourseId("");
+  };
+
+  // Delete course handler with toast notifications
+  const handleDeleteCourse = async (courseId: string) => {
+    try {
+      const res = await fetch(`/api/course/${courseId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete course");
+      toast.success("Course deleted successfully");
+    } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : "Error deleting course";
+      toast.error(msg);
+    }
   };
 
   if (loading) {
@@ -168,7 +183,11 @@ const AllCoursesList = () => {
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteCourse(course.id)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -182,7 +201,10 @@ const AllCoursesList = () => {
                       ) : errorLesson ? (
                         <div>Error loading course details</div>
                       ) : courseLesson && courseLesson.length > 0 ? (
-                        <LessonList courseLesson={courseLesson} courseId={course.id} />
+                        <LessonList
+                          courseLesson={courseLesson}
+                          courseId={course.id}
+                        />
                       ) : (
                         <div>No course details available</div>
                       )}

@@ -7,7 +7,7 @@ export async function GET() {
   const accessToken = cookiesStore.get("accessToken")?.value;
 
   try {
-    const response = await fetch(`${BASEURL}/courses?page=1&page_size=25`, {
+    const response = await fetch(`${BASEURL}/courses?page=1&page_size=99`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

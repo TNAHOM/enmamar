@@ -11,6 +11,7 @@ export const courseSchema = z.object({
     message: "Thumbnail is required",
   }),
   description: z.string().nonempty("Description is required"),
+  industry: z.string().min(3, "Industry is required"),
   lessons: z.array(
     z.object({
       // id: z.string().nonempty("Lesson ID is required"),
@@ -37,6 +38,7 @@ export const lessonSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
   duration: z.number().min(0, "Duration must be a positive number"),
+  industry: z.string().min(3, "Industry is required"),
 });
 
 export type LessonSchemaType = z.infer<typeof lessonSchema>;

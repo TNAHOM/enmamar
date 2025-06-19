@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import { useGetTopicCourses } from "@/hooks/useGetCourses";
+import { GetAdminCourses } from "@/hooks/useGetCourses";
 import {
   Table,
   TableBody,
@@ -15,14 +15,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import { course, Lesson } from "@/types/courses";
+import { Lesson } from "@/types/courses";
+import { InstructorCourseAnalytics } from "@/types/instructor";
 import { useTableData } from "@/hooks/useTableData";
 import LessonList from "./LessonList";
 import { EditCourseModal } from "./EditCourseModal"; // Update this path as needed
 import { toast } from "sonner";
 
 const AllCoursesList = () => {
-  const { data, loading } = useGetTopicCourses();
+  const { data, loading } = GetAdminCourses();
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [courseLesson, setCourseLesson] = useState<Lesson[] | null>(null);
   const [errorLesson, setErrorLesson] = useState<string | null>(null);
@@ -45,7 +46,7 @@ const AllCoursesList = () => {
     goToNextPage,
     goToPreviousPage,
     goToPage,
-  } = useTableData<course, keyof course>({
+  } = useTableData<InstructorCourseAnalytics, keyof InstructorCourseAnalytics>({
     data: data || [],
     initialSortField: "title",
     itemsPerPage: 5,
@@ -58,7 +59,7 @@ const AllCoursesList = () => {
       setLoadingLesson(true);
       try {
         const response = await fetch(`/api/course/${expandedRow}`);
-        const jsonData: course = await response.json();
+        const jsonData = await response.json();
         setCourseLesson(jsonData.lessons);
       } catch (error) {
         const errorMessage =
@@ -128,27 +129,20 @@ const AllCoursesList = () => {
                 Number of Views{" "}
                 {sortField === "views" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead
-                className="cursor-pointer"
-                onClick={() => handleSort("industry")}
-              >
-                Industry{" "}
-                {sortField === "industry" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedData.map((course) => (
-              <React.Fragment key={course.id}>
+              <React.Fragment key={course.course.id}>
                 <TableRow>
                   <TableCell>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDropdown(course.id)}
+                      onClick={() => handleDropdown(course.course.id)}
                     >
-                      {expandedRow === course.id ? "▲" : "▼"}
+                      {expandedRow === course.course.id ? "▲" : "▼"}
                     </Button>
                   </TableCell>
                   <TableCell>
@@ -156,37 +150,36 @@ const AllCoursesList = () => {
                       <Avatar className="h-8 w-8">
                         <AvatarImage
                           src={
-                            course.thumbnail_url ||
+                            course.course.thumbnail_url ||
                             "/placeholder.svg?height=32&width=32"
                           }
-                          alt={course.title}
+                          alt={course.course.title}
                         />
                         <AvatarFallback>
-                          {course.title.charAt(0)}
+                          {course.course.title.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="font-medium">{course.title}</div>
+                      <div className="font-medium">{course.course.title}</div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="default" className="rounded-full">
-                      {course.views || 0}
+                      {course.no_of_enrollments}
                     </Badge>
                   </TableCell>
-                  <TableCell>{course.industry || "N/A"}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleEditClick(course.id)}
+                        onClick={() => handleEditClick(course.course.id)}
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleDeleteCourse(course.id)}
+                        onClick={() => handleDeleteCourse(course.course.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -203,7 +196,7 @@ const AllCoursesList = () => {
                       ) : courseLesson && courseLesson.length > 0 ? (
                         <LessonList
                           courseLesson={courseLesson}
-                          courseId={course.id}
+                          courseId={course.course.id}
                         />
                       ) : (
                         <div>No course details available</div>

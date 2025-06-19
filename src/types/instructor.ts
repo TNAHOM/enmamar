@@ -53,3 +53,22 @@ export interface InstructorCoursesResponse {
   detail: string;
   data: InstructorCourseAnalytics[];
 }
+
+export interface AdminCourse extends Record<string, unknown> {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[] | null;
+  price: number;
+  discount: number;
+  thumbnail_url: string | null;
+  instructor_id: string;
+  created_at: string;
+  updated_at: string | null;
+  instructor: Instructor;
+  lessons: Lesson[];
+  view_count: number;
+  no_of_enrollments: number;
+  no_of_lessons: number;
+  revenue: number;
+}

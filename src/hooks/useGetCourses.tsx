@@ -37,3 +37,13 @@ export const useGetTopicCourses = ({
 
   return { data, error, loading };
 };
+
+export const GetAdminCourses = () => {
+  const url = "/api/admin/analysis";
+
+  const { data, error, loading } = useFetchListData<InstructorCourseAnalytics>({
+    url,
+  });
+
+  return { data, error, loading };
+};

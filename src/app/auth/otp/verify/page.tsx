@@ -160,7 +160,7 @@ function OTPVerificationContent() {
             </CardTitle>
             <CardDescription>
               {
-                "We've sent a verification code to your phone number ending in ****1234"
+                "We've sent a verification code to your phone number"
               }
             </CardDescription>
           </CardHeader>
@@ -235,9 +235,6 @@ function OTPVerificationContent() {
             </Button>
           </CardFooter>
         </Card>
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>For demo purposes, the correct OTP is: 123456</p>
-        </div>
       </div>
     </div>
   );

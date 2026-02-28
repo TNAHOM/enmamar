@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="">
+    <html lang="en" suppressHydrationWarning className="font-body">
+      <body className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
         <AuthProvider>
           <Navbar />
         </AuthProvider>

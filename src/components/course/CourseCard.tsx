@@ -20,15 +20,12 @@ const CourseCard = ({
   description,
   price,
   image,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  rating,
 }: CourseCardProps) => {
   return (
-    <Link href={`/course/${id}`} className="no-underline">
-      <div className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-full border border-gray-100">
-        {/* Course thumbnail with hover effect */}
-        <div className="relative h-64 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+    <Link href={`/course/${id}`} className="no-underline group block h-full">
+      <article className="relative overflow-hidden bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200/60 transition-all duration-300 flex flex-col h-full">
+        <div className="relative h-52 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
           <Image
             src={image || "/Images/thumbnail.webp"}
             alt={title}
@@ -36,57 +33,29 @@ const CourseCard = ({
             height={300}
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute top-3 right-3 bg-purple-600 text-white px-2 py-1 text-xs font-semibold rounded-full z-20">
+          <div className="absolute top-3 right-3 bg-amber-500 text-slate-900 px-2.5 py-1 text-xs font-semibold rounded-full z-20 shadow-sm">
             {price === 0 ? "FREE" : `${price} Br.`}
           </div>
         </div>
 
-        {/* Course content */}
         <div className="flex flex-col flex-grow p-4 space-y-2">
-          <div className="flex justify-between items-start mb-1">
-            <p className="font-semibold text-lg line-clamp-2 hover:text-purple-600 transition-colors">
-              {title}
-            </p>
-          </div>
-
-          <p className="text-sm text-gray-400">
-            Instructor:{" "}
-            <span className="font-medium text-gray-600">{instructor}</span>
+          <p className="font-heading font-semibold text-lg line-clamp-2 text-slate-800 group-hover:text-amber-700 transition-colors">
+            {title}
           </p>
 
-          <p className="text-sm text-gray-600 line-clamp-2 flex-grow">
+          <p className="text-sm text-slate-500">
+            Instructor: <span className="font-medium text-slate-700">{instructor}</span>
+          </p>
+
+          <p className="text-sm text-slate-600 line-clamp-2 flex-grow">
             {description}
           </p>
 
-          {/* Rating */}
-          <div className="flex items-center mt-auto pt-3 border-t border-gray-100">
-            {/* <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.floor(rating)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : i < rating
-                    ? "fill-yellow-400 text-yellow-400 fill-[50%]"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
-            <span className="ml-1 text-sm font-medium text-gray-700">
-              {rating.toFixed(1)}
-            </span>
-          </div> */}
-
-            {/* <Link
-            href={`/course/${id}`}
-            className="ml-auto bg-purple-50 hover:bg-purple-100 text-purple-700 text-sm font-medium py-1 px-3 rounded-full transition-colors"
-          >
-            See more
-          </Link> */}
+          <div className="flex items-center mt-auto pt-3 border-t border-slate-100">
+            <span className="text-xs font-medium text-amber-600">View course →</span>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 };

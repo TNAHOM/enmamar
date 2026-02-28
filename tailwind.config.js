@@ -20,8 +20,21 @@ const config = {
       // }
     },
     extend: {
+      fontFamily: {
+        heading: ['var(--font-heading)', 'Georgia', 'serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+      },
       colors: {
-        purpleStandard: '#893EE8',
+        brand: {
+          DEFAULT: 'hsl(25 75% 47%)',
+          foreground: 'hsl(0 0% 100%)',
+          muted: 'hsl(25 50% 92%)',
+          dark: 'hsl(25 70% 38%)',
+        },
+        slate: {
+          warm: 'hsl(215 25% 14%)',
+          soft: 'hsl(210 20% 98%)',
+        },
         contentFontColor: '#5B5D6B',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

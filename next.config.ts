@@ -26,6 +26,17 @@ const nextConfig: NextConfig = {
         hostname: "EnemamarPPpull.b-cdn.net",
         pathname: "/**", // optional but helps match all image paths
       },
+      // Mock/portfolio images
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+        pathname: "/**",
+      },
     ],
   },
 };

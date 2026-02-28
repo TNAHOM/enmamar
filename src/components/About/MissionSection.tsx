@@ -40,7 +40,7 @@ const MissionSection = () => {
             >
               Our Mission: Transforming Ethiopian Education
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               {
                 "Enmamar exists to democratize quality education across Ethiopia. We're building bridges between Ethiopian expertise and learners, creating pathways to success that honor our heritage while embracing global standards."
@@ -53,10 +53,10 @@ const MissionSection = () => {
             {missionPoints.map((point, index) => (
               <div
                 key={index}
-                className="group p-6 rounded-xl border border-gray-100 hover:border-purple-200 hover:shadow-lg transition-all duration-300"
+                className="group p-6 rounded-xl border border-gray-100 hover:border-amber-200 hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center text-purple-600 group-hover:from-purple-600 group-hover:to-blue-600 group-hover:text-white transition-all duration-300">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center text-amber-600 group-hover:from-amber-500 group-hover:to-amber-600 group-hover:text-white transition-all duration-300">
                     {point.icon}
                   </div>
                   <div className="flex-1">
@@ -79,7 +79,9 @@ const MissionSection = () => {
                 Built for Ethiopia, By Ethiopians
               </h3>
               <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                {"Understanding the unique challenges and opportunities in Ethiopian education, we've crafted a platform that respects our diverse languages, cultures, and learning traditions while preparing our people for a globally connected future."}
+                {
+                  "Understanding the unique challenges and opportunities in Ethiopian education, we've crafted a platform that respects our diverse languages, cultures, and learning traditions while preparing our people for a globally connected future."
+                }
               </p>
               <div className="mt-6 flex justify-center items-center space-x-8 text-sm text-gray-600">
                 <div className="flex items-center space-x-2">

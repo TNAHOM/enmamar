@@ -2,9 +2,9 @@ import Image from "next/image";
 
 const HeroSection = () => {
   return (
-    <div className="relative bg-purple-600 text-white">
+    <div className="relative bg-amber-500 text-slate-900">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-purple-900/60 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-amber-900/30 mix-blend-multiply" />
         {/* Ethiopian flag inspired gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 via-yellow-500/10 to-red-600/10 mix-blend-soft-light" />
       </div>
@@ -63,7 +63,7 @@ const HeroSection = () => {
             </div>
 
             {/* Floating elements */}
-            <div className="absolute -top-6 -left-6 bg-white text-purple-900 p-4 rounded-lg shadow-lg transform rotate-6 z-20">
+            <div className="absolute -top-6 -left-6 bg-white text-slate-900 p-4 rounded-lg shadow-lg transform rotate-6 z-20">
               <div className="flex items-center space-x-2">
                 <span className="text-2xl">📚</span>
                 <div>

@@ -50,7 +50,7 @@ export default function LoginPage() {
       }
 
       router.push(
-        `/auth/otp/verify?token=${encodeURIComponent(data.phone_number)}`
+        `/auth/otp/verify?token=${encodeURIComponent(data.phone_number)}`,
       );
 
       toast.success("OTP sent successfully");
@@ -82,15 +82,15 @@ export default function LoginPage() {
       <div className="my-12 w-full max-w-md">
         <div className="text-center mb-6">
           <Link href="/" className="inline-block">
-            <span className="text-2xl font-bold text-purple-600">Enmamar</span>
+            <span className="text-2xl font-bold text-amber-600">Enmamar</span>
           </Link>
         </div>
 
         <Card className="w-full shadow-lg border-0">
           <CardHeader className="space-y-1 text-center">
             <div className="flex justify-center mb-2">
-              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                <LogIn className="h-6 w-6 text-purple-600" />
+              <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+                <LogIn className="h-6 w-6 text-amber-600" />
               </div>
             </div>
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                   id="phone"
                   type="tel"
                   {...register("phone_number")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                  className="w-full border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                   disabled={isLoading}
                 />
                 {errors.phone_number && (
@@ -121,7 +121,7 @@ export default function LoginPage() {
                   <Label htmlFor="password">Password</Label>
                   <Link
                     href="/auth/forgot-password"
-                    className="text-sm text-purple-600 hover:text-purple-700"
+                    className="text-sm text-amber-600 hover:text-amber-700"
                   >
                     Forgot password?
                   </Link>
@@ -130,7 +130,7 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   {...register("password")}
-                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                  className="w-full border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                   disabled={isLoading}
                 />
                 {errors.password && (
@@ -145,7 +145,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900"
               >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
@@ -156,7 +156,7 @@ export default function LoginPage() {
               {"Don't have an account?"}
               <Link
                 href="/auth/signup"
-                className="text-purple-600 hover:text-purple-700 font-medium"
+                className="text-amber-600 hover:text-amber-700 font-medium"
               >
                 Sign up
               </Link>

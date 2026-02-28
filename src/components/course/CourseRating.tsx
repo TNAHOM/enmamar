@@ -74,8 +74,8 @@ export function CourseRating({ courseId }: CourseRatingProps) {
               ))}
             </div>
 
-            <p className="text-sm text-gray-500">
-              <span className="font-medium text-purple-600">4.5</span> Rating
+            <p className="text-sm text-slate-500">
+              <span className="font-medium text-amber-600">4.5</span> Rating
             </p>
           </div>
         </div>

@@ -3,7 +3,7 @@ import TemplateTopic from "@/components/course/TemplateTopic";
 
 export default function Home() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-[hsl(var(--background))]">
       <LandingPage />
 
       <div className="w-full space-y-8 py-12">

@@ -96,7 +96,7 @@ const FooterSection: React.FC<{ section: FooterSection }> = ({ section }) => (
         <li key={index}>
           <Link
             href={link.href}
-            className="text-sm text-muted-foreground hover:text-purple-600 transition-colors duration-200"
+            className="text-sm text-muted-foreground hover:text-amber-600 transition-colors duration-200"
             {...(link.external && {
               target: "_blank",
               rel: "noopener noreferrer",
@@ -119,7 +119,7 @@ const SocialLinks: React.FC<{ socialLinks: SocialLink[] }> = ({
       <Link
         key={index}
         href={social.href}
-        className="text-muted-foreground hover:text-purple-600 transition-colors duration-200 p-2 hover:bg-purple-50 rounded-full"
+        className="text-muted-foreground hover:text-amber-600 transition-colors duration-200 p-2 hover:bg-amber-50 rounded-full"
         target="_blank"
         rel="noopener noreferrer"
         aria-label={social.label}
@@ -211,19 +211,19 @@ const Footer: React.FC = () => {
             <div className="flex flex-wrap justify-center sm:justify-end gap-6 text-sm">
               <Link
                 href="/terms"
-                className="text-muted-foreground hover:text-purple-600 transition-colors duration-200"
+                className="text-muted-foreground hover:text-amber-600 transition-colors duration-200"
               >
                 Terms
               </Link>
               <Link
                 href="/privacy"
-                className="text-muted-foreground hover:text-purple-600 transition-colors duration-200"
+                className="text-muted-foreground hover:text-amber-600 transition-colors duration-200"
               >
                 Privacy
               </Link>
               <Link
                 href="/cookies"
-                className="text-muted-foreground hover:text-purple-600 transition-colors duration-200"
+                className="text-muted-foreground hover:text-amber-600 transition-colors duration-200"
               >
                 Cookies
               </Link>

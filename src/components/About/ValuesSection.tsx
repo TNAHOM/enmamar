@@ -7,7 +7,7 @@ const ValuesSection = () => {
       title: "Excellence & Integrity",
       description:
         "We uphold the highest standards in education delivery while maintaining transparency and authenticity in everything we do.",
-      color: "from-purple-500 to-purple-600",
+      color: "from-amber-500 to-amber-600",
     },
     {
       icon: <BookOpen className="h-12 w-12" />,
@@ -44,7 +44,7 @@ const ValuesSection = () => {
             >
               Our Core Values
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               These principles guide every decision we make and every course we
               create
@@ -79,7 +79,7 @@ const ValuesSection = () => {
                 </p>
 
                 {/* Hover effect */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-purple-200 transition-colors duration-300"></div>
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-amber-200 transition-colors duration-300"></div>
               </div>
             ))}
           </div>

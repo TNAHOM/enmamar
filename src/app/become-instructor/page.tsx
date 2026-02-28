@@ -8,9 +8,9 @@ export default function BecomeInstructorPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-purple-600 text-white">
+      <div className="relative bg-amber-500 text-slate-900">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-purple-900/60 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-amber-900/30 mix-blend-multiply" />
         </div>
         <div className="relative container mx-auto px-4 py-24 sm:py-32">
           <div className="max-w-2xl">
@@ -48,14 +48,14 @@ export default function BecomeInstructorPage() {
                     "Our administrator team is ready to help you get started. Reach out through any of the following channels and we'll guide you through the process of becoming an instructor."
                   }
                 </p>
-                <div className="bg-purple-50 p-6 rounded-lg border border-purple-100">
-                  <h4 className="font-medium text-purple-800 mb-2">
+                <div className="bg-amber-50 p-6 rounded-lg border border-amber-100">
+                  <h4 className="font-medium text-amber-800 mb-2">
                     Why Teach with Enmamar?
                   </h4>
                   <ul className="space-y-2">
                     <li className="flex items-start">
-                      <div className="flex-shrink-0 h-5 w-5 rounded-full bg-purple-200 flex items-center justify-center mr-2 mt-0.5">
-                        <span className="h-2 w-2 rounded-full bg-purple-600"></span>
+                      <div className="flex-shrink-0 h-5 w-5 rounded-full bg-amber-100 flex items-center justify-center mr-2 mt-0.5">
+                        <span className="h-2 w-2 rounded-full bg-amber-500"></span>
                       </div>
                       <span>Reach thousands of Ethiopian students</span>
                     </li>
@@ -84,11 +84,11 @@ export default function BecomeInstructorPage() {
 
             <div className="space-y-6">
               <Card className="overflow-hidden border-none shadow-lg">
-                <div className="h-2 bg-purple-600"></div>
+                <div className="h-2 bg-amber-500"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                      <Phone className="h-6 w-6 text-purple-600" />
+                    <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mr-4">
+                      <Phone className="h-6 w-6 text-amber-500" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Phone</h3>
@@ -99,7 +99,7 @@ export default function BecomeInstructorPage() {
                   </div>
                   <a
                     href="tel:+251912345678"
-                    className="block text-xl font-medium text-purple-600 hover:text-purple-700"
+                    className="block text-xl font-medium text-amber-500 hover:text-amber-600"
                   >
                     +251 91 234 5678
                   </a>
@@ -107,11 +107,11 @@ export default function BecomeInstructorPage() {
               </Card>
 
               <Card className="overflow-hidden border-none shadow-lg">
-                <div className="h-2 bg-purple-600"></div>
+                <div className="h-2 bg-amber-500"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                      <Mail className="h-6 w-6 text-purple-600" />
+                    <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mr-4">
+                      <Mail className="h-6 w-6 text-amber-500" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Email</h3>
@@ -120,7 +120,7 @@ export default function BecomeInstructorPage() {
                   </div>
                   <a
                     href="mailto:instructors@enmamar.com"
-                    className="block text-xl font-medium text-purple-600 hover:text-purple-700"
+                    className="block text-xl font-medium text-amber-500 hover:text-amber-600"
                   >
                     instructors@enmamar.com
                   </a>
@@ -128,11 +128,11 @@ export default function BecomeInstructorPage() {
               </Card>
 
               <Card className="overflow-hidden border-none shadow-lg">
-                <div className="h-2 bg-purple-600"></div>
+                <div className="h-2 bg-amber-500"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                      <Send className="h-6 w-6 text-purple-600" />
+                    <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mr-4">
+                      <Send className="h-6 w-6 text-amber-500" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Telegram</h3>
@@ -143,7 +143,7 @@ export default function BecomeInstructorPage() {
                     href="https://t.me/enmamar_instructors"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block text-xl font-medium text-purple-600 hover:text-purple-700"
+                    className="block text-xl font-medium text-amber-500 hover:text-amber-600"
                   >
                     @enmamar_instructors
                   </a>
@@ -151,18 +151,18 @@ export default function BecomeInstructorPage() {
               </Card>
 
               <Card className="overflow-hidden border-none shadow-lg">
-                <div className="h-2 bg-purple-600"></div>
+                <div className="h-2 bg-amber-500"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                      <MapPin className="h-6 w-6 text-purple-600" />
+                    <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mr-4">
+                      <MapPin className="h-6 w-6 text-amber-500" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Office Address</h3>
                       <p className="text-gray-600">Visit us in person</p>
                     </div>
                   </div>
-                  <address className="not-italic text-xl font-medium text-purple-600">
+                  <address className="not-italic text-xl font-medium text-amber-500">
                     Bole Road, Friendship Building
                     <br />
                     4th Floor, Office 405
@@ -183,7 +183,7 @@ export default function BecomeInstructorPage() {
               making a difference in education across Ethiopia.
             </p>
             <Link href="tel:+251912345678">
-              <Button className="bg-purple-600 hover:bg-purple-700 text-lg px-8 py-6 h-auto">
+              <Button className="bg-amber-500 hover:bg-amber-600 text-slate-900 text-lg px-8 py-6 h-auto">
                 Call Us Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -193,11 +193,11 @@ export default function BecomeInstructorPage() {
       </div>
 
       {/* Testimonial Section */}
-      <div className="bg-purple-50 py-16">
+      <div className="bg-amber-50 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <div className="relative mb-8">
-              <div className="absolute -top-6 -left-6 text-6xl text-purple-300">
+              <div className="absolute -top-6 -left-6 text-6xl text-amber-300">
                 {'"'}
               </div>
               <blockquote className="text-xl italic text-gray-700 relative z-10">
@@ -205,7 +205,7 @@ export default function BecomeInstructorPage() {
                   "Teaching on Enmamar has been an incredible experience. The platform is easy to use, the support team is always helpful, and I've been able to reach students across Ethiopia with my courses."
                 }
               </blockquote>
-              <div className="absolute -bottom-6 -right-6 text-6xl text-purple-300">
+              <div className="absolute -bottom-6 -right-6 text-6xl text-amber-300">
                 {'"'}
               </div>
             </div>

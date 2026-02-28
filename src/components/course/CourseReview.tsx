@@ -121,33 +121,31 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
   const visibleComments = showAllComments ? comments : comments.slice(0, 3);
 
   return (
-    <div className="border rounded-xl shadow-sm font-sans overflow-hidden mt-6 md:mt-8 bg-white">
+    <div className="border border-slate-200 rounded-xl shadow-sm overflow-hidden mt-6 md:mt-8 bg-white">
       <div className="space-y-4 md:space-y-6">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-800 px-4 py-4 md:px-6 md:py-5 text-white">
+        <div className="bg-slate-800 px-4 py-4 md:px-6 md:py-5 text-white">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 md:gap-3">
-              <MessageSquare className="w-5 h-5 md:w-6 md:h-6" />
-              <h3 className="font-medium text-xl md:text-2xl">
+              <MessageSquare className="w-5 h-5 md:w-6 md:h-6 text-amber-400" />
+              <h3 className="font-heading font-semibold text-xl md:text-2xl">
                 Student Reviews
               </h3>
             </div>
-            <div className="flex items-center gap-1 md:gap-2 bg-white/20 px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm">
+            <div className="flex items-center gap-1 md:gap-2 bg-white/15 px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm">
               <span className="font-medium">{comments.length}</span>
               <span>Comments</span>
             </div>
           </div>
         </div>
 
-        {/* Comment Input */}
         <div className="px-4 py-3 md:px-6 md:py-4">
           <div className="flex gap-2 md:gap-3 mb-6 md:mb-8">
-            <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-purple-100">
+            <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-amber-100">
               <AvatarImage
                 src="/placeholder.svg?height=40&width=40"
                 alt="Your avatar"
               />
-              <AvatarFallback className="bg-purple-100 text-purple-700 font-medium text-sm md:text-base">
+              <AvatarFallback className="bg-amber-100 text-amber-800 font-medium text-sm md:text-base">
                 {user ? getUserInitials(user.id) : "U"}
               </AvatarFallback>
             </Avatar>
@@ -162,7 +160,7 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   onFocus={() => setCommentFocused(true)}
-                  className={`min-h-[60px] md:min-h-[80px] text-sm md:text-base resize-none rounded-lg border-gray-200 focus-visible:ring-1 focus-visible:ring-purple-500 focus-visible:border-purple-500 ${
+                  className={`min-h-[60px] md:min-h-[80px] text-sm md:text-base resize-none rounded-lg border-slate-200 focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:border-amber-500 ${
                     !user && "opacity-60 cursor-not-allowed"
                   }`}
                   disabled={!user}
@@ -178,14 +176,14 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
                         setCommentFocused(false);
                         setComment("");
                       }}
-                      className="border-gray-300 text-gray-700 hover:bg-gray-50 text-xs md:text-sm py-1 px-2 md:py-2 md:px-3"
+                      className="border-slate-300 text-slate-700 hover:bg-slate-50 text-xs md:text-sm py-1 px-2 md:py-2 md:px-3"
                     >
                       Cancel
                     </Button>
                     <Button
                       type="submit"
                       size="sm"
-                      className="bg-purple-600 hover:bg-purple-700 flex items-center gap-1 md:gap-2 text-xs md:text-sm py-1 px-2 md:py-2 md:px-3"
+                      className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold flex items-center gap-1 md:gap-2 text-xs md:text-sm py-1 px-2 md:py-2 md:px-3"
                       disabled={!comment.trim() || isSubmitting}
                     >
                       {isSubmitting ? "Posting..." : "Post Comment"}
@@ -195,7 +193,7 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
                 )}
 
                 {!user && !commentFocused && (
-                  <div className="flex items-center justify-center gap-1 md:gap-2 mt-2 text-xs md:text-sm text-gray-500">
+                  <div className="flex items-center justify-center gap-1 md:gap-2 mt-2 text-xs md:text-sm text-slate-500">
                     <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Please log in to share your review</span>
                   </div>
@@ -204,57 +202,54 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
             </div>
           </div>
 
-          {/* Comments List */}
           <div>
-            <h4 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-1 md:gap-2">
-              <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
+            <h4 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-1 md:gap-2 text-slate-800">
+              <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
               Student Discussions
-              <span className="bg-purple-100 text-purple-800 text-xs rounded-full px-2 py-0.5 ml-1 md:ml-2">
+              <span className="bg-amber-50 text-amber-800 text-xs rounded-full px-2 py-0.5 ml-1 md:ml-2 border border-amber-100">
                 {comments.length}
               </span>
             </h4>
 
             {comments.length === 0 ? (
-              <div className="text-center py-8 md:py-10 border border-dashed rounded-lg border-gray-200">
-                <MessageSquare className="w-10 h-10 md:w-12 md:h-12 mx-auto text-gray-300 mb-2 md:mb-3" />
-                <p className="text-gray-500 font-medium text-sm md:text-base">
+              <div className="text-center py-8 md:py-10 border border-dashed rounded-lg border-slate-200">
+                <MessageSquare className="w-10 h-10 md:w-12 md:h-12 mx-auto text-slate-300 mb-2 md:mb-3" />
+                <p className="text-slate-500 font-medium text-sm md:text-base">
                   No comments yet
                 </p>
-                <p className="text-gray-400 text-xs md:text-sm">
+                <p className="text-slate-400 text-xs md:text-sm">
                   Be the first to share your thoughts!
                 </p>
               </div>
             ) : (
-              <div className="space-y-4 md:space-y-6 divide-y divide-gray-100">
+              <div className="space-y-4 md:space-y-6 divide-y divide-slate-100">
                 {visibleComments.map((c, index) => (
                   <div
-                    key={index}
+                    key={c.id ?? index}
                     className={`${index > 0 ? "pt-4 md:pt-6" : ""}`}
                   >
                     <div className="flex gap-3 md:gap-4">
-                      <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-gray-100">
+                      <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-slate-100">
                         <AvatarImage src="/placeholder.svg" alt="User avatar" />
-                        <AvatarFallback className="bg-gradient-to-br from-purple-400 to-purple-600 text-white text-xs md:text-sm">
+                        <AvatarFallback className="bg-amber-100 text-amber-800 text-xs md:text-sm font-medium">
                           {getUserInitials(c.user.first_name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <span className="font-semibold text-gray-800 text-sm md:text-base">
+                          <span className="font-semibold text-slate-800 text-sm md:text-base">
                             {`${c.user.first_name
                               .charAt(0)
-                              .toUpperCase()}${c.user.first_name.slice(
-                              1
-                            )} ${c.user.last_name
+                              .toUpperCase()}${c.user.first_name.slice(1)} ${c.user.last_name
                               .charAt(0)
                               .toUpperCase()}${c.user.last_name.slice(1)}`}
                           </span>
-                          <span className="text-gray-400 text-xs md:text-sm flex items-center gap-1">
+                          <span className="text-slate-400 text-xs md:text-sm flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {formatDate(c.created_at)}
                           </span>
                         </div>
-                        <p className="text-gray-700 text-sm md:text-base">
+                        <p className="text-slate-700 text-sm md:text-base">
                           {c.content}
                         </p>
                       </div>
@@ -269,7 +264,7 @@ const CourseReview = ({ courseId }: CourseReviewsProps) => {
                 <Button
                   variant="outline"
                   onClick={() => setShowAllComments(!showAllComments)}
-                  className="border-purple-200 text-purple-700 hover:bg-purple-50 text-xs md:text-sm py-1 px-3 md:py-2 md:px-4"
+                  className="border-amber-200 text-amber-700 hover:bg-amber-50 text-xs md:text-sm py-1 px-3 md:py-2 md:px-4"
                 >
                   {showAllComments ? "Show Less" : "Show All Comments"}
                 </Button>

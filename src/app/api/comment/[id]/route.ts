@@ -50,6 +50,17 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  const USE_MOCK =
+  process.env.NEXT_PUBLIC_USE_MOCK_COURSES === "true" || !process.env.BASEURL;
+
+  if (USE_MOCK) {
+    const { getMockComments } = await import("@/data/mockCourses");
+    return NextResponse.json({
+      detail: "OK",
+      data: { comments: getMockComments(id) },
+    });
+  }
+
   const BASEURL = process.env.BASEURL;
 
   try {
@@ -60,9 +71,10 @@ export async function GET(
 
     const responseData = await response.json();
     if (!response.ok) {
+      const { getMockComments } = await import("@/data/mockCourses");
       return NextResponse.json({
-        detail: responseData.detail || "Comment creation failed",
-        status: response.status,
+        detail: "OK",
+        data: { comments: getMockComments(id) },
       });
     }
 
@@ -73,6 +85,10 @@ export async function GET(
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Comment creation failed";
-    return NextResponse.json({ detail: errorMessage, status: 401 });
+    const { getMockComments } = await import("@/data/mockCourses");
+    return NextResponse.json({
+      detail: "OK",
+      data: { comments: getMockComments(id) },
+    });
   }
 }

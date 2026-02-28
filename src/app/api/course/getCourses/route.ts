@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { mockCoursesList } from "@/data/mockCourses";
+
+// Use mock when enabled or when no backend URL (portfolio/demo mode)
+const USE_MOCK =
+  process.env.NEXT_PUBLIC_USE_MOCK_COURSES === "true" || !process.env.BASEURL;
 
 export async function GET() {
+  if (USE_MOCK) {
+    return NextResponse.json(mockCoursesList);
+  }
+
   const BASEURL = process.env.BASEURL;
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("accessToken")?.value;
@@ -17,20 +26,12 @@ export async function GET() {
     const responseData = await response.json();
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch course" },
-        { status: response.status }
-      );
+      return NextResponse.json(mockCoursesList);
     }
 
     return NextResponse.json(responseData.data);
   } catch (error) {
     console.warn("Error fetching course:", error);
-    return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : "Internal server error",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json(mockCoursesList);
   }
 }

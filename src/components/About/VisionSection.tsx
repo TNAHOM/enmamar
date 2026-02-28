@@ -52,7 +52,7 @@ const VisionSection = () => {
               >
                 {"Our Vision for Ethiopia's Future"}
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mb-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mb-8"></div>
 
               <p className="text-xl text-gray-700 mb-8 leading-relaxed">
                 We envision an Ethiopia where every citizen has access to
@@ -63,7 +63,7 @@ const VisionSection = () => {
               <div className="space-y-4 mb-8">
                 {visionPoints.map((point, index) => (
                   <div key={index} className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-blue-100 flex items-center justify-center text-purple-600">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-amber-100 to-amber-200 flex items-center justify-center text-amber-600">
                       {point.icon}
                     </div>
                     <span className="text-gray-700 font-medium">
@@ -73,7 +73,7 @@ const VisionSection = () => {
                 ))}
               </div>
 
-              <blockquote className="border-l-4 border-purple-600 pl-6 italic text-lg text-gray-600">
+              <blockquote className="border-l-4 border-amber-500 pl-6 italic text-lg text-gray-600">
                 {
                   "Education is the most powerful weapon which you can use to change the world. We're putting that weapon in the hands of every Ethiopian."
                 }
@@ -91,7 +91,7 @@ const VisionSection = () => {
                   alt="Vision of Ethiopian education future with technology and traditional learning"
                   className="w-full h-96 object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-900/30 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 text-white">
                   <h4 className="text-xl font-semibold mb-2">
                     {"Building Tomorrow's Ethiopia"}
@@ -105,7 +105,7 @@ const VisionSection = () => {
               {/* Floating stats */}
               <div className="absolute -top-4 -right-4 bg-white p-4 rounded-lg shadow-lg border border-gray-100 z-20">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">2030</div>
+                  <div className="text-2xl font-bold text-amber-600">2030</div>
                   <div className="text-sm text-gray-600">Vision Year</div>
                 </div>
               </div>
@@ -113,7 +113,7 @@ const VisionSection = () => {
           </div>
 
           {/* Future Goals Timeline */}
-          <div className="bg-gradient-to-r from-purple-50 via-blue-50 to-purple-50 rounded-2xl p-8 lg:p-12">
+          <div className="bg-gradient-to-r from-amber-50 via-amber-50 to-amber-50 rounded-2xl p-8 lg:p-12">
             <div className="text-center mb-12">
               <h3 className="text-2xl font-bold mb-4 text-gray-900">
                 Our Roadmap to Impact
@@ -127,13 +127,13 @@ const VisionSection = () => {
               {futureGoals.map((goal, index) => (
                 <div key={index} className="relative">
                   {/* Timeline connector */}
-                  {index < futureGoals.length - 1 && (
-                    <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-purple-300 to-blue-300 transform translate-x-4"></div>
+                    {index < futureGoals.length - 1 && (
+                    <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-amber-300 to-amber-300 transform translate-x-4"></div>
                   )}
 
                   <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 relative z-10">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-3xl font-bold text-purple-600">
+                      <span className="text-3xl font-bold text-amber-600">
                         {goal.year}
                       </span>
                       <ArrowRight className="h-6 w-6 text-gray-400" />

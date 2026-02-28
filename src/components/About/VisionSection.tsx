@@ -127,7 +127,7 @@ const VisionSection = () => {
               {futureGoals.map((goal, index) => (
                 <div key={index} className="relative">
                   {/* Timeline connector */}
-                    {index < futureGoals.length - 1 && (
+                  {index < futureGoals.length - 1 && (
                     <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-amber-300 to-amber-300 transform translate-x-4"></div>
                   )}
 
